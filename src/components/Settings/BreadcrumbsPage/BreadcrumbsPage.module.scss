@@ -1,0 +1,132 @@
+.title {
+    margin-bottom: 1rem;
+}
+
+.description {
+    color: #646970;
+    line-height: 1.5;
+    max-width: 800px;
+}
+
+.separator {
+    border-bottom: 1px solid #e9ecef;
+    margin: 2rem 0;
+}
+
+.switchLabel {
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.breadcrumbsSwitch {
+    display: block;
+    margin-bottom: 3.5rem;
+}
+
+.displayOptionsTitle {
+    margin-top: 2rem;
+}
+
+.optionsContainer {
+    display: flex;
+    gap: 3rem;
+    margin-top: 1.5rem;
+
+    @media screen and (max-width: 960px) {
+        gap: 2rem;
+    }
+
+    @media screen and (max-width: 782px) {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+.settingsColumn {
+    flex: 1;
+
+    @media screen and (max-width: 782px) {
+        width: 100%;
+    }
+}
+
+.previewColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+
+    @media screen and (max-width: 782px) {
+        width: 100%;
+        position: static;
+    }
+}
+
+.previewTitle {
+    margin-bottom: 0;
+    padding-left: 12px;
+}
+
+.homeAnchorInput {
+    margin-top: 2rem;
+    margin-bottom: 0;
+}
+
+.advancedOptionsTitle {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.advancedInput {
+    margin-bottom: 1.5rem;
+    position: relative;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.previewItem {
+    position: absolute;
+    left: 0;
+    width: 100%;
+
+    &.archive {
+        top: 440px;
+    }
+
+    &.search {
+        top: 538px;
+    }
+
+    &.error {
+        top: 634px;
+    }
+
+    @media screen and (max-width: 782px) {
+        position: static;
+        margin-bottom: 1rem;
+
+        &.archive,
+        &.search,
+        &.error {
+            top: auto;
+        }
+    }
+}
+
+.inputWrapper {
+    flex: 1;
+}
+
+.buttonContainer {
+    margin-top: 2rem;
+    padding-top: 2rem;
+
+    @media screen and (max-width: 480px) {
+        button {
+            width: 100%;
+        }
+    }
+}

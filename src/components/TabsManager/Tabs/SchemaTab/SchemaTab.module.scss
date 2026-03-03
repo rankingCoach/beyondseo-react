@@ -1,0 +1,10 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.optimisation-tab-container .toggle-with-node {
+    width: 250px;
+}
+.optimisation-tab-container h3 {
+    font-weight: 400;
+    margin-bottom: 12px;
+}

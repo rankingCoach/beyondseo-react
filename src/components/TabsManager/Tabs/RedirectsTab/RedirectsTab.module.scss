@@ -1,0 +1,322 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.redirectsContainer {
+    .redirectsTable {
+        margin-top: 0;
+    }
+
+    .description {
+        margin-bottom: 12px;
+    }
+
+    .redirectsList {
+        margin-left: 20px;
+        margin-bottom: 16px;
+
+        li {
+            margin-bottom: 8px;
+        }
+    }
+
+    .hr {
+        height: 1px;
+        background-color: #e0e0e0;
+        margin: 24px 0;
+        width: 100%;
+    }
+
+    .tableTitle {
+        margin-bottom: 16px;
+    }
+
+    .tableContainer {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 20px;
+    }
+
+    .redirectsTableContent {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 9px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            font-weight: normal;
+        }
+    }
+
+    .actionButtons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .statusCell {
+        text-align: center;
+    }
+
+    .addRedirectContainer {
+        margin-bottom: 20px;
+    }
+
+    .addRedirectFormContainer {
+        margin-top: 24px;
+        padding: 20px 20px 20px 0;
+    }
+
+    .addRedirectTitle {
+        font-weight: 500;
+        margin-bottom: 16px;
+    }
+
+    .redirectInputsContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .inputsRow {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .inputContainer {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fieldError {
+        margin-top: 4px;
+    }
+
+    .urlInput {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .arrowIconContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        height: 40px;
+        margin-top: 22px;
+    }
+
+    .selectRow {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .redirectTypeSelect {
+            max-width: 300px;
+        }
+    }
+
+    .buttonRow {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 8px;
+        gap: 10px;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 32px;
+        background: #f8f9fa;
+        border-radius: 8px;
+
+        :global {
+            .MuiAccordion-root {
+                background: transparent;
+                box-shadow: none;
+                margin: 0;
+
+                &::before {
+                    display: none;
+                }
+
+                .MuiAccordionSummary-root {
+                    min-height: unset;
+                    padding: 0;
+                    margin: 0;
+                    position: relative;
+
+                    &.Mui-expanded {
+                        min-height: unset;
+                    }
+
+                    .MuiAccordionSummary-content {
+                        margin: 0;
+                        display: flex;
+                        align-items: center;
+
+                        &.Mui-expanded {
+                            margin: 0;
+                        }
+                    }
+
+                    .MuiAccordionSummary-expandIcon {
+                        position: absolute;
+                        left: -24px;
+                        margin: 0;
+                        padding: 0;
+                        transform: none;
+                        font-size: 12px;
+
+                        &.Mui-expanded {
+                            transform: rotate(90deg);
+                        }
+                    }
+                }
+
+                .MuiAccordionDetails-root {
+                    padding: 16px 0 0 0;
+                }
+            }
+        }
+    }
+
+    .summaryTitle {
+        position: relative;
+        padding-left: 0;
+
+        :global(.v-text-icon) {
+            align-items: center;
+        }
+    }
+
+    .accordionContent {
+        padding: 16px 0 0 32px;
+    }
+
+    .infoBox {
+        flex: 1;
+        margin-right: 24px;
+        padding: 24px;
+        background: #f8f9fa;
+        border-radius: 8px;
+
+        .infoTitle {
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .infoDescription {
+            margin-bottom: 20px;
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+    }
+
+    .usageGuide {
+        padding: 16px;
+        background: #fff;
+        border-radius: 6px;
+        border-left: 4px solid var(--p500);
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .usageGuideTitle {
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .usageGuideList {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+
+            &:before {
+                content: "•";
+                position: absolute;
+                left: 0;
+                color: var(--p500);
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .legendContainer {
+        margin-top: 16px;
+    }
+
+    .legendTitle {
+        margin-bottom: 12px;
+        font-weight: 500;
+    }
+
+    .legend {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+    }
+
+    .legendDot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 12px;
+        display: inline-block;
+
+        &[data-status="active"] {
+            background-color: #28a745;
+        }
+
+        &[data-status="inactive"] {
+            background-color: #dc3545;
+        }
+    }
+
+    .redirectTypeInfo {
+        margin-top: 16px;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        // border-left: 4px solid var(--p500);
+    }
+
+    .redirectTypeItem {
+        margin-bottom: 16px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        :global(.v-text-icon) {
+            margin-bottom: 4px;
+        }
+    }
+
+    .redirectTypeDescription {
+        color: #4a4a4a;
+        padding-left: 24px;
+    }
+}

@@ -1,0 +1,35 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.loadingIndicatorWrapper {
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.loadingIndicatorWrapper.appearing {
+  opacity: 1;
+}
+
+.loadingIndicatorWrapper.exiting {
+  opacity: 0;
+}
+
+.loadingIndicator {
+  display: inline-block;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  white-space: nowrap;
+  overflow: hidden;
+  width: auto;
+}
+
+.shrinkingText {
+  transform: scaleX(0.5);
+  opacity: 0;
+}
+
+.expandingText {
+  transform: scaleX(1);
+  opacity: 1;
+}

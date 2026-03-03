@@ -1,0 +1,40 @@
+// .container {
+//     // margin-top: 1rem;
+// }
+
+.title {
+    margin-bottom: 0.75rem;
+
+    @media screen and (max-width: 480px) {
+        font-size: 14px;
+    }
+}
+
+.separatorsContainer {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    @media screen and (max-width: 480px) {
+        gap: 6px;
+    }
+}
+
+.separator {
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--fn-divider-gl);
+    transition: all 0.25s ease-in-out;
+    user-select: none;
+
+    &.selected {
+        background-color: var(--fn-bg-cta);
+        color: var(--fn-bg-cta-fg);
+    }
+
+    @media screen and (max-width: 480px) {
+        padding: 5px 12px;
+        font-size: 14px;
+    }
+}

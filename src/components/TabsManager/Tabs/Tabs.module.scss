@@ -1,0 +1,20 @@
+@import "@src/styles/spacings";
+
+.tabContent {
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in forwards;
+    padding: 0 $mega;
+    padding-bottom: 200px;
+    will-change: opacity;
+    margin-top: $tera;
+    background-color: white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

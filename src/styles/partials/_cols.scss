@@ -1,0 +1,37 @@
+@use "./generic-mixins" as *;
+
+$sizes: (
+        auto: auto,
+        1: 8.33333333%,
+        2: 16.66666667%,
+        3: 25%,
+        4: 33.33333333%,
+        5: 41.66666667%,
+        6: 50%,
+        7: 58.33333333%,
+        8: 66.66666667%,
+        9: 75%,
+        10: 83.33333333%,
+        11: 91.66666667%,
+        12: 100%,
+);
+
+@mixin offset($breakpoint: "") {
+    @each $size, $val in $sizes {
+      @if ($breakpoint == "") {
+        @include generateClass(offset, $size, margin-left, $val);
+      } @else {
+        @include generateClassWithBreakpoint(offset, $size, margin-left, $val, $breakpoint);
+      }
+    }
+}
+
+@mixin cols($breakpoint: "") {
+    @each $size, $val in $sizes {
+      @if ($breakpoint == "") {
+        @include generateClassDP(col, $size, flex, 0 0 auto, width, $val);
+      } @else {
+        @include generateClassWithBreakpointDP(col, $size, flex, 0 0 auto, width, $val, $breakpoint);
+    }
+  }
+}

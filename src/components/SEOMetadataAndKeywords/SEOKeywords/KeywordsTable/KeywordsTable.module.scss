@@ -1,0 +1,210 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.keywords-table-container {
+    width: 100%;
+    background-color: var(--n100);
+    border-radius: 8px;
+    padding: 8px;
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+
+        .table-title {
+        }
+
+        .status-badge {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            background-color: #dbd6ff !important;
+            border-radius: 4px;
+            padding: 0 8px;
+            height: 20px;
+
+            span {
+                color: var(--a1-500) !important;
+            }
+        }
+    }
+
+    .table-body {
+        .table-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            border-bottom: 1px solid var(--n200);
+            padding: 8px;
+            background-color: var(--n000);
+            border-radius: 8px;
+            margin-bottom: 4px;
+
+            .table-cell-keyword {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                padding-right: 16px;
+                font-size: 15px;
+            }
+
+            .table-cell-actions {
+                flex-shrink: 0;
+                display: flex;
+                gap: 8px;
+                justify-content: flex-end;
+                align-items: center;
+
+                .swap-button {
+                }
+                .delete-button {
+                }
+            }
+        }
+
+        .keywordTasksContainer {
+            background-color: var(--n000);
+            border-radius: 0 0 8px 8px;
+            margin-top: -4px;
+            margin-bottom: 8px;
+            // padding: 0 16px 16px;
+            border-top: none;
+
+            .taskHeader {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 8px;
+                padding-top: 8px;
+            }
+
+            .tasksTitle {
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+            }
+
+            .taskCountPill {
+                background-color: #6c5ce7;
+                color: #ffffff;
+                font-size: 12px;
+                font-weight: 600;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                line-height: 1;
+                margin-left: 8px;
+            }
+
+            .taskItem {
+                border-radius: 6px;
+                margin-bottom: 8px;
+                overflow: hidden;
+            }
+
+            .taskItemHeader {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                padding: 0 18px 0 12px;
+                border-radius: 6px;
+                background-color: var(--n000);
+
+                &:hover {
+                    background-color: var(--n50);
+                }
+            }
+
+            .iconText {
+                padding-top: 0;
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+
+                :global(.v-text-icon__text) {
+                    padding-top: 0;
+                }
+
+                :global(.v-text-icon__icon-wrapper) {
+                    transform: scale(0.8);
+                    display: flex;
+                    align-items: center;
+                }
+            }
+
+            .expandIcon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 8px;
+                margin-right: 0;
+                align-self: center;
+                margin-top: 0;
+
+                .caretDown,
+                .caretUp {
+                    font-size: 10px;
+                    color: var(--n400);
+                    display: block;
+                    line-height: 1;
+                }
+            }
+
+            .taskDescription {
+                // padding: 12px;
+                padding-left: 40px;
+                padding-right: 18px;
+                margin-top: 2px;
+                // border-top: 1px solid #eee;
+                animation: fadeIn 0.3s ease;
+                background-color: var(--n50);
+                border-radius: 4px;
+                font-size: 14px;
+                line-height: 1.5;
+            }
+
+            // Loading state skeleton for Primary Keywords Suggestion
+            .taskItemSkeleton {
+                margin-bottom: 8px;
+                padding: 0 12px;
+                animation: pulse 1.5s infinite ease-in-out;
+            }
+        }
+
+        .noTasksMessage {
+            background-color: var(--n000);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+// Add pulse animation for skeletons
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}

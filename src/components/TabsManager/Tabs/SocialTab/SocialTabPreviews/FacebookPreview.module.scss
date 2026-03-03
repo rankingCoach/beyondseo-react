@@ -1,0 +1,70 @@
+.previewContainer {
+    max-width: 353px;
+    margin: 20px 0;
+    background: #fff;
+}
+
+.previewHeader {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.previewImage {
+    width: 100%;
+    height: 228px;
+    background-color: #f0f2f5;
+    object-fit: cover;
+    border-radius: 2px;
+    display: block;
+    margin: 0;
+}
+
+.previewContent {
+    background: #f5f7f9;
+    border: 1px solid #dddfe2;
+    border-top: none;
+    padding: 12px;
+    margin-top: 0;
+}
+
+.previewDomain {
+    color: #606770;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.previewTitle {
+    font-weight: 600;
+    color: #050505;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 3px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.iconWrapper {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.previewIcon {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
+
+.previewIconSvg {
+    width: 100% !important;
+    height: 100% !important;
+}

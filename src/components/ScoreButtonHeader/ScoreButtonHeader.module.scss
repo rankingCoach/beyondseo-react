@@ -1,0 +1,36 @@
+@import "@src/styles/spacings";
+
+.scoreContainer {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    background: #e5efff;
+    width: 90px;
+    border-radius: $byte;
+    flex-direction: row;
+    gap: $byte;
+}
+
+.onboardingContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 32px;
+    border-radius: $byte;
+    background: linear-gradient(90deg, #e0e7ff 50%, #e9d5ff 100%);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-direction: row;
+    gap: $byte;
+
+    &:hover {
+        background: linear-gradient(90deg, #d1deff 50%, #dbc4ff 100%);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+        color: #1e3a8a;
+    }
+}

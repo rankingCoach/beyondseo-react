@@ -1,0 +1,412 @@
+@media screen and (max-width: 782px) {
+    :global(body) :global(#generalSettings-rankingcoach-page) {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+
+    /* These override possible inline or highly specific styles from WordPress core */
+    :global(html) {
+        overflow-x: hidden !important;
+    }
+
+    :global(body) :global(#wpwrap),
+    :global(body) :global(#wpcontent),
+    :global(body) :global(#wpbody),
+    :global(body) :global(#wpbody-content) {
+        margin: 0;
+        padding-right: 0;
+    }
+}
+
+.settingsContainer {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 20px);
+    margin-top: 20px;
+    padding-left: 20px;
+    background-color: #f6f7f7;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* WordPress menu expanded state */
+.wpMenuExpanded {
+    width: calc(100% - 160px);
+    margin-left: 160px;
+    transition:
+        width 0.3s ease,
+        margin-left 0.3s ease;
+}
+
+/* WordPress menu collapsed state */
+.wpMenuCollapsed {
+    width: calc(100% - 36px);
+    margin-left: 36px;
+    transition:
+        width 0.3s ease,
+        margin-left 0.3s ease;
+}
+
+/* Responsive adjustments for smaller screens */
+@media screen and (max-width: 960px) {
+
+    .wpMenuExpanded,
+    .wpMenuCollapsed {
+        width: calc(100% - 20px);
+        margin-left: 20px;
+    }
+
+    .settingsContainer {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .contentArea {
+        margin: 0 1rem;
+        max-width: calc(100% - 2rem);
+    }
+}
+
+@media screen and (max-width: 782px) {
+
+    .wpMenuExpanded,
+    .wpMenuCollapsed {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .settingsContainer {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        height: 100vh;
+        border-radius: 0;
+        width: 100% !important;
+    }
+
+    .header {
+        padding: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .mainContent {
+        flex-direction: column;
+        padding: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 0.5rem;
+        overflow-x: auto;
+        overflow-y: visible;
+        box-sizing: border-box;
+    }
+
+    .settingsTitleContainer {
+        padding: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .menuList {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .menuItem {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        background-color: #f6f7f7;
+        flex: 0 0 auto;
+    }
+
+    .activeMenuItem {
+        background-color: #e9ecef;
+    }
+
+    .contentArea {
+        margin: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 1rem;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .footer {
+        padding: 0.75rem 1rem;
+        height: auto;
+        min-height: 40px;
+    }
+
+    .footerInfoContainer {
+        gap: 8px;
+        font-size: 11px;
+    }
+
+    .checkUpdateButton {
+        margin-right: 5px;
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+    .wpMenuExpanded,
+    .wpMenuCollapsed {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .settingsContainer {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .header {
+        padding: 0.75rem;
+        width: 100%;
+    }
+
+    .logo {
+        height: 20px;
+        max-width: 150px;
+    }
+
+    .sidebar {
+        padding: 0.5rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .settingsTitleContainer {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .menuList {
+        padding: 0 0.5rem;
+    }
+
+    .menuItem {
+        padding: 0.4rem 0.75rem;
+        font-size: 13px;
+    }
+
+    .contentArea {
+        padding: 0.75rem;
+        border-radius: 0;
+        width: 100%;
+        margin: 0;
+    }
+
+    .footer {
+        padding: 0.5rem 0.75rem;
+        font-size: 10px;
+    }
+
+    .footerInfoContainer {
+        gap: 6px;
+        font-size: 10px;
+    }
+
+    .infoItem {
+        font-size: 10px;
+    }
+
+    .checkUpdateButton {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    //height: 80px;
+}
+
+.logo {
+    height: 24px;
+    max-width: 200px;
+}
+
+.mainContent {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding: 0 0 2rem 0;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    width: 200px;
+    padding: 2rem 0;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.settingsTitleContainer {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 0.5rem;
+}
+
+.settingsTitleContainer:hover {
+    background-color: #e9ecef;
+}
+
+.activeSettingsTitle {
+    background-color: #e9ecef;
+}
+
+.menuList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menuItem {
+    padding: 0.5rem 2rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.menuItem:hover {
+    background-color: #e9ecef;
+}
+
+.activeMenuItem {
+    background-color: #e9ecef;
+}
+
+.activeMenuItem .menuItemText {
+    color: #0052cc;
+}
+
+.menuItemIcon {
+    margin-right: 10px;
+    color: #1d2327;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+}
+
+.contentArea {
+    flex: 1;
+    margin: 0 2rem 0 2rem;
+    /* Added equal margins on both sides */
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    overflow-y: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    max-width: calc(100% - 240px);
+    /* Set max-width to prevent overflow */
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.menuItemText {
+    color: #1d2327;
+    font-weight: 400;
+}
+
+.menuItemContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.menuItemSubtext {
+    font-size: 12px;
+    color: #646970;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.settingsHeader .menuItemText {
+    font-weight: 600;
+}
+
+.rssItem .menuItemText {
+    color: #646970;
+}
+
+.settingsTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1d2327;
+    padding: 0 2rem 1rem;
+    margin: 0;
+}
+
+.comingSoonBadge {
+    background-color: #f0f0f0;
+    color: #646970;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 500;
+    margin-left: 8px;
+    text-transform: uppercase;
+}
+
+.footer {
+    display: flex;
+    padding: 1rem 2rem;
+    color: #50575e;
+    font-size: 12px;
+    height: 40px;
+    align-items: center;
+}
+
+.footerInfoContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.infoItem {
+    white-space: nowrap;
+}
+
+.checkUpdateButton {
+    background: transparent;
+    border: 1px solid #ccd0d4;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 12px;
+    color: #2271b1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 10px;
+
+    &:hover:not(:disabled) {
+        background: #f0f6fc;
+        border-color: #2271b1;
+        color: #135e96;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}

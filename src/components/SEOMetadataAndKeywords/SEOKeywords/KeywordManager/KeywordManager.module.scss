@@ -1,0 +1,202 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.MuiAutocomplete-endAdornment {
+    top: 50% !important;
+
+    button {
+        width: 48px;
+
+        @media screen and (max-width: 480px) {
+            width: 40px;
+        }
+    }
+}
+.seo-keywords-manager-container {
+    max-width: 670px;
+    width: 100%;
+
+    .seo-keywords-manager-title {
+        font-weight: 500 !important;
+        margin-bottom: $bytex;
+        font-size: 16px;
+
+        @media screen and (max-width: 600px) {
+            font-size: 15px;
+        }
+
+        @media screen and (max-width: 480px) {
+            font-size: 14px;
+        }
+    }
+
+    .seo-keywords-manager-subtitle {
+        color: var(--n600) !important;
+        font-size: 15px;
+        line-height: 1.6em;
+        margin-bottom: $bytex;
+
+        @media screen and (max-width: 600px) {
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 480px) {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    }
+
+    .search-input-container {
+        margin-bottom: $mega;
+
+        .autocomplete-input-container {
+            max-width: 580px;
+            width: 100%;
+
+            @media screen and (max-width: 600px) {
+                max-width: 100%;
+            }
+
+            .search-icon {
+                margin: $bytex 0 $bytex $bytex;
+
+                @media screen and (max-width: 480px) {
+                    margin: 8px 0 8px 8px;
+                }
+            }
+
+            input {
+                border: 0 !important;
+                background-color: transparent;
+                box-shadow: none !important;
+                padding-left: 6px;
+                height: 48px;
+
+                @media screen and (max-width: 600px) {
+                    height: 44px;
+                }
+
+                @media screen and (max-width: 480px) {
+                    height: 40px;
+                    padding-left: 4px;
+                    font-size: 14px;
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            .error-message {
+                font-size: 14px;
+                margin-left: 4px;
+                color: #ed0b0b !important;
+
+                @media screen and (max-width: 480px) {
+                    font-size: 12px;
+                    margin-left: 2px;
+                }
+            }
+        }
+    }
+
+    .table-header-title {
+        color: var(--n600) !important;
+        font-size: 15px;
+        line-height: 1.6em;
+        margin: 24px 0 6px 0;
+        border-bottom: 1px solid var(--n200);
+
+        @media screen and (max-width: 600px) {
+            font-size: 14px;
+            margin: 20px 0 6px 0;
+        }
+
+        @media screen and (max-width: 480px) {
+            font-size: 13px;
+            margin: 16px 0 4px 0;
+        }
+    }
+
+    .keyword-primary-table-container {
+        margin-bottom: $bytex;
+
+        .nodata-container {
+            padding: 0;
+
+            img {
+                width: 150px;
+
+                @media screen and (max-width: 600px) {
+                    width: 120px;
+                }
+
+                @media screen and (max-width: 480px) {
+                    width: 100px;
+                }
+            }
+        }
+
+        .generate-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+
+            @media screen and (max-width: 480px) {
+                margin-top: 12px;
+            }
+
+            .generate-button {
+                min-width: 180px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                @media screen and (max-width: 600px) {
+                    min-width: 160px;
+                    font-size: 14px;
+                    gap: 6px;
+                }
+
+                @media screen and (max-width: 480px) {
+                    min-width: 100%;
+                    font-size: 13px;
+                    gap: 4px;
+                    padding: 10px 12px;
+                }
+            }
+
+            .button-icon {
+                margin-left: 4px;
+
+                @media screen and (max-width: 480px) {
+                    margin-left: 2px;
+                }
+            }
+        }
+    }
+
+    .keyword-additional-table-container {
+        margin-top: 24px;
+
+        @media screen and (max-width: 600px) {
+            margin-top: 20px;
+        }
+
+        @media screen and (max-width: 480px) {
+            margin-top: 16px;
+        }
+
+        .nodata-container {
+            padding: 0;
+        }
+    }
+}
+
+:global {
+    .MuiAutocomplete-popper {
+        .MuiPaper-root {
+            background-color: #f1f3f4 !important;
+        }
+    }
+}

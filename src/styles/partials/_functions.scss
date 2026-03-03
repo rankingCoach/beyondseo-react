@@ -1,0 +1,20 @@
+// return string - which of the two strings to return (first | second)
+@function split($string, $separator:"-", $returnString: first) {
+  $index: str-index($string, $separator);
+  $newString: "";
+
+  @if ($index != null) {
+    $str-1: str-slice($string, 1, $index - 1);
+    $str-2: str-slice($string, $index + 1);
+
+    @if ($returnString == first) {
+      $newString: $str-1;
+    } @else {
+      $newString: $str-2;
+    }
+  } @else {
+    $newString: $string;
+  }
+
+  @return $newString;
+}

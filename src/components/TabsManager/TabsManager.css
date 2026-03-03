@@ -1,0 +1,9 @@
+.tabs-manager-container .MuiTabs-flexContainer {
+  border-bottom: 1px solid #ccc;
+}
+.tabs-manager-container .MuiButtonBase-root {
+  text-transform: capitalize;
+  padding: 16px !important;
+  min-height: 48px !important;
+  height: 48px !important;
+}

@@ -1,0 +1,82 @@
+{
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "scripts": {
+        "clean": "rm -rf node_modules && rm package-lock.json && npm cache clean --force",
+        "build": "vite build",
+        "dev": "vite",
+        "watch": "vite build --watch",
+        "lint": "prettier . --check; stylelint **/*.{css,scss}; eslint . --ext .js; composer lint;",
+        "format": "prettier . --write; stylelint **/*.{css,scss} --fix; eslint . --ext .js --fix; composer format;",
+        "gen:TOKEN": "bash generators/get-sdk-token.sh",
+        "gen:SDK": "node generators/sdk/generate-sdk-real.js && npm run lint:SDK",
+        "lint:SDK": "eslint './src/models/**/*.{js,ts,tsx}' --fix --quiet && eslint './src/stores/**/*.{js,ts,tsx}' --fix --quiet"
+    },
+    "browserslist": [
+        "last 2 versions",
+        "> 1%"
+    ],
+    "dependencies": {
+        "@rankingcoach/vanguard": "^1.0.1",
+        "@reduxjs/toolkit": "2.4.0",
+        "@types/lodash.debounce": "^4.0.9",
+        "@wordpress/element": "^6.24.0",
+        "@wordpress/i18n": "^5.14.0",
+        "axios": "^1.6.1",
+        "classnames": "^2.5.1",
+        "include-media": "^2.0.0",
+        "js-cookie": "^3.0.5",
+        "lodash.debounce": "^4.0.8",
+        "lottie-react": "^2.4.0",
+        "lottie-web": "^5.9.6",
+        "react": "19.2.0",
+        "react-dom": "19.2.0",
+        "react-redux": "7.2.6",
+        "react-spring": "9.4.2",
+        "react-window": "^1.8.10",
+        "redux-persist": "6.0.0",
+        "rxjs": "^7.8.1",
+        "styled-components": "^6.1.13",
+        "tiny-emitter": "^2.1.0"
+    },
+    "devDependencies": {
+        "@babel/parser": "^7.27.0",
+        "@babel/traverse": "^7.27.0",
+        "@eslint/eslintrc": "^3.2.0",
+        "@types/node": "^20.17.14",
+        "@types/react": "19.0.0",
+        "@types/react-dom": "19.0.0",
+        "@types/react-window": "^2.0.0",
+        "@types/styled-components": "^5.1.34",
+        "@vitejs/plugin-react": "^4.3.4",
+        "eslint": "^8.13.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-config-semistandard": "^17.0.0",
+        "eslint-config-standard": "^17.0.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-n": "^15.0.0",
+        "eslint-plugin-promise": "^6.0.0",
+        "glob": "^10.4.5",
+        "globals": "^15.0.0",
+        "node-fetch": "^2.7.0",
+        "postcss": "^8.4.38",
+        "prettier": "^3.2.5",
+        "sass": "^1.62.1",
+        "stylelint": "^16.3.1",
+        "stylelint-config-clean-order": "^5.4.2",
+        "stylelint-config-standard-scss": "^13.1.0",
+        "stylelint-order": "^6.0.4",
+        "vite": "6.3.5"
+    },
+    "overrides": {
+        "react": "19.2.0",
+        "react-dom": "19.2.0"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    ]
+}

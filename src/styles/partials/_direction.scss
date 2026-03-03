@@ -1,0 +1,18 @@
+@use "./generic-mixins" as *;
+
+$flexDirection: (
+        column,
+        column-reverse,
+        row,
+        row-reverse,
+);
+
+@mixin flexDirection($breakpoint: "") {
+  @each $val in $flexDirection {
+    @if ($breakpoint == "") {
+      @include generateClassDP(d-flex, $val, flex-direction, $val, display, flex);
+    } @else {
+      @include generateClassWithBreakpointDP(d-flex, $val, flex-direction, $val, display, flex, $breakpoint);
+    }
+  }
+}

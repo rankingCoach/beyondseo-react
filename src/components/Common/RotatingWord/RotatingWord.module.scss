@@ -1,0 +1,29 @@
+.wrapper {
+  display: inline-block;
+  white-space: nowrap;
+  color: inherit;
+  /* Ensure color inheritance */
+}
+
+.word {
+  display: inline-block;
+  /* Default to VISIBLE - critical for initial render */
+  opacity: 1 !important;
+  transform: translateY(0);
+  color: inherit;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Visible state - word is showing */
+.visible {
+  opacity: 1 !important;
+  transform: translateY(0);
+}
+
+/* Fading state - word is disappearing */
+.fading {
+  opacity: 0 !important;
+  transform: translateY(-10px);
+}

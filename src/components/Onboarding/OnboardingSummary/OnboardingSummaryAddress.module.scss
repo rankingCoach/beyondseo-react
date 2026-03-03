@@ -1,0 +1,58 @@
+.businessAddressCard {
+    flex: 1.5;
+}
+
+.formRow {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+
+    .cityInput {
+        flex: 2;
+    }
+
+    .postalCodeInput {
+        flex: 1;
+    }
+}
+
+.iframeContainer {
+    display: flex;
+    flex-direction: column;
+
+    width: calc(100vw - 48px); /* 24px padding each side */
+    height: calc(100vh - 100px);
+
+    margin: 24px auto;
+    max-width: 1400px;
+    max-height: 760px;
+    box-sizing: border-box;
+    padding-left: 0;
+    @media (max-width: 1233px) {
+        max-height: 660px;
+    }
+    @media (max-width: 974px) {
+        max-height: 760px;
+    }
+    @media (max-width: 782px) {
+        width: calc(100vw - 16px); /* 8px padding each side */
+        height: calc(100vh - 100px);
+        margin: 12px auto;
+        padding-left: 0;
+    }
+}
+
+.businessAddressIframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+}
+
+.errorWrapper {
+    padding-top: 8px;
+}
+
+.centeredContent {
+    text-align: center;
+}

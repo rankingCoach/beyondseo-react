@@ -1,0 +1,41 @@
+@import '@src/styles/spacings';
+@import '@src/styles/media-mixins';
+
+.widget-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fn-bg);
+    padding: $tera 0;
+    margin: 0 (-$yotta);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: $peta $yotta;
+    background: var(--fn-bg);
+
+    @include media('<tablet') {
+        padding: $mega $peta;
+    }
+}
+
+.socialTabContainer {
+    width: 100%;
+    padding: 0 $mega;
+}
+
+.previewsWrapper {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin: 24px 0;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+}

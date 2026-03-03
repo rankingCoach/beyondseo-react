@@ -1,0 +1,73 @@
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1.5s ease-in-out;
+
+  :global(.rc-modal) {
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+    animation: modalSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    justify-content: center;
+
+    &.modal-position-top {
+      justify-content: center;
+    }
+
+    &:has(.errorModalContent) {
+      :global(.vanguard-btn.vanguard-btn-default) {
+        display: none;
+      }
+      :global(.modal-footer .modal-footer-buttons) {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.errorModalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding: 16px 0;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -82px;
+    left: -31px;
+    right: -31px;
+    height: 4px;
+    background-color: #ff4d4f;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  0% {
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}

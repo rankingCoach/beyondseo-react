@@ -1,0 +1,72 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.redirectsPlaceholderContainer {
+    padding: 0 $mega;
+    width: 100%;
+    margin-top: $tera;
+}
+
+.tableHeaderSkeleton {
+    margin-bottom: 16px;
+}
+
+.tableContainer {
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tableHeaderRow {
+    margin-bottom: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tableRowsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.tableRow {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.formContainer {
+    margin-top: 24px;
+    padding: 20px 20px 20px 0;
+}
+
+.formTitleSkeleton {
+    margin-bottom: 16px;
+}
+
+.formFieldsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.inputsRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.urlInputSkeleton {
+    flex: 1;
+}
+
+.selectRowSkeleton {
+    max-width: 300px;
+}
+
+.buttonRowSkeleton {
+    margin-top: 8px;
+}

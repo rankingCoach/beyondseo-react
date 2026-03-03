@@ -1,0 +1,425 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+// Most of the css from here not needed anymore, remove / clear them once development is over
+.onboarding-welcome-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    min-height: 100vh;
+
+    &.step-2 {
+        transition: background 0.5s ease-out;
+        min-height: 100vh;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.final-step {
+        height: auto;
+        overflow-y: auto;
+        align-items: flex-start;
+        padding-top: 20px;
+    }
+
+    .loader-component {
+        margin-bottom: 132px;
+        transition: all 0.5s ease-out;
+    }
+
+    .background-orb {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        transition: all 0.5s ease-out;
+    }
+
+    .slider-component {
+        margin-bottom: 24px;
+        width: 90%;
+        max-width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .slider-component-subtitle {
+        margin-bottom: 48px;
+        max-width: 80%;
+    }
+
+    .button-component {
+        margin-top: 32px;
+    }
+
+    .cancelComponent {
+        position: fixed;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0;
+        background: transparent;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .cancelLink {
+            position: static;
+            transform: none;
+        }
+    }
+
+    .topRightLink {
+        position: fixed;
+        top: 40px;
+        right: 32px;
+        z-index: 10;
+        // text-decoration: underline;
+    }
+
+    .textareaWrapper {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 50%;
+        display: flex;
+        justify-content: center;
+        background-color: transparent !important;
+        z-index: 10;
+    }
+
+    .textareaComponent {
+        width: 100%;
+        min-height: 50px;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .fadeInButton {
+        opacity: 0;
+        animation: fadeIn 1s ease-in-out forwards;
+        animation-delay: 1s;
+    }
+
+    .fadeIn {
+        opacity: 0;
+        animation: fadeIn 0.7s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    .slider-text-step1 {
+        text-align: center;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 48px;
+        background: linear-gradient(90deg, #b8003d 2.45%, #0062ff 16.5%, #16d0df 74.25%, #0062ff 89.34%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 20px;
+    }
+
+    .slider-text-step2 {
+        text-align: center;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 48px;
+        background: none;
+        -webkit-text-fill-color: white;
+        color: white;
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 80%;
+    }
+
+    .slider-text-step4 {
+        text-align: center;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 48px;
+        background: none;
+        -webkit-text-fill-color: white;
+        color: white;
+        margin-bottom: 64px;
+        margin-left: 26%;
+        margin-right: 26%;
+        max-width: 50%;
+    }
+
+    .slider-text-step7 {
+        @extend .slider-text-step4;
+        margin-bottom: 118px;
+    }
+
+    // .slider-text-step8 {
+    //     text-align: center;
+    //     font-style: normal;
+    //     font-weight: 700;
+    //     line-height: 48px;
+    //     background: none;
+    //     -webkit-text-fill-color: white;
+    //     color: white;
+    //     margin-top: 32px;
+    //     margin-right: 26%;
+    //     margin-left: 26%;
+    // }
+
+    .slider-text-step9 {
+        @extend .slider-text-step4;
+    }
+
+    .subtitle-space {
+        height: 48px;
+        margin-bottom: 48px;
+        visibility: visible;
+
+        &.step9 {
+            margin-top: 32px !important; // Maybe not necessary.
+        }
+    }
+
+    .slider-text-step4-subtitle {
+        text-align: center;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 48px;
+        background: none;
+        -webkit-text-fill-color: white;
+        color: white;
+        opacity: 0;
+        animation: fadeIn 0.5s ease-in-out forwards;
+        position: absolute;
+        width: 50%;
+        margin-left: 26%;
+        left: 0;
+    }
+
+    .textareatransparent {
+        :global(.MuiOutlinedInput-root) {
+            background-color: rgba(55, 53, 53, 0.4) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        :global(.MuiOutlinedInput-notchedOutline) {
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        }
+
+        :global(.MuiOutlinedInput-input) {
+            background: transparent !important;
+        }
+
+        :global(.textarea) {
+            border: none !important;
+        }
+
+        border-radius: 8px !important;
+
+        .noBoxShadow {
+            :global(input),
+            :global(textarea),
+            :global(select),
+            :global(button) {
+                box-shadow: none !important;
+            }
+
+            :global(input:focus),
+            :global(textarea:focus),
+            :global(select:focus),
+            :global(button:focus) {
+                box-shadow: none !important;
+            }
+        }
+
+        :global(.size-medium.has-icon-right) {
+            margin-bottom: 60%;
+            margin-right: 10%;
+        }
+
+        :global(.css-1bncmk-MuiInputBase-input-MuiOutlinedInput-input) {
+            color: white;
+        }
+
+        :global(.MuiInputBase-input::placeholder) {
+            color: #ffffff !important;
+            opacity: 1;
+        }
+        :global(.css-sjaqeb) {
+            color: white;
+        }
+    }
+
+    .loadingBadgeWrapper {
+        position: fixed;
+        bottom: 192px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 50%;
+        display: flex;
+        justify-content: center;
+        z-index: 1;
+        margin-bottom: 24px;
+    }
+
+    .loadingIndicatorWrapper {
+        display: inline-block;
+        animation: stretchShrinkIn 0.3s ease-out;
+    }
+
+    .exiting {
+        animation: stretchShrinkOut 0.1s ease-out;
+    }
+
+    @keyframes stretchShrinkIn {
+        from {
+            transform: scaleX(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes stretchShrinkOut {
+        from {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+        to {
+            transform: scaleX(0.8);
+            opacity: 0;
+        }
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    &.step2 {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .thankYouContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 100%;
+        padding: 0 32px;
+        position: relative;
+        min-height: 400px;
+        height: 100%;
+
+        .sliderTextStep2 {
+            text-align: center;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 48px;
+            background: none;
+            -webkit-text-fill-color: white;
+            color: white;
+            margin-bottom: 48px;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 80%;
+            width: 100%;
+            padding: 0;
+            position: relative;
+            z-index: 5;
+
+            @media (min-width: 1200px) {
+                max-width: 1000px;
+            }
+
+            @media (min-width: 1600px) {
+                max-width: 1200px;
+            }
+
+            @media (max-width: 768px) {
+                font-size: 24px;
+                line-height: 32px;
+                margin-bottom: 32px;
+                max-width: 100%;
+            }
+
+            @media (max-width: 480px) {
+                margin-bottom: 32px;
+            }
+
+            @media (max-height: 600px) {
+                margin-bottom: 32px;
+                font-size: 20px;
+                line-height: 28px;
+            }
+        }
+
+        .loadingAnimation {
+            width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 120px;
+            bottom: 62px;
+            position: relative;
+            top: auto;
+            left: auto;
+            transform: none;
+            z-index: 10;
+
+            @media (max-height: 600px) {
+                width: 80px;
+            }
+        }
+
+        .loadingStatusWrapper {
+            position: absolute;
+            bottom: 38%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            padding: 0 20px;
+        }
+    }
+
+    /* Original background orb styles - kept for future reference
+    .background-orb {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        transition: all 0.5s ease-out;
+    }
+    */
+}

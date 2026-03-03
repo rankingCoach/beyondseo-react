@@ -1,0 +1,53 @@
+@use "./generic-mixins" as *;
+
+$sizes: (
+        percent: (
+                0,
+                25,
+                50,
+                75,
+                100
+        ),
+        viewPort: (
+                0,
+                25,
+                50,
+                75,
+                100
+        )
+);
+
+$types: (
+        w: width,
+        h: height,
+);
+
+@function value($sizeType, $val, $type) {
+  @if ($sizeType == percent) {
+    @return $val + '%';
+  } @else {
+    @return #{$val}v#{$type};
+  }
+}
+
+@function sizeType($sizeType, $type) {
+  @if($sizeType == percent) {
+    @return $type;
+  } @else {
+    @return v#{$type}
+  }
+}
+
+@mixin sizes($breakpoint: "") {
+  @each $type, $prop in $types {
+    @each $sizeType, $values in $sizes {
+      @each $val in $values {
+        @if ($breakpoint == "") {
+          @include generateClass(sizeType($sizeType, $type), $val, $prop, value($sizeType, $val, $type));
+        } @else {
+          @include generateClassWithBreakpoint(sizeType($sizeType, $type), $val, $prop, value($sizeType, $val, $type), $breakpoint);
+        }
+      }
+    }
+  }
+}

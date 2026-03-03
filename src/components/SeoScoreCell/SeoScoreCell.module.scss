@@ -1,0 +1,104 @@
+.seoScoreCellWrapper {
+    position: relative;
+    display: inline-block;
+
+    .assistantCell {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+
+        .scoreContainer {
+            display: flex;
+            align-items: center;
+            padding: 2px 8px;
+            background: #e5efff;
+            gap: 3px;
+            span {
+                font-weight: 500 !important;
+                white-space: nowrap;
+            }
+        }
+
+        .issuesContainer {
+            display: flex;
+            align-items: center;
+            padding: 2px 8px;
+            gap: 3px;
+            font-weight: 500;
+        }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .score {
+            color: #1e3a8a;
+        }
+    }
+
+    .popup {
+        position: absolute;
+        left: -210px;
+        top: 105%;
+        width: 500px;
+        padding: 14px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        z-index: 9999;
+
+        .popupInner {
+            width: calc(100% - 130px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .recommendations {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+                gap: 8px 12px;
+                width: 100%;
+
+                .iconText {
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+            }
+
+            .recomandationsCount {
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                padding: 5px 10px;
+                gap: 10px;
+                width: min-content;
+
+                img {
+                    position: relative;
+                    top: 2px;
+                }
+            }
+        }
+    }
+}
+
+.success {
+    background: #e8e5fa;
+}
+
+.warning {
+    background: #fde5c9;
+}

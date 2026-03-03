@@ -1,0 +1,456 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.editableCardsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 80%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding-bottom: 180px;
+    opacity: 0;
+    animation: fadeIn 0.7s ease-in-out forwards;
+    animation-delay: 0.3s;
+    padding-top: 0;
+    margin-top: 0;
+    min-height: 100vh;
+    position: relative;
+
+    .summaryTitle {
+        color: white;
+        margin: 32px 0;
+        top: 0;
+        padding: 16px;
+        border-radius: 8px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: slideUpFade 0.7s ease-in-out forwards;
+        animation-delay: 0.3s;
+    }
+}
+
+.summaryTitlePlaceholder {
+    margin: 32px auto;
+    border-radius: 4px;
+}
+
+.cardPlaceholder {
+    background-color: white;
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cardContentPlaceholder {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inputWithButtonPlaceholder {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.tagsPlaceholder {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.finishButtonPlaceholder {
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.editableCardWrapper {
+    position: relative;
+    background-color: white;
+    border-radius: 8px;
+    animation: fadeIn 0.7s ease-in-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUpFade 0.7s ease-in-out forwards;
+    z-index: 2;
+    overflow: visible;
+
+    &:nth-child(1) {
+        animation-delay: 0.3s;
+    }
+
+    &:nth-child(2) {
+        animation-delay: 0.4s;
+    }
+
+    &:nth-child(3) {
+        animation-delay: 0.5s;
+    }
+
+    &:nth-child(4) {
+        animation-delay: 0.6s;
+    }
+
+    :global(.editableCard) {
+        margin-bottom: 8px;
+        overflow: visible !important;
+    }
+    :global(.container_iw) {
+        display: flex;
+    }
+}
+
+.businessInfoWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.businessInfoRow {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+}
+
+.businessInfoCard {
+    flex: 1.5;
+}
+
+.businessAddressCard {
+    flex: 1.5;
+}
+
+.formRow {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+
+    .cityInput {
+        flex: 2;
+    }
+
+    .postalCodeInput {
+        flex: 1;
+    }
+}
+
+.blurredButtonContainer {
+    padding: 16px 24px;
+    background: rgba(215, 207, 207, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+
+    :global(.container_iw) {
+        width: 100%;
+        max-width: 450px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    :global(.vanguard-btn.vanguard-btn-secondary),
+    :global(.vanguard-btn.vanguard-btn-primary) {
+        min-width: 120px;
+        width: auto;
+    }
+}
+
+.keywordInputContainer {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+
+    .keywordInputWrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .keywordInput {
+        flex: 1;
+    }
+
+    :global(.vanguard-btn) {
+        margin-bottom: 1px;
+    }
+
+    .autocompleteContainer {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+
+        :global(.vanguard-searchable-select-input) {
+            width: 100%;
+        }
+
+        :global(.vanguard-input) {
+            width: 100%;
+        }
+    }
+
+    :global(.vanguard-btn) {
+        margin-bottom: 1px;
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+:global(.modal-overlay) {
+    background-color: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+:global(.modal-container) {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 90%;
+    width: 528px;
+    position: relative;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.3s ease-in-out;
+    will-change: transform, opacity;
+}
+
+:global(.modal-container.modal-enter) {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.modalWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-in-out;
+
+    :global(.rc-modal) {
+        transform: translateY(-20px) scale(0.95);
+        opacity: 0;
+        animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        justify-content: center;
+        box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+
+        &.modal-position-top {
+            justify-content: center;
+        }
+
+        .modalTextarea {
+            width: 100%;
+
+            :global(.MuiInputBase-root) {
+                background-color: white;
+            }
+        }
+    }
+}
+
+.editDescriptionModal {
+    opacity: 0;
+    transform: scale(0.95);
+    animation: modalEnter 0.3s ease-in-out forwards;
+
+    :global(.modal-overlay) {
+        background-color: rgba(0, 0, 0, 0.65) !important;
+        backdrop-filter: blur(6px);
+    }
+}
+
+@keyframes modalEnter {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes modalSlideIn {
+    0% {
+        transform: translateY(-20px) scale(0.95);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.emptyMessage {
+    color: grey !important;
+    padding: 8px 0;
+}
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 32px 24px;
+    text-align: center;
+
+    .img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+.modal-header {
+    border-radius: red;
+}
+
+:global(input[type="text"]),
+:global(textarea) {
+    &:focus {
+        box-shadow: none !important;
+    }
+}
+
+.errorInput {
+    :global(.MuiOutlinedInput-root) {
+        fieldset {
+            border-color: #ff4d4f !important;
+        }
+    }
+}
+
+.errorText {
+    color: #ff4d4f !important;
+    font-size: 14px !important;
+    padding-left: 30px;
+}
+
+.errorTextCategories {
+    color: #ff4d4f !important;
+    padding-left: 15px;
+    font-size: 14px !important;
+}
+
+.businessNameErrorText {
+    color: #ff4d4f !important;
+    font-size: 14px !important;
+}
+
+.categoryDropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    max-height: 400px;
+    min-width: 100%;
+    width: auto;
+    max-width: 90vw;
+    overflow-y: hidden;
+    z-index: 1000;
+    margin-top: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.virtualList {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+.dropdownItem {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        background-color: #f5f5f5;
+    }
+}
+
+.dropdownMessage {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #8c8c8c;
+}
+
+.dropdownLoadingMore {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #8c8c8c;
+    background-color: #fafafa;
+}
+
+.dropdownFooter {
+    padding: 8px 16px;
+    border-top: 1px solid #f0f0f0;
+    background-color: #fafafa;
+    text-align: center;
+    position: sticky;
+    bottom: 0;
+}
+
+.dropdownOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background: transparent;
+}
+
+.category-search-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.bottomSpacer {
+    height: 100px;
+    width: 100%;
+    flex-shrink: 0;
+}

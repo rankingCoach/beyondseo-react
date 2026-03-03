@@ -1,0 +1,82 @@
+@use "generic-mixins" as *;
+
+$defaultSpacing: 8px;
+
+$spacingMultiplier: (
+        "0": 0,
+        "0_125": .125,
+        "0_25": .25,
+        "0_5": .5,
+        "1": 1,
+        "1_5": 1.5,
+        "1_75": 1.75,
+        "2": 2,
+        "2_5": 2.5,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9
+);
+
+$spacingPositions: (
+        t: top,
+        r: right,
+        b: bottom,
+        l: left
+);
+
+$spacingProps: (
+        m: margin,
+        p: padding,
+        gap: gap
+);
+
+$spacingPropsVH: (
+        mx: (margin-left, margin-right),
+        my: (margin-top, margin-bottom),
+        px: (padding-left, padding-right),
+        py: (padding-top, padding-bottom)
+);
+
+@mixin spacing($breakpoint: "") {
+  @each $prop, $propVal in $spacingProps {
+    @each $size, $sizeVal in $spacingMultiplier {
+      @if ($breakpoint == "") {
+        @include generateClass($prop, $size, $propVal, calc(#{$sizeVal} * #{$defaultSpacing}));
+      } @else {
+        @include generateClassWithBreakpoint($prop, $size, $propVal, calc(#{$sizeVal} * #{$defaultSpacing}), $breakpoint);
+      }
+    }
+  }
+}
+
+@mixin spacingWithPosition($breakpoint: "") {
+  @each $prop, $propVal in $spacingProps {
+    @if (($propVal == margin) or ($propVal == padding)) {
+      @each $size, $sizeVal in $spacingMultiplier {
+        @each $position, $positionVal in $spacingPositions {
+          @if ($breakpoint == "") {
+            @include generateClass(#{$prop}#{$position}, $size, #{$propVal}-#{$positionVal}, calc(#{$sizeVal} * #{$defaultSpacing}));
+          } @else {
+            @include generateClassWithBreakpoint(#{$prop}#{$position}, $size, #{$propVal}-#{$positionVal}, calc(#{$sizeVal} * #{$defaultSpacing}), $breakpoint);
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin spacingVerticalHorizontal($breakpoint: "") {
+  @each $prop, $propVal in $spacingPropsVH {
+    @each $size, $sizeVal in $spacingMultiplier {
+      @if ($breakpoint == "") {
+        @include generateClassDP($prop, $size, nth($propVal, 1), calc(#{$sizeVal} * #{$defaultSpacing}), nth($propVal, 2), calc(#{$sizeVal} * #{$defaultSpacing}));
+      } @else {
+        @include generateClassWithBreakpointDP($prop, $size, nth($propVal, 1), calc(#{$sizeVal} * #{$defaultSpacing}), nth($propVal, 2), calc(#{$sizeVal} * #{$defaultSpacing}), $breakpoint)
+      }
+    }
+  }
+}

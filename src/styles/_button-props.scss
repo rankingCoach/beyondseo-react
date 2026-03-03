@@ -1,0 +1,94 @@
+@import "spacings";
+
+@mixin rgba-background($hexcolor, $opacity) {
+  background-color: rgba(var($hexcolor), $opacity);
+}
+
+@mixin disabledState($name, $prefix : '-') {
+  color: var(--#{$prefix}button-#{$name}-disabled-text-color);
+
+  .button-text {
+    color: var(--#{$prefix}button-#{$name}-disabled-text-color);
+  }
+  .vanguard-btn-icon-right svg path, .vanguard-btn-icon-left svg path {
+    fill: var(--#{$prefix}button-#{$name}-disabled-text-color);
+  }
+
+  @if (#{$name} == "default" or #{$name} == "secondary") {
+    color: rgba(var(--#{$prefix}button-#{$name}-disabled-text-color-rgb), 0.5);
+    .btn-icon-right, .btn-icon-left, .button-text {
+      color: rgba(var(--#{$prefix}button-#{$name}-disabled-text-color-rgb), 0.5);
+    }
+  }
+
+  @include rgba-background(--#{$prefix}button-#{$name}-disabled-background-color-rgb, 0.5);
+
+  border: $pico solid var(--#{$prefix}button-#{$name}-disabled-border-color);
+  cursor: not-allowed;
+}
+
+@mixin focusState($name, $prefix : '-') {
+  outline: none;
+  color: var(--#{$prefix}button-#{$name}-hover-text-color);
+
+
+  .btn-icon-right, .btn-icon-left, .button-text {
+    color: var(--#{$prefix}button-#{$name}-hover-text-color);
+  }
+
+  background-color: var(--#{$prefix}button-#{$name}-hover-background-color);
+  box-shadow: 0 0 0 2px var(--#{$prefix}button-#{$name}-focus-box-shadow-color);
+  // THhs is intentional if the button has  --#{$prefix}button-#{$name}-border-color
+  // it should overwrite in in the focus state
+  border: 2px outside var(--#{$prefix}button-#{$name}-focus-box-shadow-color);
+  border: $pico solid var(--#{$prefix}button-#{$name}-border-color);
+}
+
+
+@mixin buttonProps($name, $prefix: '') {
+  background-color: var(--#{$prefix}button-#{$name}-background-color);
+  border: $pico solid var(--#{$prefix}button-#{$name}-border-color);
+
+  .vanguard-btn-label {
+    color: var(--#{$prefix}button-#{$name}-text-color);
+  }
+
+  .btn-icon-right, .btn-icon-left, .button-text {
+    color: var(--#{$prefix}button-#{$name}-text-color);
+    font-weight: var(--regular);
+  }
+  &:hover {
+    color: var(--#{$prefix}button-#{$name}-hover-text-color);
+    // Usually we set it to the normal state
+    // If it has a hover set it to that
+    border: $pico solid var(--#{$prefix}button-#{$name}-border-color);
+    border: $pico solid var(--#{$prefix}button-#{$name}-hover-border-color);
+
+    .btn-icon-right, .btn-icon-left, .button-text {
+      color: var(--#{$prefix}button-#{$name}-hover-text-color);
+    }
+
+    background-color: var(--#{$prefix}button-#{$name}-hover-background-color);
+  }
+
+  .material-ink {
+    @include rgba-background(--#{$prefix}button-#{$name}-ripple-color-rgb, 0.8);
+  }
+  &.disabled {
+    @include disabledState($name, $prefix);
+  }
+  &:disabled {
+    @include disabledState($name, $prefix);
+  }
+
+  &:focus {
+    @include focusState($name, $prefix);
+
+  }
+
+  &:active:not(:disabled):not(.disabled) {
+    outline: none;
+    box-shadow: none;
+    @include focusState($name, $prefix);
+  }
+}

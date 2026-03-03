@@ -1,0 +1,16 @@
+@import '@src/styles/spacings';
+@import '@src/styles/media-mixins';
+
+.advancedTabContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  padding: 0 $mega;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 670px;
+}

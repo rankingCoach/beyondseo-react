@@ -1,0 +1,43 @@
+@use "./generic-mixins" as *;
+
+$flex: (
+        grow: (
+                1,
+                2,
+                3,
+                4,
+                5
+        ),
+        wrap: (
+                nowrap,
+                wrap,
+                wrap-reverse
+        ),
+        shrink: (
+                1,
+                2,
+                3,
+                4,
+                5
+        )
+);
+
+@function postClass($prop, $val) {
+  @if ($prop == wrap) {
+    @return $val;
+  } @else {
+    @return #{$prop}-#{$val};
+  }
+}
+
+@mixin flexOpts($breakpoint: "") {
+  @each $prop, $values in $flex {
+    @each $val in $values {
+      @if ($breakpoint == "") {
+        @include generateClass(flex, postClass($prop,$val), flex-#{$prop}, $val);
+      } @else {
+        @include generateClassWithBreakpoint(flex, postClass($prop,$val), flex-#{$prop}, $val, $breakpoint);
+      }
+    }
+  }
+}

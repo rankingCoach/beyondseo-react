@@ -1,0 +1,46 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.container {
+  h4 {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    font-style: normal;
+    line-height: 28px;
+  }
+  .content {
+    padding: 0 $bytex !important;
+    display: flex;
+    flex-direction: column;
+    gap: $byte;
+
+    .image {
+      align-self: center;
+      margin: -24px 0 0 0;
+    }
+
+    .text {
+      color: var(--functional-foreground-fg, #2a3546);
+      font-size: var(--fontSize-text-paragraph, 16px);
+      font-style: normal;
+      font-weight: 400;
+      line-height: var(--lineHeight-text-paragraph-tight, 24px);
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      align-self: stretch;
+      margin-bottom: 0;
+    }
+
+    .icon {
+      display: flex;
+      padding: 4px;
+      align-items: flex-start;
+      border-radius: 38px;
+      background: var(--success-100, #e9fbed);
+    }
+  }
+}

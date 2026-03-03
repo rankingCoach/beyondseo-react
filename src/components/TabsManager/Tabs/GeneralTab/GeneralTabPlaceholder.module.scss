@@ -1,0 +1,46 @@
+@import '@src/styles/spacings';
+@import '@src/styles/media-mixins';
+
+.widget-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fn-bg);
+    padding: $tera 0;
+    margin: 0 (-$yotta);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: $peta $yotta;
+    background: var(--fn-bg);
+
+    @include media('<tablet') {
+        padding: $mega $peta;
+    }
+
+    .title-container {
+        display: flex;
+        flex-direction: column;
+        gap: $byte;
+        padding-bottom: $peta;
+    }
+}
+
+.optimisationTabContainer {
+    width: 100%;
+}
+
+.donutChartContainer {
+    display: flex;
+    justify-content: left;
+    margin: 24px 0;
+}
+
+.seoMetricsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+}

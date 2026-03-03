@@ -1,0 +1,38 @@
+@mixin generateClass($preClass, $postClass, $prop, $propValue) {
+  .#{$preClass}-#{$postClass} {
+    @if ($propValue == '100%') {
+      $propValue: 100%;
+    }
+    #{$prop}: $propValue;
+  }
+
+  //@debug #{$preClass}-#{$postClass};
+}
+
+@mixin generateClassWithBreakpoint($preClass, $postClass, $prop, $propValue, $breakpoint) {
+  .#{$preClass}-#{$breakpoint}-#{$postClass} {
+    #{$prop}: $propValue;
+  }
+
+  //@debug #{$preClass}-#{$breakpoint}-#{$postClass};
+}
+
+
+// double props
+@mixin generateClassDP($preClass, $postClass, $prop1, $propValue1, $prop2, $propValue2) {
+  .#{$preClass}-#{$postClass} {
+    #{$prop1}: $propValue1;
+    #{$prop2}: $propValue2;
+  }
+
+  //@debug #{$preClass}-#{$postClass};
+}
+
+@mixin generateClassWithBreakpointDP($preClass, $postClass, $prop1, $propValue1, $prop2, $propValue2, $breakpoint) {
+  .#{$preClass}-#{$breakpoint}-#{$postClass} {
+    #{$prop1}: $propValue1;
+    #{$prop2}: $propValue2;
+  }
+
+  //@debug #{$preClass}-#{$breakpoint}-#{$postClass}
+}

@@ -1,0 +1,71 @@
+/* SocialTabPreviews/LinkedInPreview.module.scss */
+.previewContainer {
+    max-width: 428px;
+    margin: 20px 0;
+    background: #fff;
+    font-family: inherit;
+}
+
+.previewHeader {
+    padding: 8px 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.previewIcon {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
+
+.previewIconSvg {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.previewBody {
+    background: #f5f7f9;
+    margin-top: 4px;
+    display: flex;
+    align-items: stretch;
+    padding: 8px;
+}
+
+.previewImage {
+    width: 104px;
+    height: 104px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.previewContent {
+    padding: 12px;
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.previewTitle {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    margin-bottom: 4px;
+    color: #050505;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.previewDomain {
+    font-size: 12px;
+    color: #606770;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

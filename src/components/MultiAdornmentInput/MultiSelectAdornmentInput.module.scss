@@ -1,0 +1,200 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.multiSelectorAdornmentInput {
+    width: 670px;
+    max-width: calc(100% - 32px);
+}
+
+.headerControlsContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: $bytex 0;
+
+    .leftAlignControls {
+        display: flex;
+        align-items: center;
+        gap: $byte;
+
+        .titleText {
+            font-size: $mega;
+            font-weight: 500 !important;
+            margin-right: $byte;
+        }
+    }
+
+    .rightAlignControls {
+        text-align: right;
+
+        .separatorSettingsText {
+            align-self: end;
+        }
+    }
+}
+
+.variablesContainer {
+    display: flex;
+    gap: $nano;
+    row-gap: 10px;
+    margin-bottom: $byte;
+    flex-wrap: wrap;
+    border: 1px solid #b6c1d4;
+    border-radius: 4px;
+    padding: $bytex;
+    cursor: text;
+    transition: border-color 0.2s ease;
+
+    .adornmentItem {
+        display: flex;
+        align-items: center;
+        gap: $nano;
+        width: auto;
+
+        div[class*="vanguard-input "] {
+            background: var(--fn-bg-var-new);
+            width: 140px;
+            min-width: 140px;
+
+            > .MuiSelect-select {
+                font-size: 14px;
+            }
+        }
+
+        div[class*="MuiInputBase-root "] {
+            background: var(--fn-bg-var-new);
+            width: 140px;
+            min-width: 140px;
+
+            &:hover {
+                border: 1px solid var(--p500);
+            }
+        }
+    }
+
+    .separatorItem {
+        s .MuiSelect-select {
+            font-weight: bold;
+        }
+    }
+
+    .inlineInput {
+        width: 10px;
+        min-width: 10px;
+        border: none;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        font-size: 16px;
+        color: black;
+
+        &:focus {
+            min-width: 10px;
+        }
+    }
+
+    .fullWidthInput {
+        flex: 1;
+        border: none;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        min-width: 50px;
+    }
+}
+
+.variablesContainer:hover,
+.variablesContainer:focus {
+    border-color: var(--p500);
+}
+
+.variablesContainerError {
+    border-color: var(--e500);
+}
+
+.variablesContainerError:hover,
+.variablesContainerError:focus {
+    border-color: var(--e500);
+}
+
+.selectAdornmentInputContainer {
+    position: relative;
+
+    .feedbackContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 4px;
+        box-sizing: border-box;
+        padding: 0 $bytex;
+    }
+
+    .characterCounter {
+        text-align: right;
+        font-size: 12px;
+        color: #666;
+        transition: color 0.2s ease;
+        margin-left: auto; /* Push to the right */
+    }
+
+    .characterCounterError {
+        color: var(--e500);
+    }
+
+    .errorMessage {
+        color: var(--e500);
+        font-size: 12px;
+    }
+
+    .adornmentInputContainer:not(:empty) {
+        margin: 0 $bytex;
+        display: flex;
+        gap: $byte;
+        .adornmentInputContainer:not(:empty) {
+            margin: 0 $bytex;
+            display: flex;
+            gap: $nano;
+
+            .adornmentItem {
+                display: flex;
+                align-items: center;
+                gap: $nano;
+
+                div[class*="vanguard-input "] {
+                    background: var(--fn-bg-var-new);
+                    width: 140px;
+                    min-width: 140px;
+
+                    > .MuiSelect-select {
+                        font-size: 14px;
+                    }
+                }
+
+                div[class*="MuiInputBase-root "] {
+                    background: var(--fn-bg-var-new);
+                    width: 140px;
+                    min-width: 140px;
+
+                    &:hover {
+                        border: 1px solid var(--p500);
+                    }
+                }
+            }
+        }
+
+        .inputAdornmentInputContainer {
+            input {
+                border: 0 !important;
+                background-color: transparent;
+                box-shadow: none !important;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,34 @@
+<svg width="1680" height="852" viewBox="0 0 1680 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1680" height="852" fill="url(#paint0_linear_9603_5973)" fill-opacity="0.9"/>
+<rect width="1680" height="852" fill="url(#paint1_radial_9603_5973)"/>
+<rect width="1680" height="852" fill="url(#paint2_radial_9603_5973)"/>
+<rect width="1680" height="852" fill="url(#paint3_linear_9603_5973)" fill-opacity="0.5" style="mix-blend-mode:plus-darker"/>
+<rect width="1680" height="852" fill="url(#paint4_radial_9603_5973)" style="mix-blend-mode:hard-light"/>
+<rect width="1680" height="852" fill="url(#paint5_radial_9603_5973)" fill-opacity="0.3"/>
+<defs>
+<linearGradient id="paint0_linear_9603_5973" x1="263.028" y1="152.977" x2="852.41" y2="1283.47" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0A2C90"/>
+<stop offset="1" stop-color="#00CDFF"/>
+</linearGradient>
+<radialGradient id="paint1_radial_9603_5973" cx="0" cy="0" r="1" gradientTransform="matrix(585.617 413.385 -89.8125 200.966 1119.98 490.395)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#004ECC"/>
+<stop offset="1" stop-color="#3381FF" stop-opacity="0.5"/>
+</radialGradient>
+<radialGradient id="paint2_radial_9603_5973" cx="0" cy="0" r="1" gradientTransform="matrix(1680 817.462 -221.216 872.724 -5.07154e-05 34.5377)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#002766"/>
+<stop offset="1" stop-color="#004ECC"/>
+</radialGradient>
+<linearGradient id="paint3_linear_9603_5973" x1="1559.43" y1="83.912" x2="722.33" y2="689.288" gradientUnits="userSpaceOnUse">
+<stop stop-color="#11385A"/>
+<stop offset="1" stop-color="#2075BF" stop-opacity="0"/>
+</linearGradient>
+<radialGradient id="paint4_radial_9603_5973" cx="0" cy="0" r="1" gradientTransform="matrix(-699.968 460.946 -150.064 -336.418 1729.46 258.662)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#21C445"/>
+<stop offset="1" stop-color="#21C445" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="paint5_radial_9603_5973" cx="0" cy="0" r="1" gradientTransform="matrix(149.45 -226.02 1042.06 1017.22 1046.03 226.02)" gradientUnits="userSpaceOnUse">
+<stop offset="0.649038" stop-color="white" stop-opacity="0.22"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>

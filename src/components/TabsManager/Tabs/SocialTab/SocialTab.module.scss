@@ -1,0 +1,57 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.socialTabContainer {
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.previewsWrapper {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.formContainer {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.textareaContainer {
+    width: 670px !important;
+    max-width: calc(100% - 32px);
+
+    label {
+        padding: 0 !important;
+        margin-bottom: 12px;
+    }
+
+    textarea {
+        border: 0 !important;
+        background-color: transparent;
+        box-shadow: none !important;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.selectContainer {
+    width: 670px !important;
+    max-width: calc(100% - 32px);
+}
+
+:global(.vanguard-input .vanguard-input-backdrop) {
+    z-index: -1;
+}

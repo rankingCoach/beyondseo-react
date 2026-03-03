@@ -1,0 +1,70 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.generalTabContainerOuter {
+    min-height: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .generalTabMainContent {
+        flex: 1 1 auto;
+        min-width: 300px;
+
+        :global(.seo-metadata-and-keywords-container) {
+            :global(p) {
+                max-width: 100%;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+            }
+        }
+    }
+
+    .generalTabSidebar {
+        width: 300px;
+        flex-shrink: 0;
+        margin-top: 24px;
+    }
+}
+
+/* Tablet: Stack when sidebar would be squeezed */
+@media screen and (max-width: 1100px) {
+    .generalTabContainerOuter {
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+        .generalTabMainContent {
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .generalTabSidebar {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 0;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+/* Small tablet and mobile */
+@media screen and (max-width: 768px) {
+    .generalTabContainerOuter {
+        flex-direction: column;
+        gap: 16px;
+
+        .generalTabMainContent {
+            min-width: 0;
+        }
+
+        .generalTabSidebar {
+            width: 100%;
+            max-width: none;
+            margin-top: 0;
+        }
+    }
+}

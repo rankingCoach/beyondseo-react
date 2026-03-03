@@ -1,0 +1,15 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.seo-title-editor-container {
+    display: flex;
+    align-items: baseline;
+    gap: $peta;
+    flex-wrap: wrap;
+
+    @media screen and (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}

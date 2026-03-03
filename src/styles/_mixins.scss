@@ -1,0 +1,18 @@
+@mixin rgba-background($hexcolor, $opacity) {
+  background-color: var($hexcolor);
+  background-color: rgba(var($hexcolor), $opacity);
+}
+
+@mixin container() {
+  // padding-right: clamp(1rem, -36.463rem + 58.54vw, 25rem);
+  // padding-left: clamp(1rem, -36.463rem + 58.54vw, 25rem);
+  max-width: 1184px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@mixin ellipsis() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

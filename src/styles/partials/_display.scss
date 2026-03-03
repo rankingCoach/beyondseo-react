@@ -1,0 +1,21 @@
+@use "./generic-mixins" as *;
+
+$display: (
+  flex,
+  block,
+  grid,
+  inline,
+  inline-block,
+  inline-flex,
+  inline-grid
+);
+
+@mixin display($breakpoint: "") {
+  @each $val in $display {
+    @if($breakpoint == "") {
+      @include generateClass(d, $val, display, $val);
+    } @else {
+      @include generateClassWithBreakpoint(d, $val, display, $val, $breakpoint);
+    }
+  }
+}

@@ -1,0 +1,1666 @@
+[data-lastpass-root] {
+    display: none;
+}
+[data-lastpass-icon-root] {
+    display: none;
+}
+*,:after,:before {
+    box-sizing: border-box
+}
+:root {
+    --white: #ffffff;
+    --white-rgb: 255, 255, 255;
+    --black: #040506;
+    --black-rgb: 4, 5, 6;
+    --brand-color: hsl(217deg, 100%, 50%);
+    --brand-color-rgb: 0, 98, 255;
+    --p500: hsl(217deg, 100%, 50%);
+    --p500-rgb: 0, 98, 255;
+    --i500: hsl(217deg, 100%, 50%);
+    --i500-rgb: 0, 98, 255;
+    --n500: hsl(217deg, 25%, 42%);
+    --n500-rgb: 80, 101, 134;
+    --s500: hsl(133deg, 71%, 37%);
+    --s500-rgb: 27, 161, 56;
+    --e500: hsl(4deg, 90%, 58%);
+    --e500-rgb: 244, 64, 52;
+    --w500: hsl(33deg, 91%, 45%);
+    --w500-rgb: 219, 125, 10;
+    --a1-500: hsl(247deg, 67%, 48%);
+    --a1-500-rgb: 60, 40, 204;
+    --a2-500: hsl(40deg, 100%, 74%);
+    --a2-500-rgb: 255, 211, 122;
+    --a3-500: hsl(339deg, 100%, 56%);
+    --a3-500-rgb: 255, 31, 109;
+    --email-brand: hsl(217deg, 100%, 50%);
+    --email-brand-rgb: 0, 98, 255;
+    --email-fn-cta-lightest: #e6efff;
+    --email-fn-cta-lightest-rgb: 230, 239, 255;
+    --email-fn-cta-light: #66a1ff;
+    --email-fn-cta-light-rgb: 102, 161, 255;
+    --email-fn-cta: hsl(217deg, 100%, 50%);
+    --email-fn-cta-rgb: 0, 98, 255;
+    --email-fn-cta-dark: #003b99;
+    --email-fn-cta-dark-rgb: 0, 59, 153;
+    --email-fn-bg: #ffffff;
+    --email-fn-bg-rgb: 255, 255, 255;
+    --email-fn-bg-var: #f5f7f9;
+    --email-fn-bg-var-rgb: 245, 247, 249;
+    --email-fn-fg: #2a3546;
+    --email-fn-fg-rgb: 42, 53, 70;
+    --email-fn-fg-on-cta: #ffffff;
+    --email-fn-fg-on-cta-rgb: 255, 255, 255;
+    --email-fn-fg-light: hsl(217deg, 25%, 42%);
+    --email-fn-fg-light-rgb: 80, 101, 134;
+    --email-fn-fg-lightest: #8698b6;
+    --email-fn-fg-lightest-rgb: 134, 152, 182;
+    --email-fn-brd: #b6c1d3;
+    --email-fn-brd-rgb: 182, 193, 211;
+    --email-fn-divider: #e6e9f0;
+    --email-fn-divider-rgb: 230, 233, 240;
+    --email-background: #f5f7f9;
+    --email-background-rgb: 245, 247, 249;
+    --email-content-background: #f5f7f9;
+    --email-content-background-rgb: 245, 247, 249;
+    --email-content-padding: "0";
+    --email-warning-lightest: #fce6c9;
+    --email-warning-lightest-rgb: 252, 230, 201;
+    --email-warning-dark: hsl(33deg, 91%, 45%);
+    --email-warning-dark-rgb: 219, 125, 10;
+    --email-warning-darkest: #7a2706;
+    --email-warning-darkest-rgb: 122, 39, 6;
+    --email-error-lightest: #ffeceb;
+    --email-error-lightest-rgb: 255, 236, 235;
+    --email-error-dark: hsl(4deg, 90%, 58%);
+    --email-error-dark-rgb: 244, 64, 52;
+    --email-error-darkest: #b8150a;
+    --email-error-darkest-rgb: 184, 21, 10;
+    --email-success-lightest: #e9fbed;
+    --email-success-lightest-rgb: 233, 251, 237;
+    --email-success-light: #21c445;
+    --email-success-light-rgb: 33, 196, 69;
+    --email-success-dark: hsl(133deg, 71%, 37%);
+    --email-success-dark-rgb: 27, 161, 56;
+    --email-success-darkest: #0d4a1a;
+    --email-success-darkest-rgb: 13, 74, 26;
+    --email-info-lightest: #e6efff;
+    --email-info-lightest-rgb: 230, 239, 255;
+    --email-info-dark: hsl(217deg, 100%, 50%);
+    --email-info-dark-rgb: 0, 98, 255;
+    --email-info-darkest: #001433;
+    --email-info-darkest-rgb: 0, 20, 51;
+    --email-ai-light: #e8e5fa;
+    --email-ai-light-rgb: 232, 229, 250;
+    --email-ai-dark: hsl(247deg, 67%, 48%);
+    --email-ai-dark-rgb: 60, 40, 204;
+    --email-acc02-darkest: #ffb114;
+    --email-acc02-darkest-rgb: 255, 177, 20;
+    --email-header-version: 1;
+    --email-header-gradient-version: none;
+    --email-header-theme-mode: light;
+    --email-header-additional-information: date;
+    --email-header-fn-fg: #2a3546;
+    --email-header-fn-fg-rgb: 42, 53, 70;
+    --email-header-fn-bg: #f5f7f9;
+    --email-header-fn-bg-rgb: 245, 247, 249;
+    --email-footer-version: 1;
+    --email-footer-theme-mode: light;
+    --email-footer-display-logo: bottom;
+    --email-footer-fg-main: #2a3546;
+    --email-footer-fg-main-rgb: 42, 53, 70;
+    --email-footer-bg-main: #ffffff;
+    --email-footer-bg-main-rgb: 255, 255, 255;
+    --email-footer-fg-light-main: hsl(217deg, 25%, 42%);
+    --email-footer-fg-light-main-rgb: 80, 101, 134;
+    --email-footer-fg-lightest-main: #8698b6;
+    --email-footer-fg-lightest-main-rgb: 134, 152, 182;
+    --email-footer-bg-accent: hsl(217deg, 100%, 50%);
+    --email-footer-bg-accent-rgb: 0, 98, 255;
+    --email-footer-fg-on-bg-accent: #ffffff;
+    --email-footer-fg-on-bg-accent-rgb: 255, 255, 255;
+    --email-footer-bg-accent2: #f5f7f9;
+    --email-footer-bg-accent2-rgb: 245, 247, 249;
+    --email-footer-fg-on-bg-accent2: hsl(217deg, 25%, 42%);
+    --email-footer-fg-on-bg-accent2-rgb: 80, 101, 134;
+    --email-footer-cta-fg-on-bg-accent2: hsl(217deg, 100%, 50%);
+    --email-footer-cta-fg-on-bg-accent2-rgb: 0, 98, 255;
+    --email-button-primary-bg: hsl(217deg, 100%, 50%);
+    --email-button-primary-bg-rgb: 0, 98, 255;
+    --email-button-primary-fg: #ffffff;
+    --email-button-primary-fg-rgb: 255, 255, 255;
+    --email-button-primary-border: hsl(217deg, 100%, 50%);
+    --email-button-primary-border-rgb: 0, 98, 255;
+    --email-button-default-bg: #ffffff;
+    --email-button-default-bg-rgb: 255, 255, 255;
+    --email-button-default-fg: hsl(217deg, 100%, 50%);
+    --email-button-default-fg-rgb: 0, 98, 255;
+    --email-button-default-border: #ffffff;
+    --email-button-default-border-rgb: 255, 255, 255;
+    --email-button-border-radius: 4px;
+    --review-booster-pm-1-text: #ffffff;
+    --review-booster-pm-1-text-rgb: 255, 255, 255;
+    --review-booster-pm-1-background: rgba(4, 5, 6, 0.7);
+    --review-booster-pm-1-qr-code: #000;
+    --review-booster-pm-1-qr-code-rgb: 0, 0, 0;
+    --review-booster-pm-2-text: #2a3546;
+    --review-booster-pm-2-text-rgb: 42, 53, 70;
+    --review-booster-pm-2-background: #ffffff;
+    --review-booster-pm-2-background-rgb: 255, 255, 255;
+    --review-booster-pm-2-stroke: linear-gradient(133.06deg, #e6efff 0%, #99c0ff 100%);
+    --review-booster-pm-2-qr-code: #000;
+    --review-booster-pm-2-qr-code-rgb: 0, 0, 0;
+    --heading-typeface: "Roboto", sans-serif;
+    --heading-color: #2a3546;
+    --heading-color-rgb: 42, 53, 70;
+    --text-typeface: "Roboto", sans-serif;
+    --text-color: #2a3546;
+    --text-color-rgb: 42, 53, 70;
+    --em-color: hsl(217deg, 100%, 50%);
+    --em-color-rgb: 0, 98, 255;
+    --header-color: #ffffff;
+    --header-color-rgb: 255, 255, 255;
+    --header-opacity: 0.8;
+    --header-button-secondary-text-color: #2a3546;
+    --header-button-secondary-text-color-rgb: 42, 53, 70;
+    --header-button-secondary-background-color: #ffffff;
+    --header-button-secondary-background-color-rgb: 255, 255, 255;
+    --header-button-secondary-border-color: #b6c1d3;
+    --header-button-secondary-border-color-rgb: 182, 193, 211;
+    --header-button-secondary-hover-text-color: hsl(217deg, 100%, 50%);
+    --header-button-secondary-hover-text-color-rgb: 0, 98, 255;
+    --header-button-secondary-hover-background-color: #f5f7f9;
+    --header-button-secondary-hover-background-color-rgb: 245, 247, 249;
+    --header-button-secondary-hover-border-color: #b6c1d3;
+    --header-button-secondary-hover-border-color-rgb: 182, 193, 211;
+    --header-button-secondary-disabled-text-color: #2a3546;
+    --header-button-secondary-disabled-text-color-rgb: 42, 53, 70;
+    --header-button-secondary-disabled-background-color: #ffffff;
+    --header-button-secondary-disabled-background-color-rgb: 255, 255, 255;
+    --header-button-secondary-disabled-border-color: #b6c1d3;
+    --header-button-secondary-disabled-border-color-rgb: 182, 193, 211;
+    --header-button-secondary-focus-text-color: #2a3546;
+    --header-button-secondary-focus-text-color-rgb: 42, 53, 70;
+    --header-button-secondary-focus-background-color: #ffffff;
+    --header-button-secondary-focus-background-color-rgb: 255, 255, 255;
+    --header-button-secondary-focus-border-color: #b6c1d3;
+    --header-button-secondary-focus-border-color-rgb: 182, 193, 211;
+    --header-button-secondary-focus-box-shadow-color: #99c0ff;
+    --header-button-secondary-focus-box-shadow-color-rgb: 153, 192, 255;
+    --header-button-secondary-ripple-color: hsl(217deg, 100%, 50%);
+    --header-button-secondary-ripple-color-rgb: 0, 98, 255;
+    --logo-height: 22px;
+    --logo-height-tablet: 22px;
+    --logo-height-mobile: 22px;
+    --logo-height-vision: 22px;
+    --logo-height-adcoach: 22px;
+    --logo-height-listingcoach: 22px;
+    --logo-height-rankingcoach: 22px;
+    --logo-height-vision-adcoach: 22px;
+    --logo-height-vision-listingcoach: 22px;
+    --logo-height-vision-listingcoach-rankingcoach: 22px;
+    --logo-height-vision-adcoach-rankingcoach: 22px;
+    --logo-height-vision-adcoach-listingcoach: 22px;
+    --logo-height-vision-rankingcoach: 22px;
+    --logo-height-adcoach-listingcoach: 22px;
+    --logo-height-adcoach-rankingcoach: 22px;
+    --logo-height-listingcoach-rankingcoach: 22px;
+    --logo-height-360: 22px;
+    --header-height: 54px;
+    --header-height-tablet: 54px;
+    --header-height-mobile: 54px;
+    --heading-weight-bold: 700;
+    --heading-V700-weight-autogen: 700;
+    --heading-V700-src-autogen: "/vanguard/assets/fonts/Roboto-Bold.ttf";
+    --heading-weight-medium: 500;
+    --heading-V500-weight-autogen: 500;
+    --heading-V500-src-autogen: "/vanguard/assets/fonts/Roboto-Medium.ttf";
+    --heading-weight-regular: 400;
+    --heading-V400-weight-autogen: 400;
+    --heading-V400-src-autogen: "/vanguard/assets/fonts/Roboto-Regular.ttf";
+    --theme-weight-bold: 700;
+    --V700-weight-autogen: 700;
+    --V700-src-autogen: "/vanguard/assets/fonts/Roboto-Bold.ttf";
+    --theme-weight-medium: 500;
+    --V500-weight-autogen: 500;
+    --V500-src-autogen: "/vanguard/assets/fonts/Roboto-Medium.ttf";
+    --theme-weight-regular: 400;
+    --V400-weight-autogen: 400;
+    --V400-src-autogen: "/vanguard/assets/fonts/Roboto-Regular.ttf";
+    --font-name: "Roboto";
+    --theme-typeface: "Roboto", sans-serif;
+    --heading-font-name: "Roboto";
+    --buttons-typeface: "Roboto", sans-serif;
+    --buttons-border-radius: 4px;
+    --button-default-text-color: hsl(217deg, 100%, 50%);
+    --button-default-text-color-rgb: 0, 98, 255;
+    --button-default-background-color: #ffffff;
+    --button-default-background-color-rgb: 255, 255, 255;
+    --button-default-hover-text-color: #003b99;
+    --button-default-hover-text-color-rgb: 0, 59, 153;
+    --button-default-hover-background-color: #f5f7f9;
+    --button-default-hover-background-color-rgb: 245, 247, 249;
+    --button-default-disabled-text-color: #2a3546;
+    --button-default-disabled-text-color-rgb: 42, 53, 70;
+    --button-default-disabled-background-color: transparent;
+    --button-default-focus-text-color: hsl(217deg, 100%, 50%);
+    --button-default-focus-text-color-rgb: 0, 98, 255;
+    --button-default-focus-background-color: transparent;
+    --button-default-focus-box-shadow-color: #99c0ff;
+    --button-default-focus-box-shadow-color-rgb: 153, 192, 255;
+    --button-default-ripple-color: hsl(217deg, 100%, 50%);
+    --button-default-ripple-color-rgb: 0, 98, 255;
+    --button-primary-text-color: #ffffff;
+    --button-primary-text-color-rgb: 255, 255, 255;
+    --button-primary-background-color: hsl(217deg, 100%, 50%);
+    --button-primary-background-color-rgb: 0, 98, 255;
+    --button-primary-hover-text-color: #ffffff;
+    --button-primary-hover-text-color-rgb: 255, 255, 255;
+    --button-primary-hover-background-color: #004ecc;
+    --button-primary-hover-background-color-rgb: 0, 78, 204;
+    --button-primary-disabled-text-color: #ffffff;
+    --button-primary-disabled-text-color-rgb: 255, 255, 255;
+    --button-primary-disabled-background-color: #8698b6;
+    --button-primary-disabled-background-color-rgb: 134, 152, 182;
+    --button-primary-focus-text-color: #ffffff;
+    --button-primary-focus-text-color-rgb: 255, 255, 255;
+    --button-primary-focus-background-color: hsl(217deg, 100%, 50%);
+    --button-primary-focus-background-color-rgb: 0, 98, 255;
+    --button-primary-focus-box-shadow-color: #99c0ff;
+    --button-primary-focus-box-shadow-color-rgb: 153, 192, 255;
+    --button-primary-ripple-color: #99c0ff;
+    --button-primary-ripple-color-rgb: 153, 192, 255;
+    --button-secondary-text-color: #2a3546;
+    --button-secondary-text-color-rgb: 42, 53, 70;
+    --button-secondary-no-border-text-color: hsl(217deg, 25%, 42%);
+    --button-secondary-no-border-text-color-rgb: 80, 101, 134;
+    --button-secondary-background-color: #ffffff;
+    --button-secondary-background-color-rgb: 255, 255, 255;
+    --button-secondary-border-color: #b6c1d3;
+    --button-secondary-border-color-rgb: 182, 193, 211;
+    --button-secondary-hover-text-color: hsl(217deg, 100%, 50%);
+    --button-secondary-hover-text-color-rgb: 0, 98, 255;
+    --button-secondary-hover-background-color: #f5f7f9;
+    --button-secondary-hover-background-color-rgb: 245, 247, 249;
+    --button-secondary-hover-border-color: #b6c1d3;
+    --button-secondary-hover-border-color-rgb: 182, 193, 211;
+    --button-secondary-disabled-text-color: #2a3546;
+    --button-secondary-disabled-text-color-rgb: 42, 53, 70;
+    --button-secondary-disabled-background-color: #ffffff;
+    --button-secondary-disabled-background-color-rgb: 255, 255, 255;
+    --button-secondary-disabled-border-color: #b6c1d3;
+    --button-secondary-disabled-border-color-rgb: 182, 193, 211;
+    --button-secondary-focus-text-color: #2a3546;
+    --button-secondary-focus-text-color-rgb: 42, 53, 70;
+    --button-secondary-focus-background-color: #ffffff;
+    --button-secondary-focus-background-color-rgb: 255, 255, 255;
+    --button-secondary-focus-border-color: #b6c1d3;
+    --button-secondary-focus-border-color-rgb: 182, 193, 211;
+    --button-secondary-focus-box-shadow-color: #99c0ff;
+    --button-secondary-focus-box-shadow-color-rgb: 153, 192, 255;
+    --button-secondary-ripple-color: hsl(217deg, 100%, 50%);
+    --button-secondary-ripple-color-rgb: 0, 98, 255;
+    --button-shimmer-text-color: #ffffff;
+    --button-shimmer-text-color-rgb: 255, 255, 255;
+    --button-shimmer-background-color: hsl(247deg, 67%, 48%);
+    --button-shimmer-background-color-rgb: 60, 40, 204;
+    --button-shimmer-hover-text-color: #ffffff;
+    --button-shimmer-hover-text-color-rgb: 255, 255, 255;
+    --button-shimmer-hover-background-color: #231877;
+    --button-shimmer-hover-background-color-rgb: 35, 24, 119;
+    --button-shimmer-disabled-text-color: #ffffff;
+    --button-shimmer-disabled-text-color-rgb: 255, 255, 255;
+    --button-shimmer-disabled-background-color: #8698b6;
+    --button-shimmer-disabled-background-color-rgb: 134, 152, 182;
+    --button-shimmer-focus-text-color: #ffffff;
+    --button-shimmer-focus-text-color-rgb: 255, 255, 255;
+    --button-shimmer-focus-background-color: hsl(217deg, 100%, 50%);
+    --button-shimmer-focus-background-color-rgb: 0, 98, 255;
+    --button-shimmer-focus-box-shadow-color: #99c0ff;
+    --button-shimmer-focus-box-shadow-color-rgb: 153, 192, 255;
+    --button-shimmer-ripple-color: #99c0ff;
+    --button-shimmer-ripple-color-rgb: 153, 192, 255;
+    --icon-font-family: rc-Icons;
+    --fn-bg: #ffffff;
+    --fn-bg-rgb: 255, 255, 255;
+    --fn-bg-var: #f5f7f9;
+    --fn-bg-var-rgb: 245, 247, 249;
+    --fn-bg-surface: #ffffff;
+    --fn-bg-surface-rgb: 255, 255, 255;
+    --fn-bg-cta: hsl(217deg, 100%, 50%);
+    --fn-bg-cta-rgb: 0, 98, 255;
+    --fn-fg-cta: hsl(217deg, 100%, 50%);
+    --fn-fg-cta-rgb: 0, 98, 255;
+    --fn-fg-cta-hov: #003b99;
+    --fn-fg-cta-hov-rgb: 0, 59, 153;
+    --fn-bg-cta-fg: #ffffff;
+    --fn-bg-cta-fg-rgb: 255, 255, 255;
+    --fn-bg-cta-fg-hov: rgba(255, 255, 255, 0.7);
+    --fn-fg: #2a3546;
+    --fn-fg-rgb: 42, 53, 70;
+    --fn-fg-light: hsl(217deg, 25%, 42%);
+    --fn-fg-light-rgb: 80, 101, 134;
+    --fn-fg-lightest: #8698b6;
+    --fn-fg-lightest-rgb: 134, 152, 182;
+    --fn-brd-gl: #b6c1d3;
+    --fn-brd-gl-rgb: 182, 193, 211;
+    --fn-divider-gl: #e6e9f0;
+    --fn-divider-gl-rgb: 230, 233, 240;
+    --fn-bg-hov-n-gl: #b6c1d3;
+    --fn-bg-hov-n-gl-rgb: 182, 193, 211;
+    --fn-bg-hov-p-gl: #99c0ff;
+    --fn-bg-hov-p-gl-rgb: 153, 192, 255;
+    --sc-charts-01: hsl(217deg, 100%, 50%);
+    --sc-charts-01-rgb: 0, 98, 255;
+    --sc-charts-01-op10: rgba(0, 98, 255, 0.1);
+    --sc-charts-02: #21c445;
+    --sc-charts-02-rgb: 33, 196, 69;
+    --sc-charts-02-op10: rgba(33, 196, 69, 0.1);
+    --sc-charts-03: hsl(339deg, 100%, 56%);
+    --sc-charts-03-rgb: 255, 31, 109;
+    --sc-charts-03-op10: rgba(255, 31, 109, 0.1);
+    --sc-charts-04: #ffb114;
+    --sc-charts-04-rgb: 255, 177, 20;
+    --sc-charts-04-op10: rgba(255, 177, 20, 0.1);
+    --sc-charts-05: #004ecc;
+    --sc-charts-05-rgb: 0, 78, 204;
+    --sc-charts-05-op10: rgba(0, 78, 204, 0.1);
+    --sc-charts-06: #3381ff;
+    --sc-charts-06-rgb: 51, 129, 255;
+    --sc-charts-06-op10: rgba(51, 129, 255, 0.1);
+    --sc-charts-07: #99c0ff;
+    --sc-charts-07-rgb: 153, 192, 255;
+    --sc-charts-07-op10: rgba(153, 192, 255, 0.1);
+    --sc-charts-08: #231877;
+    --sc-charts-08-rgb: 35, 24, 119;
+    --sc-charts-08-op10: rgba(35, 24, 119, 0.1);
+    --sc-charts-09: hsl(247deg, 67%, 48%);
+    --sc-charts-09-rgb: 60, 40, 204;
+    --sc-charts-09-op10: rgba(60, 40, 204, 0.1);
+    --sc-charts-10: #8377e4;
+    --sc-charts-10-rgb: 131, 119, 228;
+    --sc-charts-10-op10: rgba(131, 119, 228, 0.1);
+    --sc-charts-11: hsl(4deg, 90%, 58%);
+    --sc-charts-11-rgb: 244, 64, 52;
+    --sc-charts-11-op10: rgba(244, 64, 52, 0.1);
+    --p100: #e6efff;
+    --p100-rgb: 230, 239, 255;
+    --p200: #99c0ff;
+    --p200-rgb: 153, 192, 255;
+    --p300: #66a1ff;
+    --p300-rgb: 102, 161, 255;
+    --p400: #3381ff;
+    --p400-rgb: 51, 129, 255;
+    --p600: #004ecc;
+    --p600-rgb: 0, 78, 204;
+    --p700: #003b99;
+    --p700-rgb: 0, 59, 153;
+    --p800: #002766;
+    --p800-rgb: 0, 39, 102;
+    --p900: #001433;
+    --p900-rgb: 0, 20, 51;
+    --i100: #e6efff;
+    --i100-rgb: 230, 239, 255;
+    --i400: #3381ff;
+    --i400-rgb: 51, 129, 255;
+    --i900: #001433;
+    --i900-rgb: 0, 20, 51;
+    --n000: #ffffff;
+    --n000-rgb: 255, 255, 255;
+    --n100: #f5f7f9;
+    --n100-rgb: 245, 247, 249;
+    --n200: #e6e9f0;
+    --n200-rgb: 230, 233, 240;
+    --n300: #b6c1d3;
+    --n300-rgb: 182, 193, 211;
+    --n400: #8698b6;
+    --n400-rgb: 134, 152, 182;
+    --n600: #3d4d66;
+    --n600-rgb: 61, 77, 102;
+    --n700: #2a3546;
+    --n700-rgb: 42, 53, 70;
+    --n800: #171d26;
+    --n800-rgb: 23, 29, 38;
+    --n900: #040506;
+    --n900-rgb: 4, 5, 6;
+    --s100: #e9fbed;
+    --s100-rgb: 233, 251, 237;
+    --s400: #21c445;
+    --s400-rgb: 33, 196, 69;
+    --s900: #0d4a1a;
+    --s900-rgb: 13, 74, 26;
+    --w100: #fce6c9;
+    --w100-rgb: 252, 230, 201;
+    --w400: #f59b2e;
+    --w400-rgb: 245, 155, 46;
+    --w900: #7a2706;
+    --w900-rgb: 122, 39, 6;
+    --e100: #ffeceb;
+    --e100-rgb: 255, 236, 235;
+    --e400: #ff675c;
+    --e400-rgb: 255, 103, 92;
+    --e900: #b8150a;
+    --e900-rgb: 184, 21, 10;
+    --a1100: #e8e5fa;
+    --a1100-rgb: 232, 229, 250;
+    --a1300: #8377e4;
+    --a1300-rgb: 131, 119, 228;
+    --a1500: hsl(247deg, 67%, 48%);
+    --a1500-rgb: 60, 40, 204;
+    --a1900: #231877;
+    --a1900-rgb: 35, 24, 119;
+    --a2100: #fff5e0;
+    --a2100-rgb: 255, 245, 224;
+    --a2400: #ffe4ad;
+    --a2400-rgb: 255, 228, 173;
+    --a2500: hsl(40deg, 100%, 74%);
+    --a2500-rgb: 255, 211, 122;
+    --a2900: #ffb114;
+    --a2900-rgb: 255, 177, 20;
+    --a3100: #ffe0eb;
+    --a3100-rgb: 255, 224, 235;
+    --a3300: #ff85af;
+    --a3300-rgb: 255, 133, 175;
+    --a3400: #ff528e;
+    --a3400-rgb: 255, 82, 142;
+    --a3500: hsl(339deg, 100%, 56%);
+    --a3500-rgb: 255, 31, 109;
+    --a3900: #eb0052;
+    --a3900-rgb: 235, 0, 82;
+}
+:root .bg-color-white {
+    background-color: var(--white);
+}
+:root .color-white {
+    color: var(--white);
+}
+:root .bg-color-black {
+    background-color: var(--black);
+}
+:root .color-black {
+    color: var(--black);
+}
+:root .bg-color-brand-color {
+    background-color: var(--brand-color);
+}
+:root .color-brand-color {
+    color: var(--brand-color);
+}
+:root .bg-color-p500 {
+    background-color: var(--p500);
+}
+:root .color-p500 {
+    color: var(--p500);
+}
+:root .bg-color-i500 {
+    background-color: var(--i500);
+}
+:root .color-i500 {
+    color: var(--i500);
+}
+:root .bg-color-n500 {
+    background-color: var(--n500);
+}
+:root .color-n500 {
+    color: var(--n500);
+}
+:root .bg-color-s500 {
+    background-color: var(--s500);
+}
+:root .color-s500 {
+    color: var(--s500);
+}
+:root .bg-color-e500 {
+    background-color: var(--e500);
+}
+:root .color-e500 {
+    color: var(--e500);
+}
+:root .bg-color-w500 {
+    background-color: var(--w500);
+}
+:root .color-w500 {
+    color: var(--w500);
+}
+:root .bg-color-a1-500 {
+    background-color: var(--a1-500);
+}
+:root .color-a1-500 {
+    color: var(--a1-500);
+}
+:root .bg-color-a2-500 {
+    background-color: var(--a2-500);
+}
+:root .color-a2-500 {
+    color: var(--a2-500);
+}
+:root .bg-color-a3-500 {
+    background-color: var(--a3-500);
+}
+:root .color-a3-500 {
+    color: var(--a3-500);
+}
+:root .bg-color-email-brand {
+    background-color: var(--email-brand);
+}
+:root .color-email-brand {
+    color: var(--email-brand);
+}
+:root .bg-color-email-fn-cta-lightest {
+    background-color: var(--email-fn-cta-lightest);
+}
+:root .color-email-fn-cta-lightest {
+    color: var(--email-fn-cta-lightest);
+}
+:root .bg-color-email-fn-cta-light {
+    background-color: var(--email-fn-cta-light);
+}
+:root .color-email-fn-cta-light {
+    color: var(--email-fn-cta-light);
+}
+:root .bg-color-email-fn-cta {
+    background-color: var(--email-fn-cta);
+}
+:root .color-email-fn-cta {
+    color: var(--email-fn-cta);
+}
+:root .bg-color-email-fn-cta-dark {
+    background-color: var(--email-fn-cta-dark);
+}
+:root .color-email-fn-cta-dark {
+    color: var(--email-fn-cta-dark);
+}
+:root .bg-color-email-fn-bg {
+    background-color: var(--email-fn-bg);
+}
+:root .color-email-fn-bg {
+    color: var(--email-fn-bg);
+}
+:root .bg-color-email-fn-bg-var {
+    background-color: var(--email-fn-bg-var);
+}
+:root .color-email-fn-bg-var {
+    color: var(--email-fn-bg-var);
+}
+:root .bg-color-email-fn-fg {
+    background-color: var(--email-fn-fg);
+}
+:root .color-email-fn-fg {
+    color: var(--email-fn-fg);
+}
+:root .bg-color-email-fn-fg-on-cta {
+    background-color: var(--email-fn-fg-on-cta);
+}
+:root .color-email-fn-fg-on-cta {
+    color: var(--email-fn-fg-on-cta);
+}
+:root .bg-color-email-fn-fg-light {
+    background-color: var(--email-fn-fg-light);
+}
+:root .color-email-fn-fg-light {
+    color: var(--email-fn-fg-light);
+}
+:root .bg-color-email-fn-fg-lightest {
+    background-color: var(--email-fn-fg-lightest);
+}
+:root .color-email-fn-fg-lightest {
+    color: var(--email-fn-fg-lightest);
+}
+:root .bg-color-email-fn-brd {
+    background-color: var(--email-fn-brd);
+}
+:root .color-email-fn-brd {
+    color: var(--email-fn-brd);
+}
+:root .bg-color-email-fn-divider {
+    background-color: var(--email-fn-divider);
+}
+:root .color-email-fn-divider {
+    color: var(--email-fn-divider);
+}
+:root .bg-color-email-background {
+    background-color: var(--email-background);
+}
+:root .color-email-background {
+    color: var(--email-background);
+}
+:root .bg-color-email-content-background {
+    background-color: var(--email-content-background);
+}
+:root .color-email-content-background {
+    color: var(--email-content-background);
+}
+:root .bg-color-email-warning-lightest {
+    background-color: var(--email-warning-lightest);
+}
+:root .color-email-warning-lightest {
+    color: var(--email-warning-lightest);
+}
+:root .bg-color-email-warning-dark {
+    background-color: var(--email-warning-dark);
+}
+:root .color-email-warning-dark {
+    color: var(--email-warning-dark);
+}
+:root .bg-color-email-warning-darkest {
+    background-color: var(--email-warning-darkest);
+}
+:root .color-email-warning-darkest {
+    color: var(--email-warning-darkest);
+}
+:root .bg-color-email-error-lightest {
+    background-color: var(--email-error-lightest);
+}
+:root .color-email-error-lightest {
+    color: var(--email-error-lightest);
+}
+:root .bg-color-email-error-dark {
+    background-color: var(--email-error-dark);
+}
+:root .color-email-error-dark {
+    color: var(--email-error-dark);
+}
+:root .bg-color-email-error-darkest {
+    background-color: var(--email-error-darkest);
+}
+:root .color-email-error-darkest {
+    color: var(--email-error-darkest);
+}
+:root .bg-color-email-success-lightest {
+    background-color: var(--email-success-lightest);
+}
+:root .color-email-success-lightest {
+    color: var(--email-success-lightest);
+}
+:root .bg-color-email-success-light {
+    background-color: var(--email-success-light);
+}
+:root .color-email-success-light {
+    color: var(--email-success-light);
+}
+:root .bg-color-email-success-dark {
+    background-color: var(--email-success-dark);
+}
+:root .color-email-success-dark {
+    color: var(--email-success-dark);
+}
+:root .bg-color-email-success-darkest {
+    background-color: var(--email-success-darkest);
+}
+:root .color-email-success-darkest {
+    color: var(--email-success-darkest);
+}
+:root .bg-color-email-info-lightest {
+    background-color: var(--email-info-lightest);
+}
+:root .color-email-info-lightest {
+    color: var(--email-info-lightest);
+}
+:root .bg-color-email-info-dark {
+    background-color: var(--email-info-dark);
+}
+:root .color-email-info-dark {
+    color: var(--email-info-dark);
+}
+:root .bg-color-email-info-darkest {
+    background-color: var(--email-info-darkest);
+}
+:root .color-email-info-darkest {
+    color: var(--email-info-darkest);
+}
+:root .bg-color-email-ai-light {
+    background-color: var(--email-ai-light);
+}
+:root .color-email-ai-light {
+    color: var(--email-ai-light);
+}
+:root .bg-color-email-ai-dark {
+    background-color: var(--email-ai-dark);
+}
+:root .color-email-ai-dark {
+    color: var(--email-ai-dark);
+}
+:root .bg-color-email-acc02-darkest {
+    background-color: var(--email-acc02-darkest);
+}
+:root .color-email-acc02-darkest {
+    color: var(--email-acc02-darkest);
+}
+:root .bg-color-email-header-fn-fg {
+    background-color: var(--email-header-fn-fg);
+}
+:root .color-email-header-fn-fg {
+    color: var(--email-header-fn-fg);
+}
+:root .bg-color-email-header-fn-bg {
+    background-color: var(--email-header-fn-bg);
+}
+:root .color-email-header-fn-bg {
+    color: var(--email-header-fn-bg);
+}
+:root .bg-color-email-footer-fg-main {
+    background-color: var(--email-footer-fg-main);
+}
+:root .color-email-footer-fg-main {
+    color: var(--email-footer-fg-main);
+}
+:root .bg-color-email-footer-bg-main {
+    background-color: var(--email-footer-bg-main);
+}
+:root .color-email-footer-bg-main {
+    color: var(--email-footer-bg-main);
+}
+:root .bg-color-email-footer-fg-light-main {
+    background-color: var(--email-footer-fg-light-main);
+}
+:root .color-email-footer-fg-light-main {
+    color: var(--email-footer-fg-light-main);
+}
+:root .bg-color-email-footer-fg-lightest-main {
+    background-color: var(--email-footer-fg-lightest-main);
+}
+:root .color-email-footer-fg-lightest-main {
+    color: var(--email-footer-fg-lightest-main);
+}
+:root .bg-color-email-footer-bg-accent {
+    background-color: var(--email-footer-bg-accent);
+}
+:root .color-email-footer-bg-accent {
+    color: var(--email-footer-bg-accent);
+}
+:root .bg-color-email-footer-fg-on-bg-accent {
+    background-color: var(--email-footer-fg-on-bg-accent);
+}
+:root .color-email-footer-fg-on-bg-accent {
+    color: var(--email-footer-fg-on-bg-accent);
+}
+:root .bg-color-email-footer-bg-accent2 {
+    background-color: var(--email-footer-bg-accent2);
+}
+:root .color-email-footer-bg-accent2 {
+    color: var(--email-footer-bg-accent2);
+}
+:root .bg-color-email-footer-fg-on-bg-accent2 {
+    background-color: var(--email-footer-fg-on-bg-accent2);
+}
+:root .color-email-footer-fg-on-bg-accent2 {
+    color: var(--email-footer-fg-on-bg-accent2);
+}
+:root .bg-color-email-footer-cta-fg-on-bg-accent2 {
+    background-color: var(--email-footer-cta-fg-on-bg-accent2);
+}
+:root .color-email-footer-cta-fg-on-bg-accent2 {
+    color: var(--email-footer-cta-fg-on-bg-accent2);
+}
+:root .bg-color-email-button-primary-bg {
+    background-color: var(--email-button-primary-bg);
+}
+:root .color-email-button-primary-bg {
+    color: var(--email-button-primary-bg);
+}
+:root .bg-color-email-button-primary-fg {
+    background-color: var(--email-button-primary-fg);
+}
+:root .color-email-button-primary-fg {
+    color: var(--email-button-primary-fg);
+}
+:root .bg-color-email-button-primary-border {
+    background-color: var(--email-button-primary-border);
+}
+:root .color-email-button-primary-border {
+    color: var(--email-button-primary-border);
+}
+:root .bg-color-email-button-default-bg {
+    background-color: var(--email-button-default-bg);
+}
+:root .color-email-button-default-bg {
+    color: var(--email-button-default-bg);
+}
+:root .bg-color-email-button-default-fg {
+    background-color: var(--email-button-default-fg);
+}
+:root .color-email-button-default-fg {
+    color: var(--email-button-default-fg);
+}
+:root .bg-color-email-button-default-border {
+    background-color: var(--email-button-default-border);
+}
+:root .color-email-button-default-border {
+    color: var(--email-button-default-border);
+}
+:root .bg-color-review-booster-pm-1-text {
+    background-color: var(--review-booster-pm-1-text);
+}
+:root .color-review-booster-pm-1-text {
+    color: var(--review-booster-pm-1-text);
+}
+:root .bg-color-review-booster-pm-1-qr-code {
+    background-color: var(--review-booster-pm-1-qr-code);
+}
+:root .color-review-booster-pm-1-qr-code {
+    color: var(--review-booster-pm-1-qr-code);
+}
+:root .bg-color-review-booster-pm-2-text {
+    background-color: var(--review-booster-pm-2-text);
+}
+:root .color-review-booster-pm-2-text {
+    color: var(--review-booster-pm-2-text);
+}
+:root .bg-color-review-booster-pm-2-background {
+    background-color: var(--review-booster-pm-2-background);
+}
+:root .color-review-booster-pm-2-background {
+    color: var(--review-booster-pm-2-background);
+}
+:root .bg-color-review-booster-pm-2-qr-code {
+    background-color: var(--review-booster-pm-2-qr-code);
+}
+:root .color-review-booster-pm-2-qr-code {
+    color: var(--review-booster-pm-2-qr-code);
+}
+:root .bg-color-heading-color {
+    background-color: var(--heading-color);
+}
+:root .color-heading-color {
+    color: var(--heading-color);
+}
+:root .bg-color-text-color {
+    background-color: var(--text-color);
+}
+:root .color-text-color {
+    color: var(--text-color);
+}
+:root .bg-color-em-color {
+    background-color: var(--em-color);
+}
+:root .color-em-color {
+    color: var(--em-color);
+}
+:root .bg-color-header-color {
+    background-color: var(--header-color);
+}
+:root .color-header-color {
+    color: var(--header-color);
+}
+:root .bg-color-header-button-secondary-text-color {
+    background-color: var(--header-button-secondary-text-color);
+}
+:root .color-header-button-secondary-text-color {
+    color: var(--header-button-secondary-text-color);
+}
+:root .bg-color-header-button-secondary-background-color {
+    background-color: var(--header-button-secondary-background-color);
+}
+:root .color-header-button-secondary-background-color {
+    color: var(--header-button-secondary-background-color);
+}
+:root .bg-color-header-button-secondary-border-color {
+    background-color: var(--header-button-secondary-border-color);
+}
+:root .color-header-button-secondary-border-color {
+    color: var(--header-button-secondary-border-color);
+}
+:root .bg-color-header-button-secondary-hover-text-color {
+    background-color: var(--header-button-secondary-hover-text-color);
+}
+:root .color-header-button-secondary-hover-text-color {
+    color: var(--header-button-secondary-hover-text-color);
+}
+:root .bg-color-header-button-secondary-hover-background-color {
+    background-color: var(--header-button-secondary-hover-background-color);
+}
+:root .color-header-button-secondary-hover-background-color {
+    color: var(--header-button-secondary-hover-background-color);
+}
+:root .bg-color-header-button-secondary-hover-border-color {
+    background-color: var(--header-button-secondary-hover-border-color);
+}
+:root .color-header-button-secondary-hover-border-color {
+    color: var(--header-button-secondary-hover-border-color);
+}
+:root .bg-color-header-button-secondary-disabled-text-color {
+    background-color: var(--header-button-secondary-disabled-text-color);
+}
+:root .color-header-button-secondary-disabled-text-color {
+    color: var(--header-button-secondary-disabled-text-color);
+}
+:root .bg-color-header-button-secondary-disabled-background-color {
+    background-color: var(--header-button-secondary-disabled-background-color);
+}
+:root .color-header-button-secondary-disabled-background-color {
+    color: var(--header-button-secondary-disabled-background-color);
+}
+:root .bg-color-header-button-secondary-disabled-border-color {
+    background-color: var(--header-button-secondary-disabled-border-color);
+}
+:root .color-header-button-secondary-disabled-border-color {
+    color: var(--header-button-secondary-disabled-border-color);
+}
+:root .bg-color-header-button-secondary-focus-text-color {
+    background-color: var(--header-button-secondary-focus-text-color);
+}
+:root .color-header-button-secondary-focus-text-color {
+    color: var(--header-button-secondary-focus-text-color);
+}
+:root .bg-color-header-button-secondary-focus-background-color {
+    background-color: var(--header-button-secondary-focus-background-color);
+}
+:root .color-header-button-secondary-focus-background-color {
+    color: var(--header-button-secondary-focus-background-color);
+}
+:root .bg-color-header-button-secondary-focus-border-color {
+    background-color: var(--header-button-secondary-focus-border-color);
+}
+:root .color-header-button-secondary-focus-border-color {
+    color: var(--header-button-secondary-focus-border-color);
+}
+:root .bg-color-header-button-secondary-focus-box-shadow-color {
+    background-color: var(--header-button-secondary-focus-box-shadow-color);
+}
+:root .color-header-button-secondary-focus-box-shadow-color {
+    color: var(--header-button-secondary-focus-box-shadow-color);
+}
+:root .bg-color-header-button-secondary-ripple-color {
+    background-color: var(--header-button-secondary-ripple-color);
+}
+:root .color-header-button-secondary-ripple-color {
+    color: var(--header-button-secondary-ripple-color);
+}
+:root .bg-color-button-default-text-color {
+    background-color: var(--button-default-text-color);
+}
+:root .color-button-default-text-color {
+    color: var(--button-default-text-color);
+}
+:root .bg-color-button-default-background-color {
+    background-color: var(--button-default-background-color);
+}
+:root .color-button-default-background-color {
+    color: var(--button-default-background-color);
+}
+:root .bg-color-button-default-hover-text-color {
+    background-color: var(--button-default-hover-text-color);
+}
+:root .color-button-default-hover-text-color {
+    color: var(--button-default-hover-text-color);
+}
+:root .bg-color-button-default-hover-background-color {
+    background-color: var(--button-default-hover-background-color);
+}
+:root .color-button-default-hover-background-color {
+    color: var(--button-default-hover-background-color);
+}
+:root .bg-color-button-default-disabled-text-color {
+    background-color: var(--button-default-disabled-text-color);
+}
+:root .color-button-default-disabled-text-color {
+    color: var(--button-default-disabled-text-color);
+}
+:root .bg-color-button-default-focus-text-color {
+    background-color: var(--button-default-focus-text-color);
+}
+:root .color-button-default-focus-text-color {
+    color: var(--button-default-focus-text-color);
+}
+:root .bg-color-button-default-focus-box-shadow-color {
+    background-color: var(--button-default-focus-box-shadow-color);
+}
+:root .color-button-default-focus-box-shadow-color {
+    color: var(--button-default-focus-box-shadow-color);
+}
+:root .bg-color-button-default-ripple-color {
+    background-color: var(--button-default-ripple-color);
+}
+:root .color-button-default-ripple-color {
+    color: var(--button-default-ripple-color);
+}
+:root .bg-color-button-primary-text-color {
+    background-color: var(--button-primary-text-color);
+}
+:root .color-button-primary-text-color {
+    color: var(--button-primary-text-color);
+}
+:root .bg-color-button-primary-background-color {
+    background-color: var(--button-primary-background-color);
+}
+:root .color-button-primary-background-color {
+    color: var(--button-primary-background-color);
+}
+:root .bg-color-button-primary-hover-text-color {
+    background-color: var(--button-primary-hover-text-color);
+}
+:root .color-button-primary-hover-text-color {
+    color: var(--button-primary-hover-text-color);
+}
+:root .bg-color-button-primary-hover-background-color {
+    background-color: var(--button-primary-hover-background-color);
+}
+:root .color-button-primary-hover-background-color {
+    color: var(--button-primary-hover-background-color);
+}
+:root .bg-color-button-primary-disabled-text-color {
+    background-color: var(--button-primary-disabled-text-color);
+}
+:root .color-button-primary-disabled-text-color {
+    color: var(--button-primary-disabled-text-color);
+}
+:root .bg-color-button-primary-disabled-background-color {
+    background-color: var(--button-primary-disabled-background-color);
+}
+:root .color-button-primary-disabled-background-color {
+    color: var(--button-primary-disabled-background-color);
+}
+:root .bg-color-button-primary-focus-text-color {
+    background-color: var(--button-primary-focus-text-color);
+}
+:root .color-button-primary-focus-text-color {
+    color: var(--button-primary-focus-text-color);
+}
+:root .bg-color-button-primary-focus-background-color {
+    background-color: var(--button-primary-focus-background-color);
+}
+:root .color-button-primary-focus-background-color {
+    color: var(--button-primary-focus-background-color);
+}
+:root .bg-color-button-primary-focus-box-shadow-color {
+    background-color: var(--button-primary-focus-box-shadow-color);
+}
+:root .color-button-primary-focus-box-shadow-color {
+    color: var(--button-primary-focus-box-shadow-color);
+}
+:root .bg-color-button-primary-ripple-color {
+    background-color: var(--button-primary-ripple-color);
+}
+:root .color-button-primary-ripple-color {
+    color: var(--button-primary-ripple-color);
+}
+:root .bg-color-button-secondary-text-color {
+    background-color: var(--button-secondary-text-color);
+}
+:root .color-button-secondary-text-color {
+    color: var(--button-secondary-text-color);
+}
+:root .bg-color-button-secondary-no-border-text-color {
+    background-color: var(--button-secondary-no-border-text-color);
+}
+:root .color-button-secondary-no-border-text-color {
+    color: var(--button-secondary-no-border-text-color);
+}
+:root .bg-color-button-secondary-background-color {
+    background-color: var(--button-secondary-background-color);
+}
+:root .color-button-secondary-background-color {
+    color: var(--button-secondary-background-color);
+}
+:root .bg-color-button-secondary-border-color {
+    background-color: var(--button-secondary-border-color);
+}
+:root .color-button-secondary-border-color {
+    color: var(--button-secondary-border-color);
+}
+:root .bg-color-button-secondary-hover-text-color {
+    background-color: var(--button-secondary-hover-text-color);
+}
+:root .color-button-secondary-hover-text-color {
+    color: var(--button-secondary-hover-text-color);
+}
+:root .bg-color-button-secondary-hover-background-color {
+    background-color: var(--button-secondary-hover-background-color);
+}
+:root .color-button-secondary-hover-background-color {
+    color: var(--button-secondary-hover-background-color);
+}
+:root .bg-color-button-secondary-hover-border-color {
+    background-color: var(--button-secondary-hover-border-color);
+}
+:root .color-button-secondary-hover-border-color {
+    color: var(--button-secondary-hover-border-color);
+}
+:root .bg-color-button-secondary-disabled-text-color {
+    background-color: var(--button-secondary-disabled-text-color);
+}
+:root .color-button-secondary-disabled-text-color {
+    color: var(--button-secondary-disabled-text-color);
+}
+:root .bg-color-button-secondary-disabled-background-color {
+    background-color: var(--button-secondary-disabled-background-color);
+}
+:root .color-button-secondary-disabled-background-color {
+    color: var(--button-secondary-disabled-background-color);
+}
+:root .bg-color-button-secondary-disabled-border-color {
+    background-color: var(--button-secondary-disabled-border-color);
+}
+:root .color-button-secondary-disabled-border-color {
+    color: var(--button-secondary-disabled-border-color);
+}
+:root .bg-color-button-secondary-focus-text-color {
+    background-color: var(--button-secondary-focus-text-color);
+}
+:root .color-button-secondary-focus-text-color {
+    color: var(--button-secondary-focus-text-color);
+}
+:root .bg-color-button-secondary-focus-background-color {
+    background-color: var(--button-secondary-focus-background-color);
+}
+:root .color-button-secondary-focus-background-color {
+    color: var(--button-secondary-focus-background-color);
+}
+:root .bg-color-button-secondary-focus-border-color {
+    background-color: var(--button-secondary-focus-border-color);
+}
+:root .color-button-secondary-focus-border-color {
+    color: var(--button-secondary-focus-border-color);
+}
+:root .bg-color-button-secondary-focus-box-shadow-color {
+    background-color: var(--button-secondary-focus-box-shadow-color);
+}
+:root .color-button-secondary-focus-box-shadow-color {
+    color: var(--button-secondary-focus-box-shadow-color);
+}
+:root .bg-color-button-secondary-ripple-color {
+    background-color: var(--button-secondary-ripple-color);
+}
+:root .color-button-secondary-ripple-color {
+    color: var(--button-secondary-ripple-color);
+}
+:root .bg-color-button-shimmer-text-color {
+    background-color: var(--button-shimmer-text-color);
+}
+:root .color-button-shimmer-text-color {
+    color: var(--button-shimmer-text-color);
+}
+:root .bg-color-button-shimmer-background-color {
+    background-color: var(--button-shimmer-background-color);
+}
+:root .color-button-shimmer-background-color {
+    color: var(--button-shimmer-background-color);
+}
+:root .bg-color-button-shimmer-hover-text-color {
+    background-color: var(--button-shimmer-hover-text-color);
+}
+:root .color-button-shimmer-hover-text-color {
+    color: var(--button-shimmer-hover-text-color);
+}
+:root .bg-color-button-shimmer-hover-background-color {
+    background-color: var(--button-shimmer-hover-background-color);
+}
+:root .color-button-shimmer-hover-background-color {
+    color: var(--button-shimmer-hover-background-color);
+}
+:root .bg-color-button-shimmer-disabled-text-color {
+    background-color: var(--button-shimmer-disabled-text-color);
+}
+:root .color-button-shimmer-disabled-text-color {
+    color: var(--button-shimmer-disabled-text-color);
+}
+:root .bg-color-button-shimmer-disabled-background-color {
+    background-color: var(--button-shimmer-disabled-background-color);
+}
+:root .color-button-shimmer-disabled-background-color {
+    color: var(--button-shimmer-disabled-background-color);
+}
+:root .bg-color-button-shimmer-focus-text-color {
+    background-color: var(--button-shimmer-focus-text-color);
+}
+:root .color-button-shimmer-focus-text-color {
+    color: var(--button-shimmer-focus-text-color);
+}
+:root .bg-color-button-shimmer-focus-background-color {
+    background-color: var(--button-shimmer-focus-background-color);
+}
+:root .color-button-shimmer-focus-background-color {
+    color: var(--button-shimmer-focus-background-color);
+}
+:root .bg-color-button-shimmer-focus-box-shadow-color {
+    background-color: var(--button-shimmer-focus-box-shadow-color);
+}
+:root .color-button-shimmer-focus-box-shadow-color {
+    color: var(--button-shimmer-focus-box-shadow-color);
+}
+:root .bg-color-button-shimmer-ripple-color {
+    background-color: var(--button-shimmer-ripple-color);
+}
+:root .color-button-shimmer-ripple-color {
+    color: var(--button-shimmer-ripple-color);
+}
+:root .bg-color-fn-bg {
+    background-color: var(--fn-bg);
+}
+:root .color-fn-bg {
+    color: var(--fn-bg);
+}
+:root .bg-color-fn-bg-var {
+    background-color: var(--fn-bg-var);
+}
+:root .color-fn-bg-var {
+    color: var(--fn-bg-var);
+}
+:root .bg-color-fn-bg-surface {
+    background-color: var(--fn-bg-surface);
+}
+:root .color-fn-bg-surface {
+    color: var(--fn-bg-surface);
+}
+:root .bg-color-fn-bg-cta {
+    background-color: var(--fn-bg-cta);
+}
+:root .color-fn-bg-cta {
+    color: var(--fn-bg-cta);
+}
+:root .bg-color-fn-fg-cta {
+    background-color: var(--fn-fg-cta);
+}
+:root .color-fn-fg-cta {
+    color: var(--fn-fg-cta);
+}
+:root .bg-color-fn-fg-cta-hov {
+    background-color: var(--fn-fg-cta-hov);
+}
+:root .color-fn-fg-cta-hov {
+    color: var(--fn-fg-cta-hov);
+}
+:root .bg-color-fn-bg-cta-fg {
+    background-color: var(--fn-bg-cta-fg);
+}
+:root .color-fn-bg-cta-fg {
+    color: var(--fn-bg-cta-fg);
+}
+:root .bg-color-fn-fg {
+    background-color: var(--fn-fg);
+}
+:root .color-fn-fg {
+    color: var(--fn-fg);
+}
+:root .bg-color-fn-fg-light {
+    background-color: var(--fn-fg-light);
+}
+:root .color-fn-fg-light {
+    color: var(--fn-fg-light);
+}
+:root .bg-color-fn-fg-lightest {
+    background-color: var(--fn-fg-lightest);
+}
+:root .color-fn-fg-lightest {
+    color: var(--fn-fg-lightest);
+}
+:root .bg-color-fn-brd-gl {
+    background-color: var(--fn-brd-gl);
+}
+:root .color-fn-brd-gl {
+    color: var(--fn-brd-gl);
+}
+:root .bg-color-fn-divider-gl {
+    background-color: var(--fn-divider-gl);
+}
+:root .color-fn-divider-gl {
+    color: var(--fn-divider-gl);
+}
+:root .bg-color-fn-bg-hov-n-gl {
+    background-color: var(--fn-bg-hov-n-gl);
+}
+:root .color-fn-bg-hov-n-gl {
+    color: var(--fn-bg-hov-n-gl);
+}
+:root .bg-color-fn-bg-hov-p-gl {
+    background-color: var(--fn-bg-hov-p-gl);
+}
+:root .color-fn-bg-hov-p-gl {
+    color: var(--fn-bg-hov-p-gl);
+}
+:root .bg-color-sc-charts-01 {
+    background-color: var(--sc-charts-01);
+}
+:root .color-sc-charts-01 {
+    color: var(--sc-charts-01);
+}
+:root .bg-color-sc-charts-02 {
+    background-color: var(--sc-charts-02);
+}
+:root .color-sc-charts-02 {
+    color: var(--sc-charts-02);
+}
+:root .bg-color-sc-charts-03 {
+    background-color: var(--sc-charts-03);
+}
+:root .color-sc-charts-03 {
+    color: var(--sc-charts-03);
+}
+:root .bg-color-sc-charts-04 {
+    background-color: var(--sc-charts-04);
+}
+:root .color-sc-charts-04 {
+    color: var(--sc-charts-04);
+}
+:root .bg-color-sc-charts-05 {
+    background-color: var(--sc-charts-05);
+}
+:root .color-sc-charts-05 {
+    color: var(--sc-charts-05);
+}
+:root .bg-color-sc-charts-06 {
+    background-color: var(--sc-charts-06);
+}
+:root .color-sc-charts-06 {
+    color: var(--sc-charts-06);
+}
+:root .bg-color-sc-charts-07 {
+    background-color: var(--sc-charts-07);
+}
+:root .color-sc-charts-07 {
+    color: var(--sc-charts-07);
+}
+:root .bg-color-sc-charts-08 {
+    background-color: var(--sc-charts-08);
+}
+:root .color-sc-charts-08 {
+    color: var(--sc-charts-08);
+}
+:root .bg-color-sc-charts-09 {
+    background-color: var(--sc-charts-09);
+}
+:root .color-sc-charts-09 {
+    color: var(--sc-charts-09);
+}
+:root .bg-color-sc-charts-10 {
+    background-color: var(--sc-charts-10);
+}
+:root .color-sc-charts-10 {
+    color: var(--sc-charts-10);
+}
+:root .bg-color-sc-charts-11 {
+    background-color: var(--sc-charts-11);
+}
+:root .color-sc-charts-11 {
+    color: var(--sc-charts-11);
+}
+:root .bg-color-p100 {
+    background-color: var(--p100);
+}
+:root .color-p100 {
+    color: var(--p100);
+}
+:root .bg-color-p200 {
+    background-color: var(--p200);
+}
+:root .color-p200 {
+    color: var(--p200);
+}
+:root .bg-color-p300 {
+    background-color: var(--p300);
+}
+:root .color-p300 {
+    color: var(--p300);
+}
+:root .bg-color-p400 {
+    background-color: var(--p400);
+}
+:root .color-p400 {
+    color: var(--p400);
+}
+:root .bg-color-p600 {
+    background-color: var(--p600);
+}
+:root .color-p600 {
+    color: var(--p600);
+}
+:root .bg-color-p700 {
+    background-color: var(--p700);
+}
+:root .color-p700 {
+    color: var(--p700);
+}
+:root .bg-color-p800 {
+    background-color: var(--p800);
+}
+:root .color-p800 {
+    color: var(--p800);
+}
+:root .bg-color-p900 {
+    background-color: var(--p900);
+}
+:root .color-p900 {
+    color: var(--p900);
+}
+:root .bg-color-i100 {
+    background-color: var(--i100);
+}
+:root .color-i100 {
+    color: var(--i100);
+}
+:root .bg-color-i400 {
+    background-color: var(--i400);
+}
+:root .color-i400 {
+    color: var(--i400);
+}
+:root .bg-color-i900 {
+    background-color: var(--i900);
+}
+:root .color-i900 {
+    color: var(--i900);
+}
+:root .bg-color-n000 {
+    background-color: var(--n000);
+}
+:root .color-n000 {
+    color: var(--n000);
+}
+:root .bg-color-n100 {
+    background-color: var(--n100);
+}
+:root .color-n100 {
+    color: var(--n100);
+}
+:root .bg-color-n200 {
+    background-color: var(--n200);
+}
+:root .color-n200 {
+    color: var(--n200);
+}
+:root .bg-color-n300 {
+    background-color: var(--n300);
+}
+:root .color-n300 {
+    color: var(--n300);
+}
+:root .bg-color-n400 {
+    background-color: var(--n400);
+}
+:root .color-n400 {
+    color: var(--n400);
+}
+:root .bg-color-n600 {
+    background-color: var(--n600);
+}
+:root .color-n600 {
+    color: var(--n600);
+}
+:root .bg-color-n700 {
+    background-color: var(--n700);
+}
+:root .color-n700 {
+    color: var(--n700);
+}
+:root .bg-color-n800 {
+    background-color: var(--n800);
+}
+:root .color-n800 {
+    color: var(--n800);
+}
+:root .bg-color-n900 {
+    background-color: var(--n900);
+}
+:root .color-n900 {
+    color: var(--n900);
+}
+:root .bg-color-s100 {
+    background-color: var(--s100);
+}
+:root .color-s100 {
+    color: var(--s100);
+}
+:root .bg-color-s400 {
+    background-color: var(--s400);
+}
+:root .color-s400 {
+    color: var(--s400);
+}
+:root .bg-color-s900 {
+    background-color: var(--s900);
+}
+:root .color-s900 {
+    color: var(--s900);
+}
+:root .bg-color-w100 {
+    background-color: var(--w100);
+}
+:root .color-w100 {
+    color: var(--w100);
+}
+:root .bg-color-w400 {
+    background-color: var(--w400);
+}
+:root .color-w400 {
+    color: var(--w400);
+}
+:root .bg-color-w900 {
+    background-color: var(--w900);
+}
+:root .color-w900 {
+    color: var(--w900);
+}
+:root .bg-color-e100 {
+    background-color: var(--e100);
+}
+:root .color-e100 {
+    color: var(--e100);
+}
+:root .bg-color-e400 {
+    background-color: var(--e400);
+}
+:root .color-e400 {
+    color: var(--e400);
+}
+:root .bg-color-e900 {
+    background-color: var(--e900);
+}
+:root .color-e900 {
+    color: var(--e900);
+}
+:root .bg-color-a1100 {
+    background-color: var(--a1100);
+}
+:root .color-a1100 {
+    color: var(--a1100);
+}
+:root .bg-color-a1300 {
+    background-color: var(--a1300);
+}
+:root .color-a1300 {
+    color: var(--a1300);
+}
+:root .bg-color-a1500 {
+    background-color: var(--a1500);
+}
+:root .color-a1500 {
+    color: var(--a1500);
+}
+:root .bg-color-a1900 {
+    background-color: var(--a1900);
+}
+:root .color-a1900 {
+    color: var(--a1900);
+}
+:root .bg-color-a2100 {
+    background-color: var(--a2100);
+}
+:root .color-a2100 {
+    color: var(--a2100);
+}
+:root .bg-color-a2400 {
+    background-color: var(--a2400);
+}
+:root .color-a2400 {
+    color: var(--a2400);
+}
+:root .bg-color-a2500 {
+    background-color: var(--a2500);
+}
+:root .color-a2500 {
+    color: var(--a2500);
+}
+:root .bg-color-a2900 {
+    background-color: var(--a2900);
+}
+:root .color-a2900 {
+    color: var(--a2900);
+}
+:root .bg-color-a3100 {
+    background-color: var(--a3100);
+}
+:root .color-a3100 {
+    color: var(--a3100);
+}
+:root .bg-color-a3300 {
+    background-color: var(--a3300);
+}
+:root .color-a3300 {
+    color: var(--a3300);
+}
+:root .bg-color-a3400 {
+    background-color: var(--a3400);
+}
+:root .color-a3400 {
+    color: var(--a3400);
+}
+:root .bg-color-a3500 {
+    background-color: var(--a3500);
+}
+:root .color-a3500 {
+    color: var(--a3500);
+}
+:root .bg-color-a3900 {
+    background-color: var(--a3900);
+}
+:root .color-a3900 {
+    color: var(--a3900);
+}
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    src: url("assets/fonts/Roboto-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    src: url("assets/fonts/Roboto-Medium.ttf") format("truetype");
+}
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    src: url("assets/fonts/Roboto-Bold.ttf") format("truetype");
+}
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    src: url("assets/fonts/Roboto-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    src: url("assets/fonts/Roboto-Medium.ttf") format("truetype");
+}
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    src: url("assets/fonts/Roboto-Bold.ttf") format("truetype");
+}
+body {
+    font-family: var(--theme-typeface);
+}

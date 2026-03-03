@@ -1,0 +1,19 @@
+@use "./generic-mixins" as *;
+
+$positions: (
+        absolute,
+        fixed,
+        relative,
+        static,
+        sticky,
+);
+
+@mixin positions($breakpoint: "") {
+  @each $val in $positions {
+    @if ($breakpoint == "") {
+      @include generateClass(position, $val, position, $val);
+    } @else {
+      @include generateClassWithBreakpoint(position, $val, position, $val, $breakpoint);
+    }
+  }
+}

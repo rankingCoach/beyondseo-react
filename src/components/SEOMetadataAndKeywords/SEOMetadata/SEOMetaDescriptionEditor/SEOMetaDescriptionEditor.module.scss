@@ -1,0 +1,60 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.seo-description-editor-container {
+    display: flex;
+    align-items: baseline;
+    gap: $peta;
+    width: 100%;
+    flex-wrap: wrap;
+
+    @media screen and (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .description-container {
+        position: relative;
+        max-width: 670px;
+        width: 100%;
+
+        @media screen and (max-width: 600px) {
+            max-width: 100%;
+        }
+
+        .header-controls {
+            display: flex;
+            margin-bottom: $byte;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            .header-controls-title {
+                margin-right: 8px;
+            }
+        }
+    }
+
+    .textarea-container {
+        width: 100% !important;
+
+        label {
+            padding: 0 !important;
+            margin-bottom: 12px;
+        }
+
+        textarea {
+            border: 0 !important;
+            background-color: transparent;
+            box-shadow: none !important;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        :global(.vanguard-input .vanguard-input-backdrop) {
+            z-index: -1;
+        }
+    }
+}

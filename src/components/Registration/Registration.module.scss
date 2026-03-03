@@ -1,0 +1,213 @@
+.registration-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.header-section {
+    display: flex;
+    align-items: center;
+    padding: 40px 40px 20px 200px;
+    min-height: 120px;
+    transition: padding 0.3s ease-in-out;
+
+    // Responsive to WordPress admin sidebar - when folded (collapsed), reduce left padding
+    :global(body.folded) & {
+        padding: 40px 40px 20px 100px;
+    }
+
+    @media screen and (max-width: 782px) {
+        padding: 52px 40px 20px 120px !important;
+        min-height: 100px;
+
+        :global(body.folded) & {
+            padding: 32px 40px 20px 80px !important;
+        }
+    }
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+    margin: auto;
+
+    img {
+        height: 36px;
+        width: auto;
+        display: block;
+        object-fit: contain;
+    }
+
+    span {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--fn-fg);
+    }
+
+    @media screen and (max-width: 782px) {
+        img {
+            height: 36px;
+        }
+    }
+}
+
+.top-divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--fn-divider-gl);
+    margin: 0;
+}
+
+.registration-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 40px 80px;
+    transition: padding 0.3s ease-in-out;
+
+    :global(body.folded) & {
+        padding: 40px 80px;
+    }
+
+    @media screen and (max-width: 960px) {
+        padding: 32px 40px;
+    }
+
+    @media screen and (max-width: 782px) {
+        padding: 24px 20px;
+    }
+}
+
+.auth-title {
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.auth-description {
+    margin-bottom: 32px;
+    text-align: center;
+    color: var(--fn-fg-light);
+}
+
+.features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+    width: 100%;
+    max-width: 480px;
+}
+
+.email-input {
+    width: 100%;
+    max-width: 480px;
+}
+
+.country-select {
+    width: 100%;
+    max-width: 480px;
+    margin-top: 20px;
+}
+
+.terms-container {
+    width: 100%;
+    max-width: 480px;
+    margin-top: 24px;
+
+    :global(.vanguard-checkbox-label) {
+        line-height: 1.6;
+        color: var(--fn-fg-light);
+        font-size: 14px;
+        display: inline-block;
+
+        span {
+            font-size: 14px;
+            display: inline !important;
+        }
+
+        a {
+            font-size: 14px !important;
+            line-height: 1.6;
+            display: inline !important;
+            vertical-align: baseline !important;
+        }
+    }
+}
+
+.terms-text {
+    display: inline !important;
+
+    :global(a) {
+        display: inline !important;
+        font-size: 14px !important;
+        line-height: inherit !important;
+        vertical-align: baseline !important;
+    }
+}
+
+.bottom-divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--fn-divider-gl);
+    margin: 0;
+}
+
+.footer-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 112px 20px 200px;
+    min-height: 80px;
+    transition: padding 0.3s ease-in-out;
+
+    &:has(.registrationResetButton) {
+        justify-content: space-between;
+    }
+
+    :global(body.folded) & {
+        padding: 20px 80px 20px 100px;
+    }
+
+    @media screen and (max-width: 782px) {
+        padding: 16px 40px 16px 40px;
+        justify-content: center;
+    }
+}
+
+.verifyTitle {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.verifyImage {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 32px;
+    display: block;
+}
+
+.verifyDescription {
+    text-align: center;
+    color: var(--fn-fg-light);
+    max-width: 480px;
+    line-height: 1.6;
+
+    strong {
+        color: var(--fn-fg);
+        font-weight: 600;
+    }
+}
+
+.registrationResetButton {
+    @media screen and (max-width: 782px) {
+        display: none;
+    }
+}

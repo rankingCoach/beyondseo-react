@@ -1,0 +1,64 @@
+@use "./generic-mixins" as *;
+@use "./functions" as *;
+
+$alignItems: (
+        baseline,
+        center,
+        flex-end,
+        flex-start,
+        stretch,
+);
+
+$alignContent: (
+        center,
+        flex-end,
+        flex-start,
+        space-around,
+        space-between,
+        stretch
+);
+
+$alignSelf: (
+        baseline,
+        center,
+        flex-end,
+        flex-start,
+        stretch,
+);
+
+$justifyContent: (
+        flex-start,
+        flex-end,
+        center,
+        space-between,
+        space-around,
+        space-evenly,
+);
+
+$textAlign: (
+        start,
+        end,
+        center,
+        justify,
+);
+
+
+$align: (
+        align-items: $alignItems,
+        align-content: $alignContent,
+        align-self: $alignSelf,
+        justify-content: $justifyContent,
+        text-align: $textAlign
+);
+
+@mixin alignClasses($breakpoint: "") {
+  @each $prop, $values in $align {
+    @each $value in $values {
+      @if ($breakpoint == "") {
+        @include generateClass($prop, split($value, "-", second), $prop, $value);
+      } @else {
+        @include generateClassWithBreakpoint($prop, split($value, "-", second), $prop, $value, $breakpoint);
+      }
+    }
+  }
+}

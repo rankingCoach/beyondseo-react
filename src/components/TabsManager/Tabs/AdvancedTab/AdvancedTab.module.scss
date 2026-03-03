@@ -1,0 +1,33 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.advancedTabContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .advancedTabContainerForm {
+        max-width: 670px;
+    }
+
+    .advancedTabNoIndexTitle {
+        margin-bottom: $bytex;
+    }
+
+    .advancedTabNoIndexDescription {
+        margin-top: -6px;
+        line-height: 18px;
+    }
+
+    .advancedTabExcludeSitemapTitle {
+        margin-bottom: $bytex;
+    }
+
+    .advancedTabRobotsSwitch span {
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+
+    .advancedTabCanonicalTitle {
+    }
+}

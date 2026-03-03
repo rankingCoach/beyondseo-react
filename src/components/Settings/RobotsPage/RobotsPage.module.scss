@@ -1,0 +1,131 @@
+.title {
+    margin-bottom: 1rem;
+
+    @media screen and (max-width: 480px) {
+        font-size: 1.25rem;
+    }
+}
+
+.switchLabel {
+    margin-bottom: 0.75rem;
+    display: block;
+
+    @media screen and (max-width: 480px) {
+        font-size: 14px;
+    }
+}
+
+.displayOptionsTitle {
+    margin-top: 2rem;
+
+    @media screen and (max-width: 480px) {
+        font-size: 1.1rem;
+    }
+}
+
+.viewButton {
+    margin-left: 1rem;
+}
+
+.description {
+    color: #646970;
+    line-height: 1.5;
+    max-width: 800px;
+
+    @media screen and (max-width: 782px) {
+        max-width: 100%;
+        font-size: 14px;
+    }
+
+    @media screen and (max-width: 480px) {
+        font-size: 13px;
+    }
+}
+
+.separator {
+    border-bottom: 1px solid #e9ecef;
+    margin: 2rem 0;
+
+    @media screen and (max-width: 782px) {
+        margin: 1.5rem 0;
+    }
+}
+
+.buttonContainer {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+
+    @media screen and (max-width: 782px) {
+        flex-direction: column;
+        margin-top: 2rem;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+.lastUpdated {
+    margin-top: 1rem;
+    font-style: italic;
+    color: #646970;
+}
+
+.additionalInfo {
+    // margin-top: 3rem;
+    color: #646970;
+}
+
+.secondarySeparator {
+    border-bottom: 1px solid #e9ecef;
+    margin: 2rem 0;
+}
+
+.urlContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+
+    @media screen and (max-width: 782px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+}
+
+.urlValue {
+    background: #f0f0f1;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-family: monospace;
+
+    @media screen and (max-width: 782px) {
+        width: 100%;
+        word-break: break-all;
+        padding: 0.75rem;
+    }
+
+    @media screen and (max-width: 480px) {
+        font-size: 13px;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+.checkboxContainer {
+    margin: 1.5rem 0;
+}
+
+.checkboxDescription {
+    margin-top: 0.5rem;
+    margin-left: 1.8rem;
+    font-style: italic;
+    color: #646970;
+    font-size: 0.9rem;
+
+    @media screen and (max-width: 480px) {
+        font-size: 0.85rem;
+        margin-left: 1.5rem;
+    }
+}
