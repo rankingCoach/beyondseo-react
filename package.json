@@ -73,10 +73,5 @@
         "react": "19.2.0",
         "react-dom": "19.2.0"
     },
-    "licenses": [
-        {
-            "type": "MIT",
-            "url": "http://opensource.org/licenses/MIT"
-        }
-    ]
+    "license": "GPL-3.0-or-later",
 }
