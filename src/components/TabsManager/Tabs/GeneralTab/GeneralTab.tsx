@@ -69,6 +69,8 @@ export const GeneralTab = (props: any) => {
     const loadData = async () => {
       if (isEditingPost && (currentPostType === "post" || currentPostType === "page")) {
         await loadMetaData(currentPostId);
+      } else {
+        setIsLoading(false);
       }
     };
 
@@ -107,11 +109,20 @@ export const GeneralTab = (props: any) => {
     };
   }, []);
 
+  // Check if we should show message instead of loading skeleton
+  // Show message when: not loading AND (no valid post ID OR not editing a valid post type)
+  const cannotLoadData =
+    !currentPostId ||
+    currentPostId <= 0 ||
+    !(isEditingPost && (currentPostType === "post" || currentPostType === "page"));
+  const shouldShowMessage = !isLoading && cannotLoadData;
+  const shouldShowPlaceholder = isLoading || shouldShowMessage;
+
   return (
     <div className={classNames(styles.generalTabContainerOuter, tabsStyles.tabContent)}>
       <div className={styles.generalTabMainContent}>
-        {isLoading ? (
-          <GeneralTabPlaceholder />
+        {shouldShowPlaceholder ? (
+          <GeneralTabPlaceholder showMessage={shouldShowMessage} />
         ) : (
           <ComponentContainer className={"seo-metadata-and-keywords-container"}>
             <SEOMetadataAndKeywords proVersion={proVersion} />

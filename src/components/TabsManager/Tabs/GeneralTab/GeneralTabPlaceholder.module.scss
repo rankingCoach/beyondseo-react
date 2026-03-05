@@ -1,6 +1,25 @@
 @import '@src/styles/spacings';
 @import '@src/styles/media-mixins';
 
+.messageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $yotta;
+    min-height: 200px;
+}
+
+.message {
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+    margin: 0;
+    padding: $mega;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
 .widget-container {
     display: flex;
     align-items: center;
