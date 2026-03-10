@@ -28,13 +28,12 @@ import { useElementorDirtyTrigger } from "@hooks/use-elementor-dirty-trigger";
 export const seoMetaDescriptionEditorProps: SEOMetaTitleEditorProps = {
   title: "",
   description: "",
-  setSeoTitle: () => {},
-  setSeoDescription: () => {},
-  proVersion: false,
+  setSeoTitle: () => { },
+  setSeoDescription: () => { },
 };
 
 export const SEOMetaDescriptionEditor = (props: SEOMetaTitleEditorProps) => {
-  const { description: seoDescription, proVersion } = props;
+  const { description: seoDescription } = props;
   const [textareaValue, setTextareaValue] = useState<string | null>(null);
   const [switchOpen, setSwitchOpen] = useState(false);
   const [initialSaveDone, setInitialSaveDone] = useState(false);
@@ -174,7 +173,7 @@ export const SEOMetaDescriptionEditor = (props: SEOMetaTitleEditorProps) => {
 
         <Form
           config={formConfig}
-          onChange={(e:any) => {
+          onChange={(e: any) => {
           }}
         >
           <Textarea
@@ -188,7 +187,7 @@ export const SEOMetaDescriptionEditor = (props: SEOMetaTitleEditorProps) => {
             counter={true}
             maxLength={300}
             defaultValue={currentPost?.excerpt.filtered || ""}
-            onChange={(e:any) => {
+            onChange={(e: any) => {
               const value = e.target.value;
               setTextareaValue(value);
               dispatch(setSeoDescription(value));

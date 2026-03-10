@@ -21,7 +21,6 @@ import { WPFlowStepsResponseDto } from "@models/swagger/BeyondSEO/Presentation/A
 export type AppSliceType = {
   appLoadedModalId: string;
   plugin: PluginInformationResponseDto | undefined;
-  proVersion: boolean;
   isPluginDataLoaded: boolean;
   metaTagsData: MetaTagsGetResponseDto | undefined;
   seoTitle: string | null;
@@ -73,7 +72,6 @@ export type AppSliceType = {
 const initialState: AppSliceType = {
   appLoadedModalId: "",
   plugin: undefined,
-  proVersion: false,
   isPluginDataLoaded: false,
   isMetaTagsDataLoaded: false,
   isFetchingPluginData: false,
@@ -238,9 +236,9 @@ const appSlice = createSlice({
       } else {
         const titleForPreview = action.payload.title
           ? {
-              ...action.payload.title,
-              parsed: undefined, // Force building from variables
-            }
+            ...action.payload.title,
+            parsed: undefined, // Force building from variables
+          }
           : null;
       }
 

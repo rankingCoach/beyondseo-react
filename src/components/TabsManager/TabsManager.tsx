@@ -13,7 +13,6 @@ import { __ } from "@wordpress/i18n";
 import styles from "./TabsManager.module.scss";
 
 export const TabsManager = (props: any) => {
-  const { proVersion } = props;
 
   const [recalculationStart, setRecalculationStart] = React.useState(false);
 
@@ -36,12 +35,12 @@ export const TabsManager = (props: any) => {
       >
         <Tabs
           mode={"small"}
-          tabConfig={{theme: 'underline'}}
+          tabConfig={{ theme: 'underline' }}
           tabs={[
             {
               label: __("General", "beyondseo"),
               //@ts-ignore
-              component: <GeneralTab proVersion={proVersion} />,
+              component: <GeneralTab />,
               hasBorderBottom: true,
               showBackgroundColor: false,
               simple: true,
@@ -49,7 +48,7 @@ export const TabsManager = (props: any) => {
             {
               label: __("Optimisation", "beyondseo"),
               //@ts-ignore
-              component: <OptimisationTab proVersion={proVersion} recalculationStart={recalculationStart} />,
+              component: <OptimisationTab recalculationStart={recalculationStart} />,
               hasBorderBottom: true,
               showBackgroundColor: false,
               simple: true,
@@ -57,7 +56,7 @@ export const TabsManager = (props: any) => {
             {
               label: __("Social", "beyondseo"),
               //@ts-ignore
-              component: <SocialTab proVersion={proVersion} />,
+              component: <SocialTab />,
               hasBorderBottom: true,
               showBackgroundColor: false,
               simple: true,
@@ -89,7 +88,7 @@ export const TabsManager = (props: any) => {
             {
               label: __("Advanced", "beyondseo"),
               //@ts-ignore
-              component: <AdvancedTab proVersion={proVersion} />,
+              component: <AdvancedTab />,
               hasBorderBottom: true,
               showBackgroundColor: false,
               simple: true,

@@ -22,9 +22,8 @@ const SEPARATOR_BUTTON_TEXT = __("Add Separator", "beyondseo");
 export const seoMetaTitleEditorProps: SEOMetaTitleEditorProps = {
   title: "",
   description: "",
-  setSeoTitle: () => {},
-  setSeoDescription: () => {},
-  proVersion: false,
+  setSeoTitle: () => { },
+  setSeoDescription: () => { },
 };
 
 const variableConfig: AdornmentConfig = {
@@ -40,7 +39,6 @@ const separatorConfig: AdornmentConfig = {
 export const SEOMetaTitleEditor = (props: SEOMetaTitleEditorProps) => {
   const { metaTagsData, previewTitle } = useSelector((state: RootState) => state.app);
   const { currentPost, isCurrentPostLoaded } = useSelector((state: RootState) => state.post);
-  const { proVersion } = props;
   const [switchOpen, setSwitchOpen] = useState(false);
   const dispatch = useAppDispatch();
 

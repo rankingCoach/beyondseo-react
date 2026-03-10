@@ -23,15 +23,7 @@ import tabStyles from "../Tabs.module.scss";
 import { AdvancedSettingsStore } from "@stores/swagger/api/AdvancedSettingsStore";
 import { AdvancedTabPlaceholder } from "./AdvancedTabPlaceholder";
 
-export interface AdvancedTabProps {
-  proVersion?: boolean;
-}
-
-export const advancedTabProps: AdvancedTabProps = {
-  proVersion: false,
-};
-
-export const AdvancedTab = ({ proVersion = false }: AdvancedTabProps) => {
+export const AdvancedTab = () => {
   const dispatch = useAppDispatch();
   const currentPostId = getPathId();
   const { triggerRecalculation } = useScoreRecalculation();
@@ -283,30 +275,30 @@ export const AdvancedTab = ({ proVersion = false }: AdvancedTabProps) => {
                 "beyondseo",
               )}
             </Text>
-            </div>
+          </div>
 
-            <div className={VanguardStyle.mb0}>
-              <Switch
-                value={viewportForPage}
-                labelPos="left"
-                onChange={handleSaveViewportCallback}
-                disabled={isSubmitting}
-                testId={`advanced-settings-viewport-switch`}
-                className={styles.advancedTabRobotsSwitch}
-              >
-                <Text className={styles.advancedTabNoIndexTitle} fontWeight={FontWeights.medium}>
-                  {__("Enable viewport meta tag for this page:", "beyondseo")}
-                </Text>
-              </Switch>
-              <Text className={styles.advancedTabNoIndexDescription} fontWeight={FontWeights.regular} fontSize={12}>
-                {__(
-                  "Adds a responsive viewport meta tag to this page. Ensures proper display on mobile devices by setting width=device-width and initial-scale=1.",
-                  "beyondseo",
-                )}
+          <div className={VanguardStyle.mb0}>
+            <Switch
+              value={viewportForPage}
+              labelPos="left"
+              onChange={handleSaveViewportCallback}
+              disabled={isSubmitting}
+              testId={`advanced-settings-viewport-switch`}
+              className={styles.advancedTabRobotsSwitch}
+            >
+              <Text className={styles.advancedTabNoIndexTitle} fontWeight={FontWeights.medium}>
+                {__("Enable viewport meta tag for this page:", "beyondseo")}
               </Text>
-            </div>
+            </Switch>
+            <Text className={styles.advancedTabNoIndexDescription} fontWeight={FontWeights.regular} fontSize={12}>
+              {__(
+                "Adds a responsive viewport meta tag to this page. Ensures proper display on mobile devices by setting width=device-width and initial-scale=1.",
+                "beyondseo",
+              )}
+            </Text>
+          </div>
 
-            {/*<div className={VanguardStyle.mb0}>*/}
+          {/*<div className={VanguardStyle.mb0}>*/}
           {/*  <Switch*/}
           {/*    value={excludeSitemapForPage}*/}
           {/*    labelPos="left"*/}

@@ -2,23 +2,18 @@ import { __ } from "@wordpress/i18n";
 import * as React from "react";
 import { SyntheticEvent, useState } from "react";
 import styles from "./FeatureSwitch.module.scss";
-import { classNames, ComponentContainer, ModalResponse, ModalService, Render, Switch, Text } from "vanguard";
+import { classNames, ComponentContainer, ModalResponse, ModalService, Switch, Text } from "vanguard";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
-import { useSelector } from "react-redux";
-import { RootState } from "@src/main.store";
 import { AppSlice } from "@src/App.slice";
 import { UpgradePackageFeature, UpgradePackageModal } from "@components/Modals/UpgradePackageModal/UpgradePackageModal";
 
 export type FeatureSwitchProps = {
   className?: string;
   onSwitchChange?: (event: SyntheticEvent, checked: boolean) => void;
-  proVersion: boolean;
 };
 
 export const FeatureSwitch = (props: FeatureSwitchProps) => {
-  const { proVersion } = useSelector((state: RootState) => state.app);
-  const { proVersion: proVersionProp, onSwitchChange } = props;
-  const pro = (proVersion || proVersionProp) ?? false;
+  const { onSwitchChange } = props;
 
   const [switchOpen, setSwitchOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -66,7 +61,7 @@ export const FeatureSwitch = (props: FeatureSwitchProps) => {
   const handleSwitchChange = (event: SyntheticEvent) => {
     const checked = (event.currentTarget as HTMLInputElement).checked;
 
-    if (!pro && checked) {
+    if (checked) {
       openModal();
       return;
     }
@@ -76,9 +71,9 @@ export const FeatureSwitch = (props: FeatureSwitchProps) => {
   };
 
   return (
-    <ComponentContainer className={classNames(styles.container, pro ? "" : styles.background)}>
+    <ComponentContainer className={classNames(styles.container, styles.background)}>
       <Switch
-        className={classNames(pro ? styles.switchPro : styles.switch)}
+        className={classNames(styles.switch)}
         value={switchOpen}
         size={"small"}
         labelPos={"left"}
@@ -87,9 +82,7 @@ export const FeatureSwitch = (props: FeatureSwitchProps) => {
       >
         {"Autogenerate"}
       </Switch>
-      <Render if={!pro}>
-        <Text className={classNames(styles.textPro)}>{__("PRO FEATURE", "beyondseo")}</Text>
-      </Render>
+      <Text className={classNames(styles.textPro)}>{__("PRO FEATURE", "beyondseo")}</Text>
     </ComponentContainer>
   );
 };
