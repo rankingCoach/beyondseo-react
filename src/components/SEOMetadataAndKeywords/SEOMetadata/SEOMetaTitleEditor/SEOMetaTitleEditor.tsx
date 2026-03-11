@@ -7,7 +7,6 @@ import { AdornmentConfig } from "@components/MultiAdornmentInput/MultiSelectAdor
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
 import { RootState } from "@src/main.store";
-import { FeatureSwitch } from "@components/Common/FeatureSwitch/FeatureSwitch";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { useSelector } from "react-redux";
 import { SEOMetaTitleEditorProps } from "@components/SEOMetadataAndKeywords/SEOMetadataAndKeywords";

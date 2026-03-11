@@ -19,7 +19,6 @@ import { RootState } from "@src/main.store";
 import { AppSlice } from "@src/App.slice";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
-import { FeatureSwitch } from "@components/Common/FeatureSwitch/FeatureSwitch";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { WPWebPageDescriptionMetaTag } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/MetaTags/Tags/WPWebPageDescriptionMetaTag";
 import { SEOMetaTitleEditorProps } from "@components/SEOMetadataAndKeywords/SEOMetadataAndKeywords";
