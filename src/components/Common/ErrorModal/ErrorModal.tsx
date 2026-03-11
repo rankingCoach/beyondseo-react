@@ -21,7 +21,7 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
   isLoading = false,
   title = "",
   width = "528px",
-  primaryButtonText = __("Close", "beyondseo"),
+  primaryButtonText = __("Try again", "beyondseo"),
   onPrimaryAction,
 }) => {
   if (!isOpen) return null;
