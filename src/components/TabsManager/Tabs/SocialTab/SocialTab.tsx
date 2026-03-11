@@ -11,7 +11,6 @@ import { RootState } from "@src/main.store";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
-import { FeatureSwitch } from "@components/Common/FeatureSwitch/FeatureSwitch";
 import { SocialTabPlaceholder } from "./SocialTabPlaceholder";
 import { SocialStore } from "@src/stores/swagger/api/SocialStore";
 import PlaceholderImage from "@src/assets/image-placeholder.svg";
