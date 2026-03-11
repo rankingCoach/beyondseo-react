@@ -7,7 +7,7 @@ import { ErrorModal } from "@components/Common/ErrorModal/ErrorModal";
 import { __ } from "@wordpress/i18n";
 import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
 import emailVerifySvg from "@assets/validate-email-illustration.svg";
-import { SeoStore } from "@stores/swagger/rankingcoach/SeoStore";
+import { seoStore, SeoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 
@@ -17,7 +17,7 @@ const STORAGE_KEYS = {
   POLL_TOKEN: "registrationPollToken",
   ACCOUNT_STATUS: "registrationAccountStatus",
   REGISTRATION_STATUS: "registrationRegistrationStatus",
-} as const;
+};
 
 const ONBOARDING_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
 const POLLING_INTERVAL = 5000;
@@ -286,6 +286,24 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
     setTermsAccepted(e.target.checked);
   }, []);
 
+  const handleNext = async () => {
+    if (termsAccepted) {
+      try {
+        await seoStore
+          .postRankingcoachSeoSettings({
+            settings: { beyondseo_comm_opt_in: true },
+          } as any)
+          .toPromise();
+      } catch (_) {}
+    }
+
+    if (isVerificationPhase) {
+      await handleVerify();
+    } else {
+      await handleRegister();
+    }
+  };
+
   const handleRegister = async () => {
     if (!email.trim()) {
       return;
@@ -546,7 +564,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
           type={ButtonTypes.primary}
           size={ButtonSizes.medium}
           iconRight={!isVerificationPhase ? IconNames.arrowRight : undefined}
-          onClick={isVerificationPhase ? handleVerify : handleRegister}
+          onClick={handleNext}
           disabled={isLoading || isButtonLoading || isPolling || (!isVerificationPhase && (!email.trim() || !termsAccepted))}
           isLoading={isButtonLoading || isPolling}
         >
