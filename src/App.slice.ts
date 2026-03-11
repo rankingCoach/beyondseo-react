@@ -280,44 +280,6 @@ const appSlice = createSlice({
       //state.isMetaTagsDataLoaded = false;
     });
 
-    // Meta-tags title auto-suggest
-    builder.addCase(MetatagsStore.postApiMetatagsTitleAutoSuggestByPostIdThunk.fulfilled, (state, action) => {
-      //state.isMetaTagsDataLoaded = true;
-      state.metaTagsData = action.payload;
-      state.seoTitle = action.payload.title?.content ?? null;
-      state.seoDescription = action.payload.description?.content ?? null;
-      state.seoKeywords = action.payload.keywords ?? null;
-      state.primaryKeyword = state.seoKeywords?.primaryKeyword ?? "";
-      state.additionalKeywords = state.seoKeywords?.additionalKeywords ?? [];
-    });
-    builder.addCase(MetatagsStore.postApiMetatagsTitleAutoSuggestByPostIdThunk.rejected, (state, action) => {
-      //state.response = action.payload;
-      //state.isMetaTagsDataLoaded = false;
-    });
-    builder.addCase(MetatagsStore.postApiMetatagsTitleAutoSuggestByPostIdThunk.pending, (state, action) => {
-      //state.response = action.payload;
-      //state.isMetaTagsDataLoaded = false;
-    });
-
-    // Meta-tags description auto-suggest
-    builder.addCase(MetatagsStore.postApiMetatagsDescriptionAutoSuggestByPostIdThunk.fulfilled, (state, action) => {
-      //state.isMetaTagsDataLoaded = true;
-      state.metaTagsData = action.payload;
-      state.seoTitle = action.payload.title?.content ?? null;
-      state.seoDescription = action.payload.description?.content ?? null;
-      state.seoKeywords = action.payload.keywords ?? null;
-      state.primaryKeyword = state.seoKeywords?.primaryKeyword ?? "";
-      state.additionalKeywords = state.seoKeywords?.additionalKeywords ?? [];
-    });
-    builder.addCase(MetatagsStore.postApiMetatagsDescriptionAutoSuggestByPostIdThunk.rejected, (state, action) => {
-      //state.response = action.payload;
-      //state.isMetaTagsDataLoaded = false;
-    });
-    builder.addCase(MetatagsStore.postApiMetatagsDescriptionAutoSuggestByPostIdThunk.pending, (state, action) => {
-      //state.response = action.payload;
-      //state.isMetaTagsDataLoaded = false;
-    });
-
     // Account location keywords
     builder.addCase(SeoStore.getRankingcoachSeoLocationKeywordsThunk.fulfilled, (state, action) => {
       // @ts-ignore
