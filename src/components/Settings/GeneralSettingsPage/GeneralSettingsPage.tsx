@@ -12,7 +12,7 @@ type SettingsKeys =
   | "allow_sync_keywords_to_rankingcoach"
   | "enable_wp_cron_service"
   | "enable_broken_link_checker_job"
-  | "enable_user_action_and_event_logs_sharing"
+  | "beyondseo_comm_opt_in"
   | "disable_wp_heartbeat_service"
   | "open_rc_dashboard_in_new_tab";
 
@@ -82,9 +82,12 @@ const GeneralSettingsPage: React.FC = () => {
       ),
     },
     {
-      key: "enable_user_action_and_event_logs_sharing",
-      title: __("Enable anonymous usage data sharing", "beyondseo"),
-      description: __("Enable this option to share anonymous usage data with the plugin developers", "beyondseo"),
+      key: "beyondseo_comm_opt_in",
+      title: __("Allow communication with BeyondSEO servers", "beyondseo"),
+      description: __(
+        "Allow the plugin to communicate with rankingCoach backend servers to provide its services. Required for account features, keyword sync, and dashboard functionality. You can withdraw consent at any time.",
+        "beyondseo",
+      ),
     },
     {
       key: "disable_wp_heartbeat_service",

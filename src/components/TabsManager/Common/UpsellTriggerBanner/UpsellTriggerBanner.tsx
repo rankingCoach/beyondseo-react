@@ -25,7 +25,7 @@ export const UpsellTriggerBanner: React.FC<UpsellTriggerBannerProps> = ({
   className,
 }) => {
   const handleClick = () => {
-    window.location.href = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-upsell`;
+    window.location.href = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-connect`;
   };
 
   return (
