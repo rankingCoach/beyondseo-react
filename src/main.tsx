@@ -36,7 +36,7 @@ import { WPWebPageKeywordsMetaTag } from "@models/swagger/BeyondSEO/Domain/Integ
 import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
 import { ScoreButtonHeader } from "@components/ScoreButtonHeader/ScoreButtonHeader";
 import Settings from "@components/Settings/Settings";
-import { Upsell } from "@components/Upsell/Upsell";
+import { Connect } from "@components/Connect/Connect";
 import { __ } from "@wordpress/i18n";
 const params = new URLSearchParams(window.location.search);
 const hasDebug = ["1", "true"].includes(params.get("debug") || "");
@@ -278,8 +278,8 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
     return <Registration />;
   },
 
-  upsell: () => {
-    return <Upsell />;
+  connect: () => {
+    return <Connect />;
   },
 
   generalSettings: () => {
@@ -410,7 +410,7 @@ export function initializeApp() {
     float: document.getElementById("seo-optimiser-rankingcoach-react"),
     onboarding: document.getElementById("onboarding-rankingcoach-page"),
     registration: document.getElementById("registration-rankingcoach-page"),
-    upsell: document.getElementById("upsell-rankingcoach-page"),
+    connect: document.getElementById("connect-rankingcoach-page"),
     generalSettings: document.getElementById("generalSettings-rankingcoach-page"),
     gutenbergSidebar: document.getElementById("rankingcoach-sidebar-content"),
     elementor: document.getElementById("rankingcoach-elementor-content"),

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Button, ButtonTypes, ButtonSizes, Text, TextTypes, FontWeights, Switch, classNames, Icon, IconNames, IconSize } from 'vanguard';
 import { __ } from '@wordpress/i18n';
-import styles from './Upsell.module.scss';
+import styles from './Connect.module.scss';
 import { rcWindow } from "@stores/window.store";
-import gradientBackground from "@assets/upsell-page/gradient-background.svg";
-import aiBadges from "@assets/upsell-page/ai-badges.svg";
-import aiSparksBackgroundHorizontal from "@assets/upsell-page/ai-sparks-background-horizontal.svg";
+import gradientBackground from "@assets/connect-page/gradient-background.svg";
+import aiBadges from "@assets/connect-page/ai-badges.svg";
+import aiSparksBackgroundHorizontal from "@assets/connect-page/ai-sparks-background-horizontal.svg";
 // TODO: replace with correct background image, svg. This is temporary png solution, which has HUGE size.
-import simpleQuoteCharacter from "@assets/upsell-page/simple-quote-character.svg";
-import reviewsioLogo from "@assets/upsell-page/reviewsio-logo.svg";
+import simpleQuoteCharacter from "@assets/connect-page/simple-quote-character.svg";
+import reviewsioLogo from "@assets/connect-page/reviewsio-logo.svg";
 import { RotatingWord } from "@components/Common/RotatingWord/RotatingWord";
 import { ContactSalesModal } from './ContactSalesModal';
 
@@ -19,7 +19,7 @@ import {
     impactMetrics,
     stats,
     testimonials
-} from './upsellConfig';
+} from './connectConfig';
 import type {
     StatusValue,
     FeatureCategory,
@@ -30,7 +30,7 @@ import type {
     ProfessionalCard,
     FeatureHighlight,
     PlanFeature
-} from './upsellConfig';
+} from './connectConfig';
 
 // Type declaration for the global BSEORegistration object
 declare global {
@@ -43,7 +43,7 @@ declare global {
             navigateWindow: (url: string) => void;
             closeWindow: () => void;
         };
-        rcUpsell?: {
+        rcConnect?: {
             apiUrl: string;
             baseUrl: string;
             locale: string;
@@ -76,7 +76,7 @@ function getCurrentOrigin() {
     return window.location.origin;
 }
 
-export const Upsell = () => {
+export const Connect = () => {
     const isOnboardingCompleted = rcWindow?.rankingCoachReactData?.isOnboardingCompleted !== "false";
     const [paymentPeriod, setPaymentPeriod] = useState<'monthly' | 'annual'>('annual');
     const [isLoading, setIsLoading] = useState(false);
@@ -136,7 +136,7 @@ export const Upsell = () => {
     const handleUpgradeClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
 
-        if (!window.rcUpsell || !window.BSEORegistration) {
+        if (!window.rcConnect || !window.BSEORegistration) {
             console.error('[React] Required globals missing');
             alert('System not fully loaded. Please refresh.');
             return;
@@ -155,11 +155,11 @@ export const Upsell = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(window.rcUpsell.apiUrl, {
+            const response = await fetch(window.rcConnect.apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-WP-Nonce': window.rcUpsell.nonce
+                    'X-WP-Nonce': window.rcConnect.nonce
                 },
                 body: JSON.stringify({
                     paymentType: paymentPeriod
@@ -170,7 +170,7 @@ export const Upsell = () => {
 
             // data.registrationURL is relative to the root
             if (data.registrationURL) {
-                const url = new URL(window.rcUpsell.baseUrl + data.registrationURL);
+                const url = new URL(window.rcConnect.baseUrl + data.registrationURL);
                 const autoClose = 1;
 
                 if (data.s) {
@@ -184,7 +184,7 @@ export const Upsell = () => {
                 let finalUrl = fullRegistrationURL;
 
                 if (data.voucherURL) {
-                    const voucherUrlObj = new URL(window.rcUpsell.baseUrl + '/' + window.rcUpsell.locale + data.voucherURL);
+                    const voucherUrlObj = new URL(window.rcConnect.baseUrl + '/' + window.rcConnect.locale + data.voucherURL);
                     voucherUrlObj.searchParams.set('redirecturl', fullRegistrationURL);
                     finalUrl = voucherUrlObj.toString();
                 }
@@ -195,10 +195,10 @@ export const Upsell = () => {
                     window.BSEORegistration.openWindow(finalUrl);
                 }
             } else {
-                throw new Error(data.message || 'Failed to get upsell URL');
+                throw new Error(data.message || 'Failed to get connect URL');
             }
         } catch (error) {
-            console.error('[React] Upsell error:', error);
+            console.error('[React] Connect error:', error);
             alert('Could not start upgrade process. Please try again.');
 
             if (windowOpened && window.BSEORegistration.closeWindow) {
@@ -217,7 +217,7 @@ export const Upsell = () => {
     };
 
     return (
-        <div className={styles.upsellPage}>
+        <div className={styles.connectPage}>
             {/* Hero Section */}
             <div
                 className={styles.hero}

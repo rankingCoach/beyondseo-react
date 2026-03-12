@@ -10,7 +10,7 @@ import {
     CheckBox
 } from 'vanguard';
 import styles from './ContactSalesModal.module.scss';
-import { contactSalesModalConfig } from './upsellConfig';
+import { contactSalesModalConfig } from './connectConfig';
 
 interface ContactSalesModalProps {
     isOpen: boolean;

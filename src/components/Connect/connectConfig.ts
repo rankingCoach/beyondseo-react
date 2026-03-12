@@ -1,11 +1,11 @@
 import { __ } from '@wordpress/i18n';
 import { IconNames } from 'vanguard';
-import avatar1 from '@assets/upsell-page/avatar-1.svg';
-import avatar2 from '@assets/upsell-page/avatar-2.svg';
-import avatar3 from '@assets/upsell-page/avatar-3.svg';
-import avatar4 from '@assets/upsell-page/avatar-4.svg';
-import avatar5 from '@assets/upsell-page/avatar-5.svg';
-import avatar6 from '@assets/upsell-page/avatar-6.svg';
+import avatar1 from '@assets/connect-page/avatar-1.svg';
+import avatar2 from '@assets/connect-page/avatar-2.svg';
+import avatar3 from '@assets/connect-page/avatar-3.svg';
+import avatar4 from '@assets/connect-page/avatar-4.svg';
+import avatar5 from '@assets/connect-page/avatar-5.svg';
+import avatar6 from '@assets/connect-page/avatar-6.svg';
 
 export type StatusType = 'check' | 'cross' | 'limited' | 'text';
 

@@ -1,9 +1,9 @@
 import * as React from "react";
-import styles from "./UpsellTriggerBanner.module.scss";
+import styles from "./ConnectTriggerBanner.module.scss";
 import { classNames, Text } from "vanguard";
 import { __ } from "@wordpress/i18n";
 
-interface UpsellTriggerBannerProps {
+interface ConnectTriggerBannerProps {
   title: string;
   description: string;
   features: string[];
@@ -14,7 +14,7 @@ interface UpsellTriggerBannerProps {
   className?: string;
 }
 
-export const UpsellTriggerBanner: React.FC<UpsellTriggerBannerProps> = ({
+export const ConnectTriggerBanner: React.FC<ConnectTriggerBannerProps> = ({
   title,
   description,
   features,

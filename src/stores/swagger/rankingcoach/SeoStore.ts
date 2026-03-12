@@ -69,7 +69,7 @@ import type { ModulesResponseDto } from '@models/swagger/BeyondSEO/Presentation/
 }
  export type GetRankingcoachSeoFlowguardStateOpts = {FE_UNIQUE_ID?: string
 }
- export type PostRankingcoachSeoUpsellUrlOpts = {FE_UNIQUE_ID?: string
+ export type PostRankingcoachSeoConnectUrlOpts = {FE_UNIQUE_ID?: string
 }
  export type GetRankingcoachSeoLinkAnalyzerOpts = {FE_UNIQUE_ID?: string
 }
@@ -1112,7 +1112,7 @@ static getRankingcoachSeoFlowguardStateUrlMockRequest = '/wp-json/rankingcoach/s
 /**
     * Manager of list of AbortControllers for the Request
     */
-    static postRankingcoachSeoUpsellUrlAbortManager: AbortControllersManager = new AbortControllersManager();
+    static postRankingcoachSeoConnectUrlAbortManager: AbortControllersManager = new AbortControllersManager();
 
 
 
@@ -1120,13 +1120,13 @@ static getRankingcoachSeoFlowguardStateUrlMockRequest = '/wp-json/rankingcoach/s
 *  
 *  
 */
-postRankingcoachSeoUpsellUrl(  requestBody: null, queryParams?: PostRankingcoachSeoUpsellUrlOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<any> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/upsell/url`), requestBody, queryParams, signal, contentType) as Observable<any>;
+postRankingcoachSeoConnectUrl(  requestBody: null, queryParams?: PostRankingcoachSeoConnectUrlOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<any> {
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/connect/url`), requestBody, queryParams, signal, contentType) as Observable<any>;
 }
 
-static postRankingcoachSeoUpsellUrlThunk = createAsyncThunk<
+static postRankingcoachSeoConnectUrlThunk = createAsyncThunk<
   any,
-  { requestBody: null, queryParams?: PostRankingcoachSeoUpsellUrlOpts, contentType?: 'application/json'},
+  { requestBody: null, queryParams?: PostRankingcoachSeoConnectUrlOpts, contentType?: 'application/json'},
   {
       rejectValue: any
   }
@@ -1136,7 +1136,7 @@ static postRankingcoachSeoUpsellUrlThunk = createAsyncThunk<
 *  
 *  
 */
-("postRankingcoachSeoUpsellUrl", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostRankingcoachSeoUpsellUrlOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
+("postRankingcoachSeoConnectUrl", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostRankingcoachSeoConnectUrlOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
   const requestId = new Date().getTime().toString();
 
@@ -1145,26 +1145,26 @@ static postRankingcoachSeoUpsellUrlThunk = createAsyncThunk<
     const controller = new AbortController();
 
     const signal = controller.signal;
-    this.postRankingcoachSeoUpsellUrlAbortManager._push(requestId, controller);
+    this.postRankingcoachSeoConnectUrlAbortManager._push(requestId, controller);
 
     const result = await firstValueFrom(
-      seoStore.postRankingcoachSeoUpsellUrl( requestBody, queryParams, signal, contentType)
+      seoStore.postRankingcoachSeoConnectUrl( requestBody, queryParams, signal, contentType)
     );
 
     // After the Request is completed, remove the Abort controller from Manager, since we don't need it anymore.
-    this.postRankingcoachSeoUpsellUrlAbortManager._remove(requestId);
+    this.postRankingcoachSeoConnectUrlAbortManager._remove(requestId);
 
     return result;
   } catch (err: any) {
         // In case the Request fails, remove the Abort controller from Manager, since we don't need it anymore.
-        this.postRankingcoachSeoUpsellUrlAbortManager._remove(requestId);
+        this.postRankingcoachSeoConnectUrlAbortManager._remove(requestId);
 
         return rejectWithValue(err.response.data);
     }
 });
 
-static postRankingcoachSeoUpsellUrlUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/upsell/url');
-static postRankingcoachSeoUpsellUrlUrlMockRequest = '/wp-json/rankingcoach/seo/upsell/url(.*)';
+static postRankingcoachSeoConnectUrlUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/connect/url');
+static postRankingcoachSeoConnectUrlUrlMockRequest = '/wp-json/rankingcoach/seo/connect/url(.*)';
 
 
 /**
