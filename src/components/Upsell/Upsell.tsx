@@ -357,6 +357,11 @@ export const Upsell = () => {
                         <Text type={TextTypes.heading2} fontWeight={FontWeights.regular}>
                             {__('What you get with free rankingCoach Radar', 'beyondseo')}
                         </Text>
+                        {isOnboardingCompleted && (
+                            <Text type={TextTypes.text} className={styles.comparisonSubtitle}>
+                                {__('See the difference: With rankingCoach 360 you have all the tools for your online success.', 'beyondseo')}
+                            </Text>
+                        )}
                     </div>
 
                     <div className={styles.comparisonCard}>
@@ -367,6 +372,11 @@ export const Upsell = () => {
                             <Text type={TextTypes.text} fontWeight={FontWeights.regular} className={classNames(styles.headerCell, styles.headerCellCenter)}>
                                 {__('RankingCoach Radar', 'beyondseo')}
                             </Text>
+                            {isOnboardingCompleted && (
+                                <Text type={TextTypes.text} fontWeight={FontWeights.regular} className={classNames(styles.headerCell, styles.headerCellCenter)}>
+                                    {__('RankingCoach 360', 'beyondseo')}
+                                </Text>
+                            )}
                         </div>
 
                         {featureCategories.map((category: FeatureCategory) => {
@@ -390,6 +400,11 @@ export const Upsell = () => {
                                         <div className={classNames(styles.cell, styles.statusCell)}>
                                             {renderStatus(category.radar)}
                                         </div>
+                                        {isOnboardingCompleted && (
+                                            <div className={classNames(styles.cell, styles.statusCell)}>
+                                                {renderStatus(category.rc360)}
+                                            </div>
+                                        )}
                                     </button>
 
                                     {isExpanded && category.rows.length > 0 && (
@@ -404,6 +419,11 @@ export const Upsell = () => {
                                                     <div className={classNames(styles.cell, styles.statusCell)}>
                                                         {renderStatus(row.radar)}
                                                     </div>
+                                                    {isOnboardingCompleted && (
+                                                        <div className={classNames(styles.cell, styles.statusCell)}>
+                                                            {renderStatus(row.rc360)}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
