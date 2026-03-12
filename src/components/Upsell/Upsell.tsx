@@ -268,7 +268,7 @@ export const Upsell = () => {
                 </div>
 
                 <Text type={TextTypes.text} className={styles.heroSubtitle}>
-                    {__('Activate now to get rankingCoach Radar to access all features in your SEO, Online Presence, Social, and Reputation blocks, as well as new ones.', 'beyondseo')}
+                    {__('Connect now to get rankingCoach Radar to access all features in your SEO, Online Presence, Social, and Reputation blocks, as well as new ones.', 'beyondseo')}
                 </Text>
 
                 <Button
@@ -281,7 +281,7 @@ export const Upsell = () => {
                 >
                     {isOnboardingCompleted
                         ? __('Upgrade to rankingCoach 360 now', 'beyondseo')
-                        : __('Activate for free', 'beyondseo')
+                        : __('Connect for free', 'beyondseo')
                     }
                 </Button>
 
@@ -372,7 +372,7 @@ export const Upsell = () => {
                 {/*                className={styles.activateFreePlanButton}*/}
                 {/*                onClick={handleActivateForFree}*/}
                 {/*            >*/}
-                {/*                {__('Activate for free', 'beyondseo')}*/}
+                {/*                {__('Connect for free', 'beyondseo')}*/}
                 {/*            </Button>*/}
                 {/*        )}*/}
 
@@ -459,7 +459,7 @@ export const Upsell = () => {
                 {/*            >*/}
                 {/*                {isOnboardingCompleted*/}
                 {/*                    ? __('Upgrade now', 'beyondseo')*/}
-                {/*                    : __('Activate for free', 'beyondseo')*/}
+                {/*                    : __('Connect for free', 'beyondseo')*/}
                 {/*                }*/}
                 {/*            </Button>*/}
 
@@ -578,7 +578,7 @@ export const Upsell = () => {
                                 >
                                     {isOnboardingCompleted
                                         ? __('Upgrade now', 'beyondseo')
-                                        : __('Activate for free', 'beyondseo')
+                                        : __('Connect for free', 'beyondseo')
                                     }
                                 </Button>
                             </div>
@@ -831,7 +831,7 @@ export const Upsell = () => {
                         >
                             {isOnboardingCompleted
                                 ? __('Upgrade now', 'beyondseo')
-                                : __('Activate for free', 'beyondseo')
+                                : __('Connect for free', 'beyondseo')
                             }
                         </Button>
 
