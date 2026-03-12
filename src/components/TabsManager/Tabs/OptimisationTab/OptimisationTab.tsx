@@ -10,7 +10,6 @@ import { getPathId } from "@helpers/get-path-id";
 
 interface OptimisationTabProps {
   recalculationStart?: boolean;
-  proVersion?: boolean;
 }
 
 export const OptimisationTab: React.FC<OptimisationTabProps> = ({ recalculationStart }) => {

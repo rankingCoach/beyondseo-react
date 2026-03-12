@@ -11,7 +11,6 @@ import { RootState } from "@src/main.store";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
-import { FeatureSwitch } from "@components/Common/FeatureSwitch/FeatureSwitch";
 import { SocialTabPlaceholder } from "./SocialTabPlaceholder";
 import { SocialStore } from "@src/stores/swagger/api/SocialStore";
 import PlaceholderImage from "@src/assets/image-placeholder.svg";
@@ -19,11 +18,7 @@ import { useScoreRecalculation } from "@contexts/ScoreRecalculationContext";
 import classNames from "classnames";
 import { __ } from "@wordpress/i18n";
 
-export interface SocialTabProps {
-  proVersion?: boolean;
-}
-
-export const SocialTab = ({ proVersion = false }: SocialTabProps) => {
+export const SocialTab = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [seoUrl, setSeoUrl] = useState<string | null>(null);
@@ -335,7 +330,7 @@ export const SocialTab = ({ proVersion = false }: SocialTabProps) => {
               className={styles.selectContainer}
               label={__("Image Source", "beyondseo")}
               labelType="outer"
-              onChange={async (e:any) => {
+              onChange={async (e: any) => {
                 const newValue = e.target.value;
                 setSelectedImageSource(newValue);
                 updateActiveImageUrl(newValue);
@@ -365,7 +360,7 @@ export const SocialTab = ({ proVersion = false }: SocialTabProps) => {
 
           <div className={styles.formContainer}>
             <div className={styles.inputWrapper}>
-              <Form config={formConfig} onChange={(e:any) => {}}>
+              <Form config={formConfig} onChange={(e: any) => { }}>
                 <Textarea
                   formconfig={formConfig.socialTitle}
                   required={true}
@@ -378,14 +373,14 @@ export const SocialTab = ({ proVersion = false }: SocialTabProps) => {
                   maxLength={60}
                   value={title}
                   disabled={titleSwitchOpen}
-                  onChange={(e:any) => setTitle(e.target.value)}
-                  onBlur={(e:any) => handleSave("title", e.target.value)}
+                  onChange={(e: any) => setTitle(e.target.value)}
+                  onBlur={(e: any) => handleSave("title", e.target.value)}
                 />
               </Form>
             </div>
 
             <div className={styles.inputWrapper}>
-              <Form config={formConfig} onChange={(e:any) => {}}>
+              <Form config={formConfig} onChange={(e: any) => { }}>
                 <Textarea
                   formconfig={formConfig.socialDescription}
                   required={true}
@@ -398,8 +393,8 @@ export const SocialTab = ({ proVersion = false }: SocialTabProps) => {
                   maxLength={300}
                   value={description}
                   disabled={descriptionSwitchOpen}
-                  onChange={(e:any) => setDescription(e.target.value)}
-                  onBlur={(e:any) => handleSave("description", e.target.value)}
+                  onChange={(e: any) => setDescription(e.target.value)}
+                  onBlur={(e: any) => handleSave("description", e.target.value)}
                 />
               </Form>
             </div>

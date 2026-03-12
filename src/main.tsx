@@ -37,18 +37,12 @@ import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
 import { ScoreButtonHeader } from "@components/ScoreButtonHeader/ScoreButtonHeader";
 import Settings from "@components/Settings/Settings";
 import { Upsell } from "@components/Upsell/Upsell";
-import {__} from "@wordpress/i18n";
+import { __ } from "@wordpress/i18n";
 const params = new URLSearchParams(window.location.search);
 const hasDebug = ["1", "true"].includes(params.get("debug") || "");
 
 const componentsToLoad = (rcWindow.rankingCoachReactData?.loadNextComponents || "").split(",");
-/**
- * var rankingCoachReactData = {"loadNextComponents":"edit,float","currentUserId":"1","proVersion":"0"};
- * The expectation is that const proVersion to be a boolean value.
- */
-const proVersion =
-  rcWindow?.rankingCoachReactData?.subscriptionVersion !== "seo_wp_free"
-  && rcWindow?.rankingCoachReactData?.subscriptionVersion !== "radar_wp_test";
+
 
 interface FactorSuggestion {
   id: number;
@@ -180,7 +174,7 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
     // This component is used for the "Add New" post type page
     return <></>;
   },
-  edit: () => <App hideTabs={false} proVersion={proVersion} />, // set noInternalOnboarding accordingly
+  edit: () => <App hideTabs={false} />,
   float: () => {
     const { metaTagsData, seoTitle, seoDescription, seoKeywords, isMetaTagsDataLoaded } = useSelector(
       (state: RootState) => state.app,
@@ -296,7 +290,7 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
       </Render>
     );
   },
-  elementor: () => <App hideTabs={false} proVersion={proVersion} context={"elementor"} />,
+  elementor: () => <App hideTabs={false} context={"elementor"} />,
   postlist: () => {
     // This component will be rendered for each post cell in the list
     // The actual rendering of individual cells will be handled separately
@@ -374,33 +368,33 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
       overallScore: overallScore,
       analysisResult: optimiserResult
         ? {
-            contexts: {
-              elements:
-                optimiserResult.contexts?.elements?.map((context) => ({
-                  contextName: context.contextName || "",
-                  score: context.score,
-                  weight: context.weight || 1,
-                  weightedScore: Math.round((context.score || 0) * (context.weight || 1)) * 100,
-                  factors: {
-                    elements:
-                      context.factors?.elements?.map((factor) => ({
-                        factorName: factor.factorName || "",
-                        score: factor.score || 0,
-                        status: factor.status,
-                        suggestions: factor.suggestions
-                          ? {
-                              elements:
-                                factor.suggestions.elements?.map((suggestion) => ({
-                                  title: suggestion.title || "",
-                                  description: suggestion.description || "",
-                                })) || [],
-                            }
-                          : undefined,
-                      })) || [],
-                  },
-                })) || [],
-            },
-          }
+          contexts: {
+            elements:
+              optimiserResult.contexts?.elements?.map((context) => ({
+                contextName: context.contextName || "",
+                score: context.score,
+                weight: context.weight || 1,
+                weightedScore: Math.round((context.score || 0) * (context.weight || 1)) * 100,
+                factors: {
+                  elements:
+                    context.factors?.elements?.map((factor) => ({
+                      factorName: factor.factorName || "",
+                      score: factor.score || 0,
+                      status: factor.status,
+                      suggestions: factor.suggestions
+                        ? {
+                          elements:
+                            factor.suggestions.elements?.map((suggestion) => ({
+                              title: suggestion.title || "",
+                              description: suggestion.description || "",
+                            })) || [],
+                        }
+                        : undefined,
+                    })) || [],
+                },
+              })) || [],
+          },
+        }
         : undefined,
       isLoading: isLoading,
     };

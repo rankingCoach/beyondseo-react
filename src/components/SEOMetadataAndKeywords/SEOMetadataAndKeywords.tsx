@@ -23,11 +23,9 @@ export interface SEOMetaTitleEditorProps {
   description: string | null;
   setSeoTitle: (title: string) => void;
   setSeoDescription: (description: string) => void;
-  proVersion: boolean;
 }
 
 export const SEOMetadataAndKeywords = (props: any) => {
-  const { proVersion } = props;
   const { seoTitle, seoDescription, isMetaTagsDataLoaded, metaTagsData } = useSelector((state: RootState) => state.app);
   const { currentPost, isCurrentPostLoaded } = useSelector((state: RootState) => state.post);
   const { setSeoTitle, setSeoDescription } = AppSlice;
@@ -72,13 +70,11 @@ export const SEOMetadataAndKeywords = (props: any) => {
   seoMetaTitleEditorProps.description = seoDescription;
   seoMetaTitleEditorProps.setSeoTitle = (title: string) => dispatch(setSeoTitle(title));
   seoMetaTitleEditorProps.setSeoDescription = (description: string) => dispatch(setSeoDescription(description));
-  seoMetaTitleEditorProps.proVersion = proVersion;
 
   seoMetaDescriptionEditorProps.title = seoTitle;
   seoMetaDescriptionEditorProps.description = seoDescription;
   seoMetaDescriptionEditorProps.setSeoTitle = (title: string) => dispatch(setSeoTitle(title));
   seoMetaDescriptionEditorProps.setSeoDescription = (description: string) => dispatch(setSeoDescription(description));
-  seoMetaDescriptionEditorProps.proVersion = proVersion;
 
   return (
     <>

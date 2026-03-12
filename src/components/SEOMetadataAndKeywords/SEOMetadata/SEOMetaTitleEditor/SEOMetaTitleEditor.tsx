@@ -7,7 +7,6 @@ import { AdornmentConfig } from "@components/MultiAdornmentInput/MultiSelectAdor
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
 import { RootState } from "@src/main.store";
-import { FeatureSwitch } from "@components/Common/FeatureSwitch/FeatureSwitch";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { useSelector } from "react-redux";
 import { SEOMetaTitleEditorProps } from "@components/SEOMetadataAndKeywords/SEOMetadataAndKeywords";
@@ -22,9 +21,8 @@ const SEPARATOR_BUTTON_TEXT = __("Add Separator", "beyondseo");
 export const seoMetaTitleEditorProps: SEOMetaTitleEditorProps = {
   title: "",
   description: "",
-  setSeoTitle: () => {},
-  setSeoDescription: () => {},
-  proVersion: false,
+  setSeoTitle: () => { },
+  setSeoDescription: () => { },
 };
 
 const variableConfig: AdornmentConfig = {
@@ -40,7 +38,6 @@ const separatorConfig: AdornmentConfig = {
 export const SEOMetaTitleEditor = (props: SEOMetaTitleEditorProps) => {
   const { metaTagsData, previewTitle } = useSelector((state: RootState) => state.app);
   const { currentPost, isCurrentPostLoaded } = useSelector((state: RootState) => state.post);
-  const { proVersion } = props;
   const [switchOpen, setSwitchOpen] = useState(false);
   const dispatch = useAppDispatch();
 

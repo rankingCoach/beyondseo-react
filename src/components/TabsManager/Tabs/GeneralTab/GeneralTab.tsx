@@ -18,7 +18,6 @@ import { AppSlice } from "@src/App.slice";
 
 export const GeneralTab = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
-  const { proVersion } = props;
   const dispatch = useAppDispatch();
   const currentPostId = getPathId();
   const { currentPostType, isEditingPost } = rcWindow?.rankingCoachReactData;
@@ -125,7 +124,7 @@ export const GeneralTab = (props: any) => {
           <GeneralTabPlaceholder showMessage={shouldShowMessage} />
         ) : (
           <ComponentContainer className={"seo-metadata-and-keywords-container"}>
-            <SEOMetadataAndKeywords proVersion={proVersion} />
+            <SEOMetadataAndKeywords />
           </ComponentContainer>
         )}
       </div>

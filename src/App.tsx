@@ -8,12 +8,11 @@ import { rcWindow } from '@stores/window.store';
 import { getPathId } from '@helpers/get-path-id';
 import { useSelector } from 'react-redux';
 import { RootState } from '@src/main.store';
-import {WPPlugin} from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Plugin/Entities/WPPlugin";
+import { WPPlugin } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Plugin/Entities/WPPlugin";
 
 export type AppProps = {
   currentPost?: any,
   hideTabs?: boolean,
-  proVersion?: boolean,
   context?: string,
 }
 
@@ -23,12 +22,12 @@ const App = (props: AppProps) => {
   const pluginData: WPPlugin | undefined = plugin?.pluginData;
   const internalOnboarding: boolean = !!pluginData?.setupData?.isPluginOnboarded;
 
-  const { currentPost } = useSelector((state:RootState) => state.post);
+  const { currentPost } = useSelector((state: RootState) => state.post);
   const dispatch = useAppDispatch();
   const currentPostId = getPathId();
-  const {currentPostType, isEditingPost} = rcWindow?.rankingCoachReactData;
+  const { currentPostType, isEditingPost } = rcWindow?.rankingCoachReactData;
 
-  if(
+  if (
     !internalOnboarding
   ) {
     props.hideTabs = true;
