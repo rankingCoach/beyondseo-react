@@ -323,17 +323,6 @@ export const freePlanFeatures: PlanFeature[] = [
     { text: __('No post boosting', 'beyondseo'), checked: false },
 ];
 
-export const proPlanFeatures: string[] = [
-    __('BeyondSEO WordPress plugin', 'beyondseo'),
-    __('Full AI-powered SEO', 'beyondseo'),
-    __('Track 50 keywords', 'beyondseo'),
-    __('Publish Profile in up to 46 directories automatically', 'beyondseo'),
-    __('Create Google Ads in minutes', 'beyondseo'),
-    __('Create entire series of social media posts with AI', 'beyondseo'),
-    __('Automatic replies with AI', 'beyondseo'),
-    __('Boosts posts with Meta ads', 'beyondseo')
-];
-
 // Contact Sales Modal Configuration
 export interface ContactSalesModalField {
     label: string;
