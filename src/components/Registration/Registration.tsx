@@ -10,6 +10,7 @@ import emailVerifySvg from "@assets/validate-email-illustration.svg";
 import { seoStore, SeoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
+import { RegistrationWelcome } from "./RegistrationWelcome";
 
 const STORAGE_KEYS = {
   EMAIL: "registrationEmail",
@@ -31,6 +32,7 @@ interface RegistrationProps {
 export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) => {
   const dispatch = useAppDispatch();
 
+  const [showWelcome, setShowWelcome] = useState(true);
   const [isLoading, setIsLoading] = useState(Boolean(isPluginLoading));
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [country, setCountry] = useState(() => sessionStorage.getItem(STORAGE_KEYS.COUNTRY) || "DE");
@@ -120,6 +122,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
         }
 
         // Resume verification phase
+        setShowWelcome(false);
         setIsVerificationPhase(true);
       } catch (error) {
         console.error("[REGISTRATION] Error loading initial state:", error);
@@ -294,7 +297,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
             settings: { beyondseo_comm_opt_in: true },
           } as any)
           .toPromise();
-      } catch (_) {}
+      } catch (_) { }
     }
 
     if (isVerificationPhase) {
@@ -420,6 +423,10 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
     return [];
   }, [allowedCountries]);
 
+  if (showWelcome) {
+    return <RegistrationWelcome onContinueWithEmail={() => setShowWelcome(false)} />;
+  }
+
   return (
     <ComponentContainer className={styles.registrationContainer}>
       {/* Header Section with Logo */}
@@ -441,17 +448,17 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
               fontWeight={FontWeights.bold}
               className={styles.authTitle}
             >
-              {__("Welcome to BeyondSEO", "beyondseo")}
+              {__("Sign in or create an account", "beyondseo")}
             </Text>
 
             <Text
               type={TextTypes.text}
               className={styles.authDescription}
             >
-              {__("Log in or create a new account to start using your SEO tools.", "beyondseo")}
+              {__("Enter your email and we'll get you set up.", "beyondseo")}
             </Text>
 
-            <ComponentContainer className={styles.featuresList}>
+            {/* <ComponentContainer className={styles.featuresList}>
               <TextIcon icon={IconNames.check} iconColor="#4caf50" iconHasCircle={true} iconFillColor="#e9fbed" iconCircleSize={24}>
                 {__("Optimize WordPress SEO", "beyondseo")}
               </TextIcon>
@@ -464,7 +471,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
               <TextIcon icon={IconNames.check} iconColor="#4caf50" iconHasCircle={true} iconFillColor="#e9fbed" iconCircleSize={24}>
                 {__("Start your personal online marketing agent", "beyondseo")}
               </TextIcon>
-            </ComponentContainer>
+            </ComponentContainer> */}
 
             <Input
               label={__("Email", "beyondseo")}
@@ -503,6 +510,13 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
                   </span>
                 }
               />
+            </div>
+
+            <div className={styles.activationCodeHint}>
+              {__("Have an activation code instead? ", "beyondseo")}
+              <Link href={`${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`}>
+                {__("Enter it here", "beyondseo")}
+              </Link>
             </div>
           </>
         ) : (
