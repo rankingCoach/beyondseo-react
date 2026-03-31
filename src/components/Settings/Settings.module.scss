@@ -1,24 +1,11 @@
 @media screen and (max-width: 782px) {
-    :global(body) :global(#generalSettings-rankingcoach-page) {
+    :global(#generalSettings-rankingcoach-page) {
         width: 100%;
         max-width: 100%;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
         overflow-x: hidden;
-    }
-
-    /* These override possible inline or highly specific styles from WordPress core */
-    :global(html) {
-        overflow-x: hidden !important;
-    }
-
-    :global(body) :global(#wpwrap),
-    :global(body) :global(#wpcontent),
-    :global(body) :global(#wpbody),
-    :global(body) :global(#wpbody-content) {
-        margin: 0;
-        padding-right: 0;
     }
 }
 
