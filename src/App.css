@@ -1661,6 +1661,3 @@
     font-weight: 700;
     src: url("assets/fonts/Roboto-Bold.ttf") format("truetype");
 }
-body {
-    font-family: var(--theme-typeface);
-}
