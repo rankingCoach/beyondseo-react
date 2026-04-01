@@ -2,9 +2,6 @@ import path from 'path';
 import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 
-const ROOT = path.resolve('');
-const BASE = __dirname.replace(ROOT, '');
-
 export default defineConfig({
     base: process.env.NODE_ENV === 'production'
         ? '/wp-content/plugins/beyondseo/react/dist/'
@@ -16,9 +13,6 @@ export default defineConfig({
         modules: {
             localsConvention: "camelCase",
             generateScopedName: "[name]__[local]___[hash:base64:5]",
-        },
-        postcss: {
-            plugins: [],
         },
     },
     build: {
