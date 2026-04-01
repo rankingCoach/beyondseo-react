@@ -5,68 +5,6 @@ import react from '@vitejs/plugin-react';
 const ROOT = path.resolve('');
 const BASE = __dirname.replace(ROOT, '');
 
-/**
- * Custom PostCSS plugin to scope global CSS selectors under .beyondseo
- * This prevents plugin CSS from affecting WordPress admin elements.
- */
-function beyondseoScopePlugin() {
-    return {
-        postcssPlugin: 'beyondseo-scope',
-        Rule(rule) {
-            // Skip rules inside @keyframes
-            if (rule.parent && rule.parent.type === 'atrule' && rule.parent.name === 'keyframes') {
-                return;
-            }
-            // Skip CSS module selectors (already scoped by hash)
-            if (rule.selector && rule.selector.includes('___')) {
-                return;
-            }
-            // Skip selectors already scoped to plugin containers
-            if (rule.selector && (
-                rule.selector.includes('.beyondseo') ||
-                rule.selector.includes('#edit-rankingcoach') ||
-                rule.selector.includes('#seo-optimiser-rankingcoach') ||
-                rule.selector.includes('#onboarding-rankingcoach') ||
-                rule.selector.includes('#registration-rankingcoach') ||
-                rule.selector.includes('#generalSettings-rankingcoach') ||
-                rule.selector.includes('#upsell-rankingcoach') ||
-                rule.selector.includes('#rankingcoach-') ||
-                rule.selector.includes('#rc-') ||
-                rule.selector.includes('.vanguard-')
-            )) {
-                return;
-            }
-
-            // Scope all selectors that don't start with a class or ID
-            const selectors = rule.selector.split(',').map(s => s.trim());
-            const needsScoping = selectors.some(s => {
-                // Bare element selectors (div, span, body, html, a, p, h1, etc.)
-                if (/^[a-zA-Z]/.test(s)) return true;
-                // Universal selector
-                if (s === '*' || /^\*[:\s]/.test(s)) return true;
-                // Pseudo-root
-                if (s === ':root' || s.startsWith(':root')) return true;
-                // Pseudo-elements at top level
-                if (/^::?(?:after|before|first-line|first-letter)/.test(s)) return true;
-                // Attribute selectors at top level
-                if (/^\[/.test(s)) return true;
-                return false;
-            });
-
-            if (needsScoping) {
-                rule.selector = selectors.map(s => {
-                    s = s.trim();
-                    if (s === ':root' || s === 'body' || s === 'html') return '.beyondseo';
-                    if (s === '*') return '.beyondseo *';
-                    if (/^::?(?:after|before)/.test(s)) return '.beyondseo *' + s;
-                    return '.beyondseo ' + s;
-                }).join(', ');
-            }
-        }
-    };
-}
-beyondseoScopePlugin.postcss = true;
-
 export default defineConfig({
     base: process.env.NODE_ENV === 'production'
         ? '/wp-content/plugins/beyondseo/react/dist/'
@@ -80,7 +18,7 @@ export default defineConfig({
             generateScopedName: "[name]__[local]___[hash:base64:5]",
         },
         postcss: {
-            plugins: [beyondseoScopePlugin()],
+            plugins: [],
         },
     },
     build: {
