@@ -32,7 +32,8 @@ interface RegistrationProps {
 export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) => {
   const dispatch = useAppDispatch();
 
-  const [showWelcome, setShowWelcome] = useState(true);
+  // Temporary state to skip welcome screen.
+  const [showWelcome, setShowWelcome] = useState(false);
   const [isLoading, setIsLoading] = useState(Boolean(isPluginLoading));
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [country, setCountry] = useState(() => sessionStorage.getItem(STORAGE_KEYS.COUNTRY) || "DE");
