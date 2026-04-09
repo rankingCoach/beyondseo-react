@@ -513,12 +513,12 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
               />
             </div>
 
-            <div className={styles.activationCodeHint}>
+            {/* <div className={styles.activationCodeHint}>
               {__("Have an activation code instead? ", "beyondseo")}
               <Link href={`${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`}>
                 {__("Enter it here", "beyondseo")}
               </Link>
-            </div>
+            </div> */}
           </>
         ) : (
           <>
