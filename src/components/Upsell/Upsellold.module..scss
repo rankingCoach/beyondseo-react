@@ -7,6 +7,7 @@
     box-sizing: border-box;
     padding-bottom: 64px;
     position: relative;
+    /* Ensure space for lower sections when viewport is tight */
 
     @media (max-width: 768px) {
         margin-top: 0;
@@ -137,7 +138,6 @@
     background-color: white !important;
     color: var(--p600) !important;
     border: none !important;
-    margin-bottom: 24px;
 
     &:hover {
         background-color: #f8f9fa !important;
@@ -928,17 +928,6 @@
     &:hover {
         background-color: #f8f9fa !important;
     }
-}
-
-.activateFreePlanButton {
-    width: 100%;
-    border-radius: 50px !important;
-    padding: 12px !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    margin-bottom: 32px !important;
-    text-align: center;
-    cursor: pointer !important;
 }
 
 .limitedTimeBanner {

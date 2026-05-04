@@ -1,0 +1,232 @@
+@import "@src/styles/spacings";
+@import "@src/styles/media-mixins";
+
+.modalWrapper {
+    position: fixed;
+    top: 32px;
+    left: 160px;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-in-out;
+    padding: 20px;
+    box-sizing: border-box;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    @media screen and (max-width: 960px) {
+        left: 0;
+    }
+
+    @media screen and (max-width: 782px) {
+        top: 46px;
+    }
+
+    body.folded & {
+        left: 36px;
+
+        @media screen and (max-width: 960px) {
+            left: 0;
+        }
+    }
+
+    &::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        pointer-events: all;
+        z-index: 0;
+    }
+
+    :global(.rc-modal) {
+        transform: translateY(40px) scale(0.96);
+        opacity: 0;
+        animation: slideUpFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        max-width: 1148px;
+        width: calc(90vw - 160px) !important;
+        margin: auto;
+        position: relative;
+        pointer-events: all;
+        z-index: 1;
+
+        @media (max-width: 1200px) {
+            width: calc(85vw - 160px) !important;
+        }
+
+        @media screen and (max-width: 960px) {
+            width: 90vw !important;
+        }
+
+        @media (max-width: 768px) {
+            width: 95vw !important;
+            max-width: calc(100vw - 40px);
+        }
+    }
+
+    body.folded & :global(.rc-modal) {
+        width: calc(90vw - 36px) !important;
+
+        @media (max-width: 1200px) {
+            width: calc(85vw - 36px) !important;
+        }
+
+        @media screen and (max-width: 960px) {
+            width: 90vw !important;
+        }
+    }
+}
+
+.contactSalesModal {
+    opacity: 0;
+    transform: scale(0.95);
+    animation: modalEnter 0.3s ease-in-out forwards;
+    position: relative;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 auto !important;
+
+    :global(.modal-overlay) {
+        background-color: rgba(0, 0, 0, 0.65) !important;
+        backdrop-filter: blur(6px);
+    }
+
+    :global(.rc-modal-content) {
+        margin: 0 auto;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes modalEnter {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modalContent {
+    padding: 24px;
+    max-height: calc(90vh - 100px);
+    overflow-y: auto;
+
+    @media (max-width: 768px) {
+        padding: 16px;
+        max-height: calc(90vh - 60px);
+    }
+}
+
+.modalForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formRow {
+    display: flex;
+    gap: 16px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.formField {
+    flex: 1;
+    min-width: 0;
+
+    :global(.vanguard-input),
+    :global(.vanguard-select),
+    :global(.vanguard-textarea) {
+        width: 100%;
+    }
+
+    :global(.MuiInputBase-root) {
+        background-color: white;
+    }
+
+    :global(.vanguard-input-label),
+    :global(.vanguard-select-label),
+    :global(.vanguard-textarea-label) {
+        font-weight: 600;
+        color: var(--n900);
+        margin-bottom: 8px;
+    }
+
+    :global(.vanguard-select) {
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+    }
+}
+
+.checkboxField {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+
+    :global(.vanguard-checkbox) {
+        margin-top: 2px;
+    }
+
+    :global(.vanguard-text) {
+        color: var(--n800);
+        line-height: 1.5;
+    }
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 8px;
+}
+
+// Override default vanguard styles if needed
+:global {
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    }
+}

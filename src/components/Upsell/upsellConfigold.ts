@@ -214,7 +214,9 @@ export const featureCategories: FeatureCategory[] = [
   },
 ];
 
-export const defaultExpandedCategoryIds = featureCategories.map((c) => c.id);
+export const defaultExpandedCategoryIds = [featureCategories[0]?.id, featureCategories[1]?.id].filter(
+  Boolean,
+) as string[];
 
 export const stats: Stat[] = [
   { label: __("Google ads clicks", "beyondseo"), value: "854", change: "+24%" },

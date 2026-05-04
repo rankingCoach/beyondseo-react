@@ -8,6 +8,11 @@
     box-sizing: border-box
 }
 :root {
+    --ai-start-color: hsl(from var(--ai-base-color) calc(h + 123) 100 56);
+    --ai-start-color-lighter: hsl(from var(--ai-start-color) h s calc(l + 10));
+    --ai-end-color: hsl(from var(--ai-base-color) calc(h - 35) 93 60);
+    --ai-base-color: hsl(217, 100%, 50%);
+    --ai-base-color-rgb: 0, 98, 255;
     --white: #ffffff;
     --white-rgb: 255, 255, 255;
     --black: #040506;
