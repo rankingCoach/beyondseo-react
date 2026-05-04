@@ -91,7 +91,7 @@
 }
 
 .auth-description {
-    margin-bottom: 32px;
+    margin-bottom: 64px;
     text-align: center;
     color: var(--fn-fg-light);
 }
@@ -148,6 +148,20 @@
         display: inline !important;
         font-size: 14px !important;
         line-height: inherit !important;
+        vertical-align: baseline !important;
+    }
+}
+
+.activation-code-hint {
+    width: 100%;
+    max-width: 480px;
+    margin-top: 24px;
+    color: var(--fn-fg-light);
+    font-size: 14px;
+
+    :global(a) {
+        display: inline-flex !important;
+        font-size: 14px !important;
         vertical-align: baseline !important;
     }
 }

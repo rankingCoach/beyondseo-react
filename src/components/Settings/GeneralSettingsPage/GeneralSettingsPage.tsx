@@ -83,7 +83,7 @@ const GeneralSettingsPage: React.FC = () => {
     },
     {
       key: "beyondseo_comm_opt_in",
-      title: __("Allow communication with BeyondSEO servers", "beyondseo"),
+      title: __("Allow communication with rankingCoach servers", "beyondseo"),
       description: __(
         "Allow the plugin to communicate with rankingCoach backend servers to provide its services. Required for account features, keyword sync, and dashboard functionality. You can withdraw consent at any time.",
         "beyondseo",
