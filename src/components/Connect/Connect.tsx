@@ -12,7 +12,6 @@ import alwaysKnowWhats from "@assets/connect-page/always-know-whats.svg";
 import spotWhatsHolding from "@assets/connect-page/spot-whats-holding.svg";
 import stayOnTopOf from "@assets/connect-page/stay-on-top-of.svg";
 import trackYourProgress from "@assets/connect-page/track-your-progress.svg";
-import { RotatingWord } from "@components/Common/RotatingWord/RotatingWord";
 import { testimonials } from "@components/Upsell/upsellConfig";
 import type { Testimonial } from "@components/Upsell/upsellConfig";
 
@@ -130,11 +129,11 @@ export const Connect = () => {
                 {IconNames.starActive}
               </Icon>
             ))}
-            <Text color="var(--fn-fg-on-dark)" types={FontWeights.medium}>
+            <Text color="var(--fn-fg-on-dark)" type={FontWeights.medium}>
               {__("4.84/5 | 5,000+ Reviews", "beyondseo")}
             </Text>
           </span>
-          <Text color="var(--fn-fg-on-dark)" types={FontWeights.medium}>
+          <Text color="var(--fn-fg-on-dark)" type={FontWeights.medium}>
             {__("Google Partner", "beyondseo")}
           </Text>
         </div>
