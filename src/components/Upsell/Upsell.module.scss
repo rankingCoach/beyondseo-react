@@ -36,7 +36,7 @@
 .heroTitle {
     position: relative;
     z-index: 1;
-    color: white !important;
+    color: var(--white) !important;
     font-size: 48px !important;
     line-height: 1.2 !important;
     margin-top: 24px;
@@ -48,7 +48,7 @@
     gap: 8px;
 
     > * {
-        color: white !important;
+        color: var(--white) !important;
         font-size: inherit !important;
         line-height: inherit !important;
         font-weight: inherit !important;
@@ -74,7 +74,7 @@
 .heroSubtitle {
     position: relative;
     z-index: 1;
-    color: white !important;
+    color: var(--white) !important;
     font-size: 18px !important;
     line-height: 1.6 !important;
     margin: 0 auto 32px;
@@ -122,7 +122,7 @@
 }
 
 .periodLabelActive {
-    color: white;
+    color: var(--white);
     font-weight: 700;
 }
 
@@ -134,13 +134,13 @@
     font-size: 16px !important;
     font-weight: 700 !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    background-color: white !important;
+    background-color: var(--white) !important;
     color: var(--p600) !important;
     border: none !important;
     margin-bottom: 24px;
 
     &:hover {
-        background-color: #f8f9fa !important;
+        background-color: var(--n100) !important;
     }
 
     @media (max-width: 768px) {
@@ -150,7 +150,7 @@
 
 /* Testimonials section */
 .testimonialsSection {
-    background: #ffffff;
+    background: var(--white);
     padding: clamp(72px, 10vh, 120px) 16px clamp(80px, 12vh, 120px);
 }
 
@@ -172,7 +172,7 @@
 }
 
 .testimonialsTitle {
-    color: #1f2a3c;
+    color: var(--n700);
 }
 
 .testimonialsRating {
@@ -187,7 +187,7 @@
 }
 
 .ratingScore {
-    color: #2a3546;
+    color: var(--n700);
     font-weight: 700;
 }
 
@@ -200,7 +200,7 @@
 
 .testimonialCard {
     position: relative;
-    background: var(--opacity-n900-02, rgba(4, 5, 6, 0.02));
+    background: rgba(var(--n900-rgb), 0.02);
     border-radius: 18px;
     padding: 24px;
     display: flex;
@@ -221,8 +221,8 @@
 }
 
 .testimonialText {
-    color: var(--functional-foreground-fg-default, #2a3546);
-    font-size: var(--fontSize-headings-intro, 20px);
+    color: var(--n700);
+    font-size: 20px;
     font-weight: 400;
     line-height: 1.6;
 }
@@ -241,12 +241,12 @@
     flex-shrink: 0;
     object-fit: cover;
     display: block;
-    background: #e8edf5;
+    background: var(--n200);
 }
 
 .authorName {
-    color: var(--functional-foreground-fg-default, #2a3546);
-    font-size: var(--fontSize-text-paragraph, 16px);
+    color: var(--n700);
+    font-size: 16px;
     font-weight: 700;
 }
 
@@ -256,11 +256,11 @@
     gap: 16px;
     align-items: center;
     justify-content: center;
-    color: #5f6b78;
+    color: var(--fn-fg-light);
 }
 
 .partnerText {
-    color: #5f6b78;
+    color: var(--fn-fg-light);
     font-weight: 600;
 }
 
@@ -322,8 +322,7 @@
     margin: 0 auto;
     position: relative;
     z-index: 1;
-    background: rgba(255, 255, 255, 0.05);
-    // border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(var(--white-rgb), 0.05);
     border-bottom: none;
     border-radius: 38px 38px 0 0;
     padding: 24px;
@@ -484,7 +483,7 @@
 }
 
 .foundationSection {
-    background: white;
+    background: var(--white);
     padding: clamp(72px, 10vh, 120px) 24px clamp(72px, 12vh, 140px);
     display: flex;
     flex-direction: column;
@@ -498,7 +497,7 @@
 .foundationTitle {
     font-size: 42px !important;
     line-height: 1.2 !important;
-    color: #1a1a1a !important;
+    color: var(--n800) !important;
     margin-bottom: 24px;
     display: flex;
     flex-direction: column;
@@ -511,7 +510,7 @@
 }
 
 .foundationLinePrimary {
-    color: #1a1a1a !important;
+    color: var(--n800) !important;
     text-align: center;
 }
 
@@ -523,13 +522,13 @@
 .foundationSubtitle {
     font-size: 18px !important;
     line-height: 1.6 !important;
-    color: #5f6368 !important;
+    color: var(--fn-fg-light) !important;
     max-width: 700px;
     margin: 0 auto;
 }
 
 .featureHighlightsSection {
-    background: #f6f8fc;
+    background: var(--n100);
     padding: clamp(72px, 10vh, 120px) 24px;
 }
 
@@ -552,11 +551,11 @@
 }
 
 .featureHighlightsTitle {
-    color: #1f2a3c;
+    color: var(--n700);
 }
 
 .featureHighlightsSubtitle {
-    color: #4f5b6b;
+    color: var(--fn-fg-light);
     max-width: 760px;
     line-height: 1.6;
 }
@@ -569,7 +568,7 @@
 }
 
 .featureHighlightCard {
-    background: #ffffff;
+    background: var(--white);
     border-radius: 18px;
     padding: 24px;
     display: flex;
@@ -607,13 +606,13 @@
 }
 
 .featureCardTitle {
-    color: #1f2a3c;
+    color: var(--n700);
     font-size: 17px !important;
     line-height: 1.35;
 }
 
 .featureCardDescription {
-    color: #4f5b6b;
+    color: var(--fn-fg-light);
     font-size: 16px;
     line-height: 1.6;
 }
@@ -678,11 +677,11 @@
 }
 
 .bottomPlansTitle {
-    color: #1f2a3c;
+    color: var(--n700);
 }
 
 .bottomPlansSubtitle {
-    color: #4f5b6b;
+    color: var(--fn-fg-light);
     max-width: 620px;
     line-height: 1.6;
 }
@@ -713,11 +712,11 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
-    color: #ffffff;
+    color: var(--white);
     overflow: hidden;
     min-height: 100%;
     box-shadow: 0 18px 38px rgba(8, 41, 96, 0.2);
-    background-color: #0f3f99;
+    background-color: var(--p700);
     max-width: 400px;
     width: 100%;
     margin: 0 auto;
@@ -727,7 +726,6 @@
     content: "";
     position: absolute;
     inset: 0;
-    // background: linear-gradient(160deg, rgba(11, 71, 180, 0.9), rgba(2, 41, 116, 0.9));
     z-index: 0;
 }
 
@@ -751,19 +749,17 @@
 }
 
 .planTitle {
-    color: #ffffff !important;
+    color: var(--white) !important;
     align-self: stretch;
-    font-family: var(--headings-fontFamily, Inter);
-    font-size: var(--fontSize-headings-intro, 20px);
-    line-height: var(--lineHeight-headings-intro, 28px);
+    font-size: 20px;
+    line-height: 28px;
     font-weight: 700;
 }
 
 .planSubtitle {
-    color: var(--pricing-color, #fff) !important;
-    font-family: var(--text-fontFamily, Inter);
-    font-size: var(--fontSize-text-help, 14px);
-    line-height: var(--lineHeight-text-help, 24px);
+    color: var(--white);
+    font-size: 14px;
+    line-height: 24px;
     font-weight: 400;
     letter-spacing: 0.004px;
 }
@@ -773,8 +769,8 @@
     border-radius: 50px;
     padding: 10px 16px;
     font-weight: 700;
-    background: #ffffff;
-    color: #0d3e9f;
+    background: var(--white);
+    color: var(--p700);
     border: none;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
     width: min(328px, 100%);
@@ -811,8 +807,7 @@
 }
 
 .planFeatureText {
-    color: var(--features-list-color, #fff) !important;
-    font-family: "Roboto", var(--text-fontFamily, Inter), sans-serif;
+    color: var(--white);
     font-size: 14px;
     line-height: 24px;
     font-weight: 400;
@@ -832,16 +827,16 @@
 }
 
 .freeCard {
-    background: white;
-    border: 1px solid #e1e4e8;
-    color: #1a1a1a;
+    background: var(--white);
+    border: 1px solid var(--n200);
+    color: var(--n800);
     padding-top: 48px;
 
     .cardTitle {
         font-size: 18px;
         font-weight: 700;
         margin-bottom: 24px;
-        color: #1a1a1a;
+        color: var(--n800);
         text-align: left;
     }
 }
@@ -856,9 +851,9 @@
 }
 
 .proCard {
-    background: #0066ff;
+    background: var(--p500);
     /* rankingCoach Blue */
-    color: white;
+    color: var(--white);
     border: none;
     box-shadow: 0 8px 32px rgba(0, 102, 255, 0.25);
     padding-top: 56px;
@@ -872,7 +867,7 @@
     /* Card sits on top of badge's bottom part */
 
     .cardTitle {
-        color: white;
+        color: var(--white);
         font-size: 18px;
         font-weight: 700;
         margin-bottom: 16px;
@@ -891,14 +886,14 @@
     .price {
         font-size: 42px;
         font-weight: 700;
-        color: #1a1a1a;
+        color: var(--n800);
         line-height: 1;
     }
 
     .period {
         font-size: 14px;
         font-weight: 500;
-        color: #5f6368;
+        color: var(--fn-fg-light);
         margin-bottom: 8px;
     }
 }
@@ -906,15 +901,15 @@
 .subText {
     font-size: 14px;
     font-weight: 500;
-    color: #1a1a1a;
+    color: var(--n800);
     margin-bottom: 32px;
     text-align: left;
 }
 
 .currentPlanButton {
     width: 100%;
-    background-color: #f8f9fa !important;
-    color: #5f6368 !important;
+    background-color: var(--n100) !important;
+    color: var(--fn-fg-light) !important;
     border: none !important;
     border-radius: 50px !important;
     padding: 12px !important;
@@ -926,7 +921,7 @@
     box-shadow: none !important;
 
     &:hover {
-        background-color: #f8f9fa !important;
+        background-color: var(--n100) !important;
     }
 }
 
@@ -946,8 +941,8 @@
     top: 0;
     left: 0;
     right: 0;
-    background-color: #ffc107;
-    color: #1a1a1a;
+    background-color: var(--a2900);
+    color: var(--n800);
     text-align: center;
     font-weight: 700;
     font-size: 14px;
@@ -990,13 +985,13 @@
 
 .toggleOptionActive {
     background-color: transparent;
-    color: #0066ff;
-    background-color: white;
+    color: var(--p500);
+    background-color: var(--white);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .saveText {
-    color: #ffc107;
+    color: var(--a2900);
     font-weight: 800;
     margin-left: 4px;
 }
@@ -1021,8 +1016,8 @@
 }
 
 .discountBadge {
-    background-color: #ffebee;
-    color: #d32f2f;
+    background-color: var(--e100);
+    color: var(--e900);
     font-size: 11px;
     font-weight: 700;
     padding: 2px 6px;
@@ -1060,7 +1055,7 @@
 
 .upgradeButton {
     width: 100%;
-    background-color: white !important;
+    background-color: var(--white) !important;
     border: none !important;
     border-radius: 50px !important;
     padding: 16px !important;
@@ -1072,7 +1067,7 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
     &:hover {
-        background-color: #f0f0f0 !important;
+        background-color: var(--n100) !important;
     }
 }
 
@@ -1100,14 +1095,14 @@
     gap: 12px;
     font-size: 13px;
     line-height: 1.4;
-    color: white;
+    color: var(--white);
 
     &.textDark {
-        color: #1f1f1f;
+        color: var(--n800);
     }
 
     &.disabled {
-        color: #5f6368;
+        color: var(--fn-fg-light);
         /* No strikethrough in screenshot, just greyed out / X'd */
     }
 }
@@ -1132,11 +1127,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    // gap: 12px;
-    /* Increased gap */
 
     z-index: 1;
-    /* Behind card (which is 2) */
     background: transparent;
     box-shadow: none;
     padding: 0;
@@ -1169,7 +1161,6 @@
 
 /* Feature comparison section */
 .comparisonSection {
-    // background: #f6f8fc;
     padding: clamp(72px, 10vh, 120px) 16px clamp(90px, 12vh, 140px);
 }
 
@@ -1190,14 +1181,14 @@
 }
 
 .comparisonSubtitle {
-    color: #5f6b78;
+    color: var(--fn-fg-light);
     max-width: 640px;
     margin: 0 auto;
     line-height: 1.6;
 }
 
 .comparisonCard {
-    background: #ffffff;
+    background: var(--white);
     border-radius: 24px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
     padding: 0 0 16px;
@@ -1209,10 +1200,10 @@
     display: grid;
     grid-template-columns: minmax(220px, 1.2fr) minmax(160px, 1fr) minmax(160px, 1fr);
     background: var(--n200);
-    color: #253041;
+    color: var(--n700);
     padding: 18px 32px;
     border-radius: 24px 24px 0 0;
-    border-bottom: 1px solid #dfe5f0;
+    border-bottom: 1px solid var(--n200);
     min-width: 760px;
     box-sizing: border-box;
 }
@@ -1220,7 +1211,7 @@
 .headerCell {
     text-align: left;
     font-size: 14px;
-    color: #2c3645;
+    color: var(--n700);
 }
 
 .headerCellCenter {
@@ -1229,7 +1220,6 @@
 
 .categoryBlock {
     width: 100%;
-    // border-bottom: 1px solid #eef2f7;
 }
 
 .summaryRow {
@@ -1239,7 +1229,7 @@
     gap: 16px;
     padding: 16px 32px;
     box-sizing: border-box;
-    background: #ffffff;
+    background: var(--white);
     width: 100%;
     min-width: 760px;
     border: none;
@@ -1248,11 +1238,6 @@
     font: inherit;
     -webkit-appearance: none;
     appearance: none;
-    transition: background 0.15s ease;
-}
-
-.summaryRow:hover {
-    background: #ffffff;
 }
 
 .summaryLeft {
@@ -1272,7 +1257,7 @@
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 8px solid #1f2a3c;
+    border-top: 8px solid var(--n700);
     transition: transform 0.2s ease;
     flex-shrink: 0;
 }
@@ -1326,21 +1311,21 @@
 }
 
 .statusPositive {
-    color: #2bb673;
+    color: var(--s500);
 }
 
 .statusNegative {
-    color: #d14b4b;
+    color: var(--e400);
 }
 
 .statusText {
-    color: #1f2a3c;
+    color: var(--n700);
     font-size: 15px;
 }
 
 .limitedTag {
-    background: #fff3e0;
-    color: #d27a2f;
+    background: var(--w100);
+    color: var(--w500);
     font-size: 13px;
     padding: 4px 10px;
     border-radius: 8px;
@@ -1348,18 +1333,18 @@
 }
 
 .detailsWrapper {
-    border-top: 1px solid #eef2f7;
-    background: #ffffff;
+    border-top: 1px solid var(--n200);
+    background: var(--white);
 }
 
 .detailRow {
     padding: 12px 32px;
-    border-bottom: 1px solid #f2f4f8;
+    border-bottom: 1px solid var(--n200);
 }
 
 .detailLabel {
     font-size: 15px;
-    color: #2d3648;
+    color: var(--n700);
 }
 
 .legendRow {
@@ -1375,7 +1360,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #4f5b6b;
+    color: var(--fn-fg-light);
 
     .statusIcon {
         display: inline-flex;
@@ -1390,7 +1375,7 @@
 }
 
 .legendText {
-    color: #4f5b6b;
+    color: var(--fn-fg-light);
     font-size: 13px;
 }
 
@@ -1399,15 +1384,9 @@
 }
 
 .legendButton {
-    border-radius: 50px !important;
-    padding: 10px 24px !important;
-    font-weight: 600 !important;
-}
-
-.legendButton {
-    border-radius: 50px !important;
-    padding: 10px 24px !important;
-    font-weight: 600 !important;
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-weight: 600;
 }
 
 @media (max-width: 900px) {
@@ -1459,6 +1438,7 @@
 
 /* Professional Section */
 .professionalsSection {
+    background-color: var(--p800);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1468,10 +1448,12 @@
     padding: clamp(72px, 10vh, 120px) 16px;
     text-align: center;
     gap: 24px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .professionalsLabel {
-    color: var(--Accent-200, #35faff) !important;
+    color: #35faff !important;
     font-size: 14px !important;
     font-weight: 700 !important;
     line-height: 24px !important;
@@ -1482,7 +1464,7 @@
 }
 
 .professionalsTitle {
-    color: var(--functional-foreground-fg-on-dark, #fff) !important;
+    color: var(--white) !important;
     font-size: 40px !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
@@ -1494,7 +1476,7 @@
 }
 
 .professionalsDescription {
-    color: var(--functional-foreground-fg-on-dark, #fff) !important;
+    color: var(--white) !important;
     font-size: 20px !important;
     font-weight: 400 !important;
     line-height: 1.4 !important;
@@ -1537,7 +1519,7 @@
 }
 
 .cardTitle {
-    color: #fff !important;
+    color: var(--white) !important;
     font-size: 18px !important;
     font-weight: 700 !important;
 }
@@ -1549,7 +1531,7 @@
 }
 
 .professionalsQuoteTitle {
-    color: var(--functional-foreground-fg-on-dark, #fff) !important;
+    color: var(--white) !important;
     font-size: 28px !important;
     font-weight: 700 !important;
     line-height: 1.3 !important;
@@ -1558,7 +1540,7 @@
 }
 
 .professionalsQuoteSubtitle {
-    color: var(--functional-foreground-fg-on-dark, #fff) !important;
+    color: var(--white) !important;
     font-size: 16px !important;
     font-weight: 400 !important;
     line-height: 1.75 !important;
@@ -1570,7 +1552,7 @@
 .salesButton {
     border-radius: 50px !important;
     padding: 16px 32px !important;
-    background-color: white !important;
+    background-color: var(--white) !important;
     color: var(--p600) !important;
     font-weight: 700 !important;
     border: none !important;
@@ -1580,9 +1562,3 @@
     }
 }
 
-.professionalsSection {
-    background-color: #0a2c90;
-    /* Fallback color matching gradient start */
-    width: 100%;
-    box-sizing: border-box;
-}

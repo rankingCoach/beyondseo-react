@@ -13,6 +13,7 @@ import simpleQuoteCharacter from "@assets/upsell-page/simple-quote-character.svg
 import reviewsioLogo from "@assets/upsell-page/reviewsio-logo.svg";
 import { RotatingWord } from "@components/Common/RotatingWord/RotatingWord";
 import { ContactSalesModal } from './ContactSalesModal';
+import { Connect } from '@components/Connect/Connect';
 
 import {
     agencyFeatures,
@@ -83,6 +84,16 @@ function getCurrentOrigin() {
 }
 
 export const Upsell = () => {
+    const isOnboardingCompleted = rcWindow?.rankingCoachReactData?.isOnboardingCompleted !== "false";
+
+    if (!isOnboardingCompleted) {
+        return <Connect />;
+    }
+
+    return <UpsellContent />;
+};
+
+const UpsellContent = () => {
     const isOnboardingCompleted = rcWindow?.rankingCoachReactData?.isOnboardingCompleted !== "false";
     const [paymentPeriod, setPaymentPeriod] = useState<'monthly' | 'annual'>('annual');
     const [isLoading, setIsLoading] = useState(false);
