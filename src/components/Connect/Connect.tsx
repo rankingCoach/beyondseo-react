@@ -1,9 +1,21 @@
 import React from "react";
-import { Button, ButtonTypes, ButtonSizes, Text, TextTypes, FontWeights, Icon, IconNames, IconSize } from "vanguard";
+import {
+  Button,
+  ButtonTypes,
+  ButtonSizes,
+  Text,
+  TextTypes,
+  FontWeights,
+  Icon,
+  IconNames,
+  IconSize,
+  PageSection,
+  PageSectionBackground,
+  TextIcon,
+} from "vanguard";
 import { __ } from "@wordpress/i18n";
 import styles from "./Connect.module.scss";
 import { rcWindow } from "@stores/window.store";
-import gradientBackground from "@assets/upsell-page/gradient-background.svg";
 import simpleQuoteCharacter from "@assets/upsell-page/simple-quote-character.svg";
 import reviewsioLogo from "@assets/upsell-page/reviewsio-logo.svg";
 import seeYourPerformance from "@assets/connect-page/see-your-performance.svg";
@@ -85,15 +97,7 @@ export const Connect = () => {
 
   return (
     <div className={styles.connectPage}>
-      <div
-        className={styles.hero}
-        style={{
-          backgroundImage: `url(${gradientBackground})`,
-          backgroundSize: "cover",
-          backgroundPosition: "top center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <PageSection background={PageSectionBackground.gradientPrimaryMesh} noDefaultPadding className={styles.hero}>
         <div className={styles.heroTitle}>
           <Text type={TextTypes.display2} fontWeight={FontWeights.bold} color="var(--fn-fg-on-dark)">
             {__("Turn your free plugin into a growth engine", "beyondseo")}
@@ -137,7 +141,7 @@ export const Connect = () => {
             {__("Google Partner", "beyondseo")}
           </Text>
         </div>
-      </div>
+      </PageSection>
 
       <section className={styles.unlockSection}>
         <div className={styles.unlockHeader}>
@@ -156,15 +160,18 @@ export const Connect = () => {
             </Text>
             <ul className={styles.unlockList}>
               {rightNowItems.map((item, index) => (
-                <li key={index} className={styles.unlockItem}>
-                  <span className={styles.crossIcon} aria-hidden="true">
-                    <Icon type={IconSize.small} color="var(--n700)">
-                      {IconNames.close}
-                    </Icon>
-                  </span>
-                  <Text type={TextTypes.text} className={styles.unlockItemText}>
+                <li key={index}>
+                  <TextIcon
+                    icon={IconNames.close}
+                    iconColor="var(--n700)"
+                    iconSize={IconSize.small}
+                    textType={TextTypes.text}
+                    textColor="var(--n700)"
+                    verticalAlign="start"
+                    className={styles.unlockItemText}
+                  >
                     {item}
-                  </Text>
+                  </TextIcon>
                 </li>
               ))}
             </ul>
@@ -176,15 +183,19 @@ export const Connect = () => {
             </Text>
             <ul className={styles.unlockList}>
               {withRcFreeItems.map((item, index) => (
-                <li key={index} className={styles.unlockItem}>
-                  <span className={styles.checkIcon} aria-hidden="true">
-                    <Icon type={IconSize.small} color="var(--white)">
-                      {IconNames.check}
-                    </Icon>
-                  </span>
-                  <Text type={TextTypes.text} fontWeight={FontWeights.bold} className={styles.unlockItemText}>
+                <li key={index}>
+                  <TextIcon
+                    icon={IconNames.check}
+                    iconColor="var(--white)"
+                    iconSize={IconSize.small}
+                    textType={TextTypes.text}
+                    textColor="var(--white)"
+                    fontWeight={FontWeights.bold}
+                    verticalAlign="start"
+                    className={styles.unlockItemText}
+                  >
                     {item}
-                  </Text>
+                  </TextIcon>
                 </li>
               ))}
             </ul>
@@ -268,6 +279,40 @@ export const Connect = () => {
             </a>
           </div>
         </div>
+      </section>
+
+      <section className={styles.finalCtaSection}>
+        <PageSection
+          background={PageSectionBackground.gradientPrimaryMesh}
+          noDefaultPadding
+          className={styles.finalCtaCard}
+        >
+          <Text
+            type={TextTypes.heading2}
+            fontWeight={FontWeights.bold}
+            color="var(--fn-fg-on-dark)"
+            className={styles.finalCtaTitle}
+          >
+            {__("Activate your free account and start seeing results today", "beyondseo")}
+          </Text>
+
+          <Text type={TextTypes.textIntro} color="var(--fn-fg-on-dark)" className={styles.finalCtaSubtitle}>
+            {__("Track your performance and see results in minutes", "beyondseo")}
+          </Text>
+
+          <Button
+            type={ButtonTypes.secondary}
+            size={ButtonSizes.medium}
+            className={styles.finalCtaButton}
+            onClick={handleActivateForFree}
+          >
+            {__("Activate your free account", "beyondseo")}
+          </Button>
+
+          <Text type={TextTypes.textHelp} color="var(--fn-fg-on-dark)" className={styles.finalCtaDisclaimer}>
+            {__("100% free  • No credit card  • Takes less than 2 minutes", "beyondseo")}
+          </Text>
+        </PageSection>
       </section>
     </div>
   );
