@@ -9,8 +9,8 @@
         "watch": "vite build --watch",
         "lint": "prettier . --check; stylelint **/*.{css,scss}; eslint . --ext .js; composer lint;",
         "format": "prettier . --write; stylelint **/*.{css,scss} --fix; eslint . --ext .js --fix; composer format;",
-        "gen:TOKEN": "bash generators/get-sdk-token.sh",
-        "gen:SDK": "node generators/sdk/generate-sdk-real.js && npm run lint:SDK",
+        "gen:TOKEN": "bash ../../../../../../rankingcoach-ionos/wordpress-2/wp-content/plugins/beyond-seo/react/generators/get-sdk-token.sh",
+        "gen:SDK": "node ../../../../../../rankingcoach-ionos/wordpress-2/wp-content/plugins/beyond-seo/react/generators/sdk/generate-sdk-real.js && npm run lint:SDK",
         "lint:SDK": "eslint './src/models/**/*.{js,ts,tsx}' --fix --quiet && eslint './src/stores/**/*.{js,ts,tsx}' --fix --quiet"
     },
     "browserslist": [
@@ -23,7 +23,7 @@
         "@types/lodash.debounce": "^4.0.9",
         "@wordpress/element": "^6.24.0",
         "@wordpress/i18n": "^5.14.0",
-        "axios": "^1.6.1",
+        "axios": "1.13.6",
         "classnames": "^2.5.1",
         "include-media": "^2.0.0",
         "js-cookie": "^3.0.5",

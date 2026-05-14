@@ -40,6 +40,7 @@ export const OnboardingStep: React.FC<OnboardingStepProps> = ({
   const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
   const [showSubtitle, setShowSubtitle] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorDetails, setErrorDetails] = useState<any>(null);
 
   const TEXT_FADE_ANIMATION_DURATION = 150;
   const TEXT_WELCOME_ANIMATION_WAIT_BETWEEN_COMPONENTS = 1000;
@@ -92,6 +93,7 @@ export const OnboardingStep: React.FC<OnboardingStepProps> = ({
       await onSubmit(textareaValue);
       setTextareaValue("");
     } catch (error) {
+      setErrorDetails(error);
       setShowErrorModal(true);
     } finally {
       setIsButtonLoading(false);
@@ -217,6 +219,7 @@ export const OnboardingStep: React.FC<OnboardingStepProps> = ({
         isOpen={showErrorModal}
         onClose={() => setShowErrorModal(false)}
         errorMessage={__("Something went wrong from our side, please try again!", "beyondseo")}
+        errorDetails={errorDetails}
       />
     </>
   );
