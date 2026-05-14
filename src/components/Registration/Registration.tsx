@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./Registration.module.scss";
-import { Button, ButtonSizes, ButtonTypes, ComponentContainer, IconNames, Input, Text, TextTypes, FontWeights, TextIcon, Select, Link, CheckBox } from "vanguard";
+import { Button, ButtonSizes, ButtonTypes, ComponentContainer, IconNames, Input, Text, TextTypes, FontWeights, TextIcon, Select, Link, PageSectionLoading, CheckBox } from "vanguard";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { ErrorModal } from "@components/Common/ErrorModal/ErrorModal";
 import { __ } from "@wordpress/i18n";
@@ -18,7 +18,7 @@ const STORAGE_KEYS = {
   POLL_TOKEN: "registrationPollToken",
   ACCOUNT_STATUS: "registrationAccountStatus",
   REGISTRATION_STATUS: "registrationRegistrationStatus",
-};
+} as const;
 
 const ONBOARDING_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
 const POLLING_INTERVAL = 5000;
@@ -33,9 +33,10 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
   const dispatch = useAppDispatch();
 
   // Temporary state to skip welcome screen.
-  const [showWelcome, setShowWelcome] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
   const [isLoading, setIsLoading] = useState(Boolean(isPluginLoading));
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorDetails, setErrorDetails] = useState<any>(null);
   const [country, setCountry] = useState(() => sessionStorage.getItem(STORAGE_KEYS.COUNTRY) || "DE");
   const [isVerificationPhase, setIsVerificationPhase] = useState(false);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -156,6 +157,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
 
       if (!finalizeResult || (!finalizeResult.ok && !finalizeResult.success)) {
         console.error("[REGISTRATION] Finalize registration failed - invalid response:", finalizeResult);
+        setErrorDetails(finalizeResult);
         setShowErrorModal(true);
         setIsButtonLoading(false);
         return false;
@@ -166,6 +168,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       return true;
     } catch (error) {
       console.error("[REGISTRATION] Finalize registration error:", error);
+      setErrorDetails(error);
       setShowErrorModal(true);
       setIsButtonLoading(false);
       return false;
@@ -239,6 +242,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       if (!result) {
         console.error("[REGISTRATION] Invalid verification status response");
         stopPolling();
+        setErrorDetails("Invalid verification status response");
         setShowErrorModal(true);
         return;
       }
@@ -260,6 +264,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
     } catch (error) {
       console.error("[REGISTRATION] Verification status check error:", error);
       stopPolling();
+      setErrorDetails(error);
       setShowErrorModal(true);
     }
   };
@@ -330,6 +335,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
 
       if (!result || !result.pollToken || !result.status) {
         console.error("[REGISTRATION] Invalid registration response:", result);
+        setErrorDetails(result);
         setShowErrorModal(true);
         setIsButtonLoading(false);
         return;
@@ -349,6 +355,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       setIsVerificationPhase(true);
     } catch (error) {
       console.error("[REGISTRATION] Error:", error);
+      setErrorDetails(error);
       setShowErrorModal(true);
     } finally {
       setIsButtonLoading(false);
@@ -384,6 +391,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
 
       if (!result) {
         console.error("[REGISTRATION] Invalid manual verification response");
+        setErrorDetails("Invalid manual verification response");
         setShowErrorModal(true);
         setIsButtonLoading(false);
         return;
@@ -406,6 +414,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       }
     } catch (error) {
       console.error("[REGISTRATION] Manual verification error:", error);
+      setErrorDetails(error);
       setShowErrorModal(true);
     } finally {
       setIsButtonLoading(false);
@@ -591,6 +600,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
         isOpen={showErrorModal}
         onClose={() => setShowErrorModal(false)}
         errorMessage={__("Something went wrong from our side, please try again!", "beyondseo")}
+        errorDetails={errorDetails}
         primaryButtonText={__("Try again", "beyondseo")}
         onPrimaryAction={() => {
           setShowErrorModal(false);
