@@ -178,8 +178,9 @@ export const Connect = () => {
           </div>
 
           <div className={styles.withFreeCard}>
+            {/*TODO: I've the text "with rankingCoach Free" to "After activation", because the Connect page will be shown also Ionos users, there we have to come up with solution*/}
             <Text type={TextTypes.heading4} fontWeight={FontWeights.bold} className={styles.cardHeading}>
-              {__("With rankingCoach Free", "beyondseo")}
+              {__("After activation", "beyondseo")}
             </Text>
             <ul className={styles.unlockList}>
               {withRcFreeItems.map((item, index) => (
