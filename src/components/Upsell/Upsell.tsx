@@ -14,6 +14,7 @@ import reviewsioLogo from "@assets/upsell-page/reviewsio-logo.svg";
 import { RotatingWord } from "@components/Common/RotatingWord/RotatingWord";
 import { ContactSalesModal } from './ContactSalesModal';
 import { Connect } from '@components/Connect/Connect';
+import { LaunchOfferUpsell, LAUNCH_OFFER_SCROLL_ID } from './LaunchOfferUpsell';
 
 import {
     agencyFeatures,
@@ -22,6 +23,7 @@ import {
     featureHighlights,
     freePlanFeatures,
     impactMetrics,
+    LAUNCH_OFFER_ENABLED,
     proPlanFeatures,
     professionalCards,
     stats,
@@ -150,7 +152,10 @@ const UpsellContent = () => {
     /**
      * Handle the upgrade button click by calling the global registration window handler
      */
-    const handleUpgradeClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const triggerUpgrade = async (
+        paymentType: 'monthly' | 'annual',
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
         event.preventDefault();
 
         if (!window.rcUpsell || !window.BSEORegistration) {
@@ -179,7 +184,7 @@ const UpsellContent = () => {
                     'X-WP-Nonce': window.rcUpsell.nonce
                 },
                 body: JSON.stringify({
-                    paymentType: paymentPeriod
+                    paymentType
                 })
             });
 
@@ -226,6 +231,21 @@ const UpsellContent = () => {
         }
     };
 
+    const handleUpgradeClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+        triggerUpgrade(paymentPeriod, event);
+
+    const handleLaunchOfferUpgrade = (
+        paymentType: 'annual' | 'monthly',
+        event: React.MouseEvent<HTMLElement>,
+    ) => triggerUpgrade(paymentType, event as React.MouseEvent<HTMLButtonElement>);
+
+    const scrollToLaunchOffer = () => {
+        const target = document.getElementById(LAUNCH_OFFER_SCROLL_ID);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
     const togglePaymentPeriod = () => {
         setPaymentPeriod(prev => prev === 'annual' ? 'monthly' : 'annual');
     };
@@ -245,7 +265,17 @@ const UpsellContent = () => {
                     backgroundRepeat: 'no-repeat'
                 }}
             >
-                {isOnboardingCompleted && (
+                {isOnboardingCompleted && LAUNCH_OFFER_ENABLED && (
+                    <button
+                        type="button"
+                        className={classNames(styles.limitedOfferBadge, styles.limitedOfferBadgeButton)}
+                        onClick={scrollToLaunchOffer}
+                    >
+                        <span role="img" aria-label="party">🎉</span> {__('Limited time only: Your Wordpress Launch Offer!', 'beyondseo')}
+                    </button>
+                )}
+
+                {isOnboardingCompleted && !LAUNCH_OFFER_ENABLED && (
                     <div className={styles.limitedOfferBadge}>
                         <span role="img" aria-label="party">🎉</span> {__('Limited Offer: First 3 months only $5/month!', 'beyondseo')}
                     </div>
@@ -296,7 +326,7 @@ const UpsellContent = () => {
                     }
                 </Button>
 
-                {isOnboardingCompleted && (
+                {isOnboardingCompleted && !LAUNCH_OFFER_ENABLED && (
                     <>
                         <div className={styles.periodSwitcher}>
                             <span
@@ -353,19 +383,32 @@ const UpsellContent = () => {
 
             {/* Foundation Section */}
             <div className={styles.foundationSection}>
-                <div className={styles.foundationTitle}>
-                    <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.foundationLinePrimary}>
-                        {__('You\'ve laid the foundation.', 'beyondseo')}
-                    </Text>
-                    <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.foundationLineSecondary}>
-                        {__('Now let\'s take it further.', 'beyondseo')}
-                    </Text>
-                </div>
-                <Text type={TextTypes.text} className={styles.foundationSubtitle}>
-                    {__('The free rankingCoach Radar plugin is a great start. To continue growing your business, you need the full power.', 'beyondseo')}
-                </Text>
+                {!LAUNCH_OFFER_ENABLED && (
+                    <>
+                        <div className={styles.foundationTitle}>
+                            <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.foundationLinePrimary}>
+                                {__('You\'ve laid the foundation.', 'beyondseo')}
+                            </Text>
+                            <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.foundationLineSecondary}>
+                                {__('Now let\'s take it further.', 'beyondseo')}
+                            </Text>
+                        </div>
+                        <Text type={TextTypes.text} className={styles.foundationSubtitle}>
+                            {__('The free rankingCoach Radar plugin is a great start. To continue growing your business, you need the full power.', 'beyondseo')}
+                        </Text>
+                    </>
+                )}
 
-                {isOnboardingCompleted && (
+                {isOnboardingCompleted && LAUNCH_OFFER_ENABLED && (
+                    <div className={styles.pricingContainer}>
+                        <LaunchOfferUpsell
+                            onUpgrade={handleLaunchOfferUpgrade}
+                            isLoading={isLoading}
+                        />
+                    </div>
+                )}
+
+                {isOnboardingCompleted && !LAUNCH_OFFER_ENABLED && (
                     <div className={styles.pricingContainer}>
                         {/* Free Card */}
                         <div className={classNames(styles.pricingCard, styles.freeCard)}>
@@ -790,6 +833,13 @@ const UpsellContent = () => {
                     </div>
 
                     <div className={styles.bottomPlansGrid}>
+                        {LAUNCH_OFFER_ENABLED ? (
+                            <LaunchOfferUpsell
+                                onUpgrade={handleLaunchOfferUpgrade}
+                                isLoading={isLoading}
+                                scrollId={null}
+                            />
+                        ) : (
                         <div className={classNames(styles.pricingCard, styles.proCard, styles.bottomPrimaryCard)}>
                             {paymentPeriod === 'annual' && (
                                 <div className={styles.limitedTimeBanner}>{__('Limited time offer', 'beyondseo')}</div>
@@ -860,6 +910,7 @@ const UpsellContent = () => {
                                 ))}
                             </ul>
                         </div>
+                        )}
 
                         <div
                             className={classNames(styles.planCard, styles.agencyCard)}
@@ -907,4 +958,4 @@ const UpsellContent = () => {
             />
         </div>
     );
-};
+}

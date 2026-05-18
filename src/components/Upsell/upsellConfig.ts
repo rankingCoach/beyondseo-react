@@ -410,6 +410,81 @@ export const proPlanFeatures: string[] = [
   __("Boosts posts with Meta ads", "beyondseo"),
 ];
 
+// Launch Offer Configuration
+// Flip this flag to false to restore the normal pricing cards section.
+export const LAUNCH_OFFER_ENABLED = true;
+
+export type LaunchOfferPlan = {
+  badge?: string;
+  label: string;
+  price: string;
+  pricePeriod: string;
+  primarySubtext?: string;
+  secondarySubtext?: string;
+  strikethroughSubtext?: string;
+  highlightText?: string;
+  highlightType?: "positive" | "negative";
+};
+
+export type LaunchOfferFeature = { text: string };
+
+export interface LaunchOfferConfig {
+  title: string;
+  subtitle: string;
+  spotsBadge: string;
+  spotsLimit: string;
+  spotsDescription: string;
+  spotsFilledPercent: number;
+  founders: LaunchOfferPlan;
+  alternative: LaunchOfferPlan;
+  features: LaunchOfferFeature[];
+  ctaLabel: string;
+  ctaFootnote: string;
+}
+
+export const launchOfferConfig: LaunchOfferConfig = {
+  title: __("Your WordPress Launch Offer", "beyondseo"),
+  subtitle: __("For a limited time only. Exclusively for WordPress users.", "beyondseo"),
+  spotsBadge: __("launch spots — almost gone", "beyondseo"),
+  spotsLimit: __("Limited to max 5,000", "beyondseo"),
+  spotsDescription: __(
+    "Only a few spots remaining at this price — once they're gone, the offer closes permanently.",
+    "beyondseo",
+  ),
+  spotsFilledPercent: 85,
+  founders: {
+    badge: __("Founders price", "beyondseo"),
+    label: __("Annual · Year 1", "beyondseo"),
+    price: "$99",
+    pricePeriod: __("/year", "beyondseo"),
+    primarySubtext: __("≈ $8.25/month", "beyondseo"),
+    strikethroughSubtext: __("$600/year", "beyondseo"),
+    secondarySubtext: __("monthly", "beyondseo"),
+    highlightText: __("83% off vs. monthly billing", "beyondseo"),
+    highlightType: "positive",
+  },
+  alternative: {
+    label: __("Monthly billing", "beyondseo"),
+    price: "$50",
+    pricePeriod: __("/month", "beyondseo"),
+    primarySubtext: __("$600/year", "beyondseo"),
+    highlightText: __("506% more expensive", "beyondseo"),
+    highlightType: "negative",
+  },
+  features: [
+    { text: __("Full first year for $99", "beyondseo") },
+    { text: __("50 keywords tracked daily", "beyondseo") },
+    { text: __("up to 46+ directories synced", "beyondseo") },
+    { text: __("AI content & Google Ads", "beyondseo") },
+    { text: __("AI review management", "beyondseo") },
+    { text: __("5 competitors monitored", "beyondseo") },
+    { text: __("Weekly AI growth reports", "beyondseo") },
+    { text: __("Instant access to everything", "beyondseo") },
+  ],
+  ctaLabel: __("Start for $99 — Get Full Access", "beyondseo"),
+  ctaFootnote: __("Annual billing · Instant access · Cancel anytime", "beyondseo"),
+};
+
 // Contact Sales Modal Configuration
 export interface ContactSalesModalField {
   label: string;
