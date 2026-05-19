@@ -5,13 +5,13 @@ import {
     ButtonSizes,
     Text,
     TextTypes,
-    FontWeights,
     classNames,
     Icon,
     IconNames,
     IconSize,
 } from 'vanguard';
 import styles from './LaunchOfferUpsell.module.scss';
+import flameSvg from './img/Flame.svg';
 import {
     launchOfferConfig,
     type LaunchOfferConfig,
@@ -53,22 +53,11 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
 
     return (
         <div className={styles.launchOffer} id={scrollId ?? undefined}>
-            <div className={styles.header}>
-                <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.title}>
-                    {config.title}
-                </Text>
-                <Text type={TextTypes.text} className={styles.subtitle}>
-                    {config.subtitle}
-                </Text>
-            </div>
-
             <div className={styles.card}>
-                <div className={styles.spotsBanner}>
+                <div className={styles.gradientHeader}>
+                    <img src={flameSvg} alt="" aria-hidden="true" className={styles.flameDecoration} />
                     <div className={styles.spotsHeader}>
-                        <span className={styles.spotsTitle}>
-                            <span role="img" aria-label="fire">🔥</span>
-                            {config.spotsBadge}
-                        </span>
+                        <span className={styles.spotsTitle}>{config.spotsBadge}</span>
                         <span className={styles.spotsLimit}>{config.spotsLimit}</span>
                     </div>
                     <div
@@ -85,50 +74,51 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
                     </Text>
                 </div>
 
-                <div className={styles.pricingComparison}>
-                    {renderPlanCard(config.founders, true)}
-                    <div
-                        role="button"
-                        tabIndex={isLoading ? -1 : 0}
-                        aria-disabled={isLoading}
-                        className={classNames(
-                            styles.priceCard,
-                            styles.priceCardInactive,
-                            isLoading ? styles.priceCardDisabled : '',
-                        )}
-                        onClick={isLoading ? undefined : handleMonthlyClick}
-                        onKeyDown={isLoading ? undefined : handleMonthlyKey}
-                    >
-                        {renderPlanContent(config.alternative)}
+                <div className={styles.cardBody}>
+                    <div className={styles.pricingComparison}>
+                        {renderPlanCard(config.founders, true)}
+                        <div
+                            role="button"
+                            tabIndex={isLoading ? -1 : 0}
+                            aria-disabled={isLoading}
+                            className={classNames(
+                                styles.priceCard,
+                                styles.priceCardInactive,
+                                isLoading ? styles.priceCardDisabled : '',
+                            )}
+                            onClick={isLoading ? undefined : handleMonthlyClick}
+                            onKeyDown={isLoading ? undefined : handleMonthlyKey}
+                        >
+                            {renderPlanContent(config.alternative)}
+                        </div>
                     </div>
+
+                    <ul className={styles.featuresList}>
+                        {config.features.map((feature: LaunchOfferFeature, index: number) => (
+                            <li key={index} className={styles.featureItem}>
+                                <span className={styles.featureIcon}>
+                                    <Icon type={IconSize.small} color="var(--s900)">{IconNames.check}</Icon>
+                                </span>
+                                <span>{feature.text}</span>
+                            </li>
+                        ))}
+                    </ul>
+
+                    <Button
+                        type={ButtonTypes.primary}
+                        size={ButtonSizes.medium}
+                        className={styles.ctaButton}
+                        onClick={handleAnnualClick}
+                        isLoading={isLoading}
+                        disabled={isLoading}
+                    >
+                        {config.ctaLabel}
+                    </Button>
+
+                    <Text type={TextTypes.text} className={styles.ctaFootnote}>
+                        {config.ctaFootnote}
+                    </Text>
                 </div>
-
-                <ul className={styles.featuresList}>
-                    {config.features.map((feature: LaunchOfferFeature, index: number) => (
-                        <li key={index} className={styles.featureItem}>
-                            <span className={styles.featureIcon}>
-                                <Icon type={IconSize.small} color="#2bb673">{IconNames.check}</Icon>
-                            </span>
-                            <span>{feature.text}</span>
-                        </li>
-                    ))}
-                </ul>
-
-                <Button
-                    type={ButtonTypes.primary}
-                    size={ButtonSizes.medium}
-                    className={styles.ctaButton}
-                    iconRight={IconNames.arrowRight}
-                    onClick={handleAnnualClick}
-                    isLoading={isLoading}
-                    disabled={isLoading}
-                >
-                    {config.ctaLabel}
-                </Button>
-
-                <Text type={TextTypes.text} className={styles.ctaFootnote}>
-                    {config.ctaFootnote}
-                </Text>
             </div>
         </div>
     );
