@@ -7,16 +7,25 @@ import gradientBackground from "@assets/upsell-page/gradient-background.svg";
 import aiBadges from "@assets/upsell-page/ai-badges.svg";
 import aiSparksBackgroundHorizontal from "@assets/upsell-page/ai-sparks-background-horizontal.svg";
 // TODO: replace with correct background image, svg. This is temporary png solution, which has HUGE size.
+import backgroundGradientBlueGreen from "@assets/upsell-page/background-gradient-blue-green.png";
+import aiSparksPricingCard from "@assets/upsell-page/ai-sparks-pricing-card.svg";
 import simpleQuoteCharacter from "@assets/upsell-page/simple-quote-character.svg";
 import reviewsioLogo from "@assets/upsell-page/reviewsio-logo.svg";
 import { RotatingWord } from "@components/Common/RotatingWord/RotatingWord";
 import { ContactSalesModal } from './ContactSalesModal';
+import { Connect } from '@components/Connect/Connect';
+import { LaunchOfferUpsell, LAUNCH_OFFER_SCROLL_ID } from './LaunchOfferUpsell';
 
 import {
+    agencyFeatures,
     defaultExpandedCategoryIds,
     featureCategories,
     featureHighlights,
+    freePlanFeatures,
     impactMetrics,
+    LAUNCH_OFFER_ENABLED,
+    proPlanFeatures,
+    professionalCards,
     stats,
     testimonials
 } from './upsellConfig';
@@ -78,6 +87,16 @@ function getCurrentOrigin() {
 
 export const Upsell = () => {
     const isOnboardingCompleted = rcWindow?.rankingCoachReactData?.isOnboardingCompleted !== "false";
+
+    if (!isOnboardingCompleted) {
+        return <Connect />;
+    }
+
+    return <UpsellContent />;
+};
+
+const UpsellContent = () => {
+    const isOnboardingCompleted = rcWindow?.rankingCoachReactData?.isOnboardingCompleted !== "false";
     const [paymentPeriod, setPaymentPeriod] = useState<'monthly' | 'annual'>('annual');
     const [isLoading, setIsLoading] = useState(false);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -133,7 +152,10 @@ export const Upsell = () => {
     /**
      * Handle the upgrade button click by calling the global registration window handler
      */
-    const handleUpgradeClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const triggerUpgrade = async (
+        paymentType: 'monthly' | 'annual',
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
         event.preventDefault();
 
         if (!window.rcUpsell || !window.BSEORegistration) {
@@ -162,7 +184,7 @@ export const Upsell = () => {
                     'X-WP-Nonce': window.rcUpsell.nonce
                 },
                 body: JSON.stringify({
-                    paymentType: paymentPeriod
+                    paymentType
                 })
             });
 
@@ -209,6 +231,21 @@ export const Upsell = () => {
         }
     };
 
+    const handleUpgradeClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+        triggerUpgrade(paymentPeriod, event);
+
+    const handleLaunchOfferUpgrade = (
+        paymentType: 'annual' | 'monthly',
+        event: React.MouseEvent<HTMLElement>,
+    ) => triggerUpgrade(paymentType, event as React.MouseEvent<HTMLButtonElement>);
+
+    const scrollToLaunchOffer = () => {
+        const target = document.getElementById(LAUNCH_OFFER_SCROLL_ID);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
     const togglePaymentPeriod = () => {
         setPaymentPeriod(prev => prev === 'annual' ? 'monthly' : 'annual');
     };
@@ -228,7 +265,17 @@ export const Upsell = () => {
                     backgroundRepeat: 'no-repeat'
                 }}
             >
-                {isOnboardingCompleted && (
+                {isOnboardingCompleted && LAUNCH_OFFER_ENABLED && (
+                    <button
+                        type="button"
+                        className={classNames(styles.limitedOfferBadge, styles.limitedOfferBadgeButton)}
+                        onClick={scrollToLaunchOffer}
+                    >
+                        <span role="img" aria-label="party">🎉</span> {__('Limited time only: Your Wordpress Launch Offer!', 'beyondseo')}
+                    </button>
+                )}
+
+                {isOnboardingCompleted && !LAUNCH_OFFER_ENABLED && (
                     <div className={styles.limitedOfferBadge}>
                         <span role="img" aria-label="party">🎉</span> {__('Limited Offer: First 3 months only $5/month!', 'beyondseo')}
                     </div>
@@ -279,7 +326,7 @@ export const Upsell = () => {
                     }
                 </Button>
 
-                {isOnboardingCompleted && (
+                {isOnboardingCompleted && !LAUNCH_OFFER_ENABLED && (
                     <>
                         <div className={styles.periodSwitcher}>
                             <span
@@ -336,18 +383,144 @@ export const Upsell = () => {
 
             {/* Foundation Section */}
             <div className={styles.foundationSection}>
-                <div className={styles.foundationTitle}>
-                    <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.foundationLinePrimary}>
-                        {__('You\'ve laid the foundation.', 'beyondseo')}
-                    </Text>
-                    <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.foundationLineSecondary}>
-                        {__('Now let\'s take it further.', 'beyondseo')}
-                    </Text>
-                </div>
-                <Text type={TextTypes.text} className={styles.foundationSubtitle}>
-                    {__('The free rankingCoach Radar plugin is a great start. To continue growing your business, you need the full power.', 'beyondseo')}
-                </Text>
+                {!LAUNCH_OFFER_ENABLED && (
+                    <>
+                        <div className={styles.foundationTitle}>
+                            <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.foundationLinePrimary}>
+                                {__('You\'ve laid the foundation.', 'beyondseo')}
+                            </Text>
+                            <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.foundationLineSecondary}>
+                                {__('Now let\'s take it further.', 'beyondseo')}
+                            </Text>
+                        </div>
+                        <Text type={TextTypes.text} className={styles.foundationSubtitle}>
+                            {__('The free rankingCoach Radar plugin is a great start. To continue growing your business, you need the full power.', 'beyondseo')}
+                        </Text>
+                    </>
+                )}
 
+                {isOnboardingCompleted && LAUNCH_OFFER_ENABLED && (
+                    <div className={styles.pricingContainer}>
+                        <LaunchOfferUpsell
+                            onUpgrade={handleLaunchOfferUpgrade}
+                            isLoading={isLoading}
+                        />
+                    </div>
+                )}
+
+                {isOnboardingCompleted && !LAUNCH_OFFER_ENABLED && (
+                    <div className={styles.pricingContainer}>
+                        {/* Free Card */}
+                        <div className={classNames(styles.pricingCard, styles.freeCard)}>
+                            <div className={styles.cardTitle}>{__('rankingCoach Radar', 'beyondseo')}</div>
+                            <div className={styles.freePriceBlock}>
+                                <span className={styles.price}>$0</span>
+                                <span className={styles.period}>{__('/ month', 'beyondseo')}</span>
+                            </div>
+                            <div className={styles.subText}>{__('Free', 'beyondseo')}</div>
+                            <div className={styles.currentPlanButton}>{__('Current plan', 'beyondseo')}</div>
+
+                            <ul className={styles.featuresList}>
+                                {freePlanFeatures.map((feature: PlanFeature, index: number) => (
+                                    <li
+                                        key={index}
+                                        className={classNames(styles.featureItem, styles.textDark, !feature.checked ? styles.disabled : '')}
+                                    >
+                                        <div className={styles.featureIcon}>
+                                            <Icon type={IconSize.small}>{feature.checked ? IconNames.check : IconNames.close}</Icon>
+                                        </div>
+                                        <span className={styles.featureText}>{feature.text}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Pro Card */}
+                        <div className={styles.proCardWrapper}>
+                            <div className={styles.aiFloatingBadge}>
+                                <Text className={styles.aiBadgeText}>
+                                    <mark>
+                                        {__('Better chances to appear', 'beyondseo')}
+                                        <br />
+                                        {__(' in AI search results', 'beyondseo')}
+                                    </mark>
+                                </Text>
+                                <img src={aiBadges} alt="AI Badges" className={styles.aiBadgesImage} />
+                            </div>
+
+                            <div className={classNames(styles.pricingCard, styles.proCard)}>
+                                {paymentPeriod === 'annual' && (
+                                    <div className={styles.limitedTimeBanner}>{__('Limited time offer', 'beyondseo')}</div>
+                                )}
+
+                                <div className={styles.toggleContainer}>
+                                    <div
+                                        className={classNames(styles.toggleOption, paymentPeriod === 'annual' ? styles.toggleOptionActive : '')}
+                                        onClick={() => setPaymentPeriod('annual')}
+                                    >
+                                        {__('Annual', 'beyondseo')} <span className={styles.saveText}>{__('SAVE 83%', 'beyondseo')}</span>
+                                    </div>
+                                    <div
+                                        className={classNames(styles.toggleOption, paymentPeriod === 'monthly' ? styles.toggleOptionActive : '')}
+                                        onClick={() => setPaymentPeriod('monthly')}
+                                    >
+                                        {__('Monthly', 'beyondseo')}
+                                    </div>
+                                </div>
+
+                                <div className={styles.cardTitle}>{__('rankingCoach 360', 'beyondseo')}</div>
+
+                                {paymentPeriod === 'annual' ? (
+                                    <div className={styles.proPriceBlock}>
+                                        <div className={styles.oldPriceRow}>
+                                            <span className={styles.oldPrice}>{__('$40 / month', 'beyondseo')}</span>
+                                            <span className={styles.discountBadge}>{__('Save 83%', 'beyondseo')}</span>
+                                        </div>
+                                        <div className={styles.mainPrice}>
+                                            $5 <span>{__('/ first 3 months', 'beyondseo')}</span>
+                                        </div>
+                                        <div className={styles.thenPrice}>{__('then $40/month', 'beyondseo')}</div>
+                                        <div className={styles.contractInfo}>{__('Annual contract', 'beyondseo')}</div>
+                                    </div>
+                                ) : (
+                                    <div className={styles.proPriceBlock}>
+                                        <div className={styles.mainPrice}>
+                                            $40 <span>{__('/ month', 'beyondseo')}</span>
+                                        </div>
+                                        <div className={styles.contractInfo}>{__('Monthly contract', 'beyondseo')}</div>
+                                    </div>
+                                )}
+
+                                <Button
+                                    type={ButtonTypes.secondary}
+                                    size={ButtonSizes.medium}
+                                    className={styles.upgradeButton}
+                                    onClick={handleUpgradeClick}
+                                    isLoading={isLoading}
+                                    disabled={isLoading}
+                                >
+                                    {__('Upgrade now', 'beyondseo')}
+                                </Button>
+
+                                <div className={styles.featuresListHeader}>
+                                    {__('Everything in RankingCoach Radar, plus:', 'beyondseo')}
+                                </div>
+                                <ul className={styles.featuresList}>
+                                    {proPlanFeatures.map((text: string, index: number) => (
+                                        <li key={index} className={styles.featureItem}>
+                                            <div className={styles.featureIcon}>
+                                                <Icon type={IconSize.small} color="var(--n000)">
+                                                    {IconNames.check}
+                                                </Icon>
+                                            </div>
+                                            <span className={styles.featureText}>{text}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Feature Comparison Section */}
@@ -523,6 +696,20 @@ export const Upsell = () => {
                             </div>
                         ))}
                     </div>
+
+                    <Button
+                        type={ButtonTypes.secondary}
+                        size={ButtonSizes.small}
+                        className={styles.impactButton}
+                        onClick={openContactModal}
+                    >
+                        <span className={styles.impactButtonContent}>
+                            {__('Agency or Enterprise? See our special offers', 'beyondseo')}
+                            <Icon type={IconSize.small} color="var(--n000)">
+                                {IconNames.chevronRight}
+                            </Icon>
+                        </span>
+                    </Button>
                 </div>
             </section>
 
@@ -579,6 +766,191 @@ export const Upsell = () => {
                 </div>
             </section>
 
+            {/* Professionals Section */}
+            <div
+                className={styles.professionalsSection}
+                style={{
+                    backgroundImage: `url('${backgroundGradientBlueGreen}')`
+                }}
+            >
+                <Text type={TextTypes.text} className={styles.professionalsLabel}>
+                    {__('FOR PROFESSIONALS', 'beyondseo')}
+                </Text>
+
+                <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.professionalsTitle}>
+                    {__('Are you a Web Professional, Agency or Enterprise?', 'beyondseo')}
+                </Text>
+
+                <Text type={TextTypes.text} className={styles.professionalsDescription}>
+                    {__('Managing SEO and Digital Marketing for clients or multiple businesses? Talk to our sales team to learn about our special offers and partner programs.', 'beyondseo')}
+                </Text>
+
+                <div className={styles.professionalsCardsContainer}>
+                    {professionalCards.map((card: ProfessionalCard, index: number) => (
+                        <div key={index} className={styles.professionalCard}>
+                            <Icon type={IconSize.medium} color="#35FAFF" className={styles.cardIcon}>
+                                {card.icon}
+                            </Icon>
+                            <Text type={TextTypes.heading4} fontWeight={FontWeights.bold} className={styles.cardTitle}>
+                                {card.title}
+                            </Text>
+                            <Text type={TextTypes.text} className={styles.cardDescription}>
+                                {card.description}
+                            </Text>
+                        </div>
+                    ))}
+                </div>
+
+                <Text type={TextTypes.heading4} fontWeight={FontWeights.bold} className={styles.professionalsQuoteTitle}>
+                    {__('Get a custom quote for your business', 'beyondseo')}
+                </Text>
+
+                <Text type={TextTypes.text} className={styles.professionalsQuoteSubtitle}>
+                    {__('Volume discounts and white-label solutions available.', 'beyondseo')}
+                </Text>
+
+                <Button
+                    type={ButtonTypes.secondary}
+                    size={ButtonSizes.medium}
+                    iconRight={IconNames.arrowRight}
+                    className={styles.salesButton}
+                    onClick={openContactModal}
+                >
+                    {__('Talk to sales', 'beyondseo')}
+                </Button>
+            </div>
+
+            {/* Bottom Pricing Section */}
+            {isOnboardingCompleted && (
+                <section className={styles.bottomPlansSection}>
+                    <div className={styles.bottomPlansHeader}>
+                        <Text type={TextTypes.heading2} fontWeight={FontWeights.bold} className={styles.bottomPlansTitle}>
+                            {__('Ready to unlock your business\'s full potential?', 'beyondseo')}
+                        </Text>
+                        <Text type={TextTypes.text} className={styles.bottomPlansSubtitle}>
+                            {__('Upgrade now to unlock all features that help grow your business with less effort.', 'beyondseo')}
+                        </Text>
+                    </div>
+
+                    <div className={styles.bottomPlansGrid}>
+                        {LAUNCH_OFFER_ENABLED ? (
+                            <LaunchOfferUpsell
+                                onUpgrade={handleLaunchOfferUpgrade}
+                                isLoading={isLoading}
+                                scrollId={null}
+                            />
+                        ) : (
+                        <div className={classNames(styles.pricingCard, styles.proCard, styles.bottomPrimaryCard)}>
+                            {paymentPeriod === 'annual' && (
+                                <div className={styles.limitedTimeBanner}>{__('Limited time offer', 'beyondseo')}</div>
+                            )}
+
+                            <div className={styles.toggleContainer}>
+                                <div
+                                    className={classNames(styles.toggleOption, paymentPeriod === 'annual' ? styles.toggleOptionActive : '')}
+                                    onClick={() => setPaymentPeriod('annual')}
+                                >
+                                    {__('Annual', 'beyondseo')} <span className={styles.saveText}>{__('SAVE 83%', 'beyondseo')}</span>
+                                </div>
+                                <div
+                                    className={classNames(styles.toggleOption, paymentPeriod === 'monthly' ? styles.toggleOptionActive : '')}
+                                    onClick={() => setPaymentPeriod('monthly')}
+                                >
+                                    {__('Monthly', 'beyondseo')}
+                                </div>
+                            </div>
+
+                            <div className={styles.cardTitle}>{__('rankingCoach 360', 'beyondseo')}</div>
+
+                            {paymentPeriod === 'annual' ? (
+                                <div className={styles.proPriceBlock}>
+                                    <div className={styles.oldPriceRow}>
+                                        <span className={styles.oldPrice}>{__('$40 / month', 'beyondseo')}</span>
+                                        <span className={styles.discountBadge}>{__('Save 83%', 'beyondseo')}</span>
+                                    </div>
+                                    <div className={styles.mainPrice}>
+                                        $5 <span>{__('/ first 3 months', 'beyondseo')}</span>
+                                    </div>
+                                    <div className={styles.thenPrice}>{__('then $40/month', 'beyondseo')}</div>
+                                    <div className={styles.contractInfo}>{__('Annual contract', 'beyondseo')}</div>
+                                </div>
+                            ) : (
+                                <div className={styles.proPriceBlock}>
+                                    <div className={styles.mainPrice}>
+                                        $40 <span>{__('/ month', 'beyondseo')}</span>
+                                    </div>
+                                    <div className={styles.contractInfo}>{__('Monthly contract', 'beyondseo')}</div>
+                                </div>
+                            )}
+
+                            <Button
+                                type={ButtonTypes.secondary}
+                                size={ButtonSizes.medium}
+                                className={styles.upgradeButton}
+                                onClick={handleUpgradeClick}
+                                isLoading={isLoading}
+                                disabled={isLoading}
+                            >
+                                {__('Upgrade now', 'beyondseo')}
+                            </Button>
+
+                            <div className={styles.featuresListHeader}>
+                                {__('Everything in RankingCoach Radar, plus:', 'beyondseo')}
+                            </div>
+                            <ul className={styles.featuresList}>
+                                {proPlanFeatures.map((text: string, index: number) => (
+                                    <li key={index} className={styles.featureItem}>
+                                        <div className={styles.featureIcon}>
+                                            <Icon type={IconSize.small} color="var(--n000)">
+                                                {IconNames.check}
+                                            </Icon>
+                                        </div>
+                                        <span className={styles.featureText}>{text}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        )}
+
+                        <div
+                            className={classNames(styles.planCard, styles.agencyCard)}
+                            style={{ backgroundImage: `url(${aiSparksPricingCard})` }}
+                        >
+                            <Text type={TextTypes.heading3} fontWeight={FontWeights.bold} className={styles.planTitle}>
+                                {__('Agency, Enterprise or Freelancer?', 'beyondseo')}
+                            </Text>
+                            <Text type={TextTypes.text} className={styles.planSubtitle}>
+                                {__('Deliver growth to your clients.', 'beyondseo')}
+                            </Text>
+
+                            <Button
+                                type={ButtonTypes.secondary}
+                                size={ButtonSizes.medium}
+                                className={styles.planButton}
+                                onClick={() => setIsContactModalOpen(true)}
+                            >
+                                {__('Contact sales', 'beyondseo')}
+                            </Button>
+
+                            <ul className={styles.planFeatureList}>
+                                {agencyFeatures.map((feature: string) => (
+                                    <li key={feature} className={styles.planFeatureItem}>
+                                        <span className={styles.planFeatureIcon}>
+                                            <Icon type={IconSize.small} color="var(--n000)">
+                                                {IconNames.check}
+                                            </Icon>
+                                        </span>
+                                        <Text type={TextTypes.text} className={styles.planFeatureText}>
+                                            {feature}
+                                        </Text>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            )}
+
             {/* Contact Sales Modal */}
             <ContactSalesModal
                 isOpen={isContactModalOpen}
@@ -586,4 +958,4 @@ export const Upsell = () => {
             />
         </div>
     );
-};
+}

@@ -29,6 +29,8 @@ import {
   SearchableSelect
 } from "vanguard";
 import { useAppDispatch } from "@src/custom-hooks/use-app-dispatch";
+import { useSelector } from "react-redux";
+import { RootState } from "@src/main.store";
 import { OnboardingStore } from "@src/stores/swagger/api/OnboardingStore";
 import emptyStateUfo from "@src/custom-hooks/use-dynamic-import/assets/empty-states/empty-state-ufo.svg";
 import { WPRequirementObjectType } from "@src/models/swagger/BeyondSEO/Domain/Integrations/WordPress/Setup/Entities/Flows/Requirements/WPRequirement";
@@ -228,6 +230,7 @@ export const OnboardingSummary: React.FC<OnboardingSummaryProps> = ({
   const [showBusinessInfoModal, setShowBusinessInfoModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [errorDetails, setErrorDetails] = useState<any>(null);
   const [businessName, setBusinessName] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
@@ -249,6 +252,7 @@ export const OnboardingSummary: React.FC<OnboardingSummaryProps> = ({
   const [isAddressDisabled, setIsAddressDisabled] = useState(false);
   const [prefillAddressRequirement, setPrefillAddressRequirement] = useState(false);
   const dispatch = useAppDispatch();
+  const { plugin } = useSelector((state: RootState) => state.app);
 
   useEffect(() => {
     setIsLoading(true);
@@ -516,11 +520,13 @@ export const OnboardingSummary: React.FC<OnboardingSummaryProps> = ({
     if (isFinishing) return;
 
     setIsFinishing(true);
+    setErrorDetails(null);
 
     try {
       onFinish();
     } catch (error: any) {
       setErrorMessage(error?.message || __("An unexpected error occurred", "beyondseo"));
+      setErrorDetails(error?.content || error);
       setShowErrorModal(true);
       setIsFinishing(false);
     }
@@ -840,6 +846,7 @@ export const OnboardingSummary: React.FC<OnboardingSummaryProps> = ({
         isOpen={showErrorModal}
         onClose={() => setShowErrorModal(false)}
         errorMessage={errorMessage || __("Something went wrong from our side, please try again!", "beyondseo")}
+        errorDetails={errorDetails}
         isLoading={isFinishing}
       />
     </ComponentContainer>

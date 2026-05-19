@@ -1,0 +1,364 @@
+.launchOffer {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 0 16px;
+}
+
+.card {
+    background: var(--white);
+    border-radius: 40px;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    @media (max-width: 640px) {
+        border-radius: 22px;
+    }
+}
+
+.gradientHeader {
+    position: relative;
+    background: linear-gradient(135deg, #ff528b 40%, #ffb114 100%);
+    padding: 24px 28px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+
+    @media (max-width: 640px) {
+        padding: 20px 20px 60px;
+    }
+}
+
+.flameDecoration {
+    position: absolute;
+    right: 16px;
+    top: -4px;
+    width: 103px;
+    height: 180px;
+    opacity: 0.9;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+}
+
+.spotsHeader,
+.progressBar,
+.spotsDescription {
+    position: relative;
+    z-index: 1;
+}
+
+.spotsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.spotsTitle {
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.spotsLimit {
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--w900);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.progressBar {
+    width: 100%;
+    height: 16px;
+    background: var(--a2100);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #f6c343 0%, #fbbf24 100%);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+.spotsDescription {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 14px !important;
+    line-height: 24px !important;
+    display: flex !important;
+}
+
+.cardBody {
+    position: relative;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: var(--white);
+    border-radius: 40px;
+    margin-top: -36px;
+
+    @media (max-width: 640px) {
+        padding: 20px;
+        gap: 20px;
+    }
+}
+
+.pricingComparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.priceCard {
+    position: relative;
+    border-radius: 24px;
+    padding: 28px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    box-sizing: border-box;
+}
+
+.priceCardActive {
+    border-radius: 24px;
+    background: radial-gradient(107.01% 191.74% at 106.32% 133.66%, rgba(0, 249, 255, 0.80) 24.6%, rgba(0, 249, 255, 0.00) 58.27%), radial-gradient(274.5% 130.92% at 176.43% 140.21%, rgba(0, 249, 255, 0.80) 14.64%, rgba(0, 249, 255, 0.00) 47.3%), radial-gradient(103.36% 123.01% at 119.41% 105.94%, #00F9FF 30.58%, rgba(0, 249, 255, 0.00) 47.9%), radial-gradient(265.57% 40.47% at 103.07% -76.85%, #F0F 0%, rgba(255, 0, 255, 0.00) 98.56%), radial-gradient(298.26% 101.65% at -78.22% 3%, #F0F 33.3%, rgba(255, 0, 255, 0.00) 63.78%), #0062FF;
+
+    .priceLabel {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .priceAmount {
+        color: var(--white);
+    }
+
+    .pricePeriod {
+        color: var(--white);
+    }
+
+    .priceSubtext {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .priceCompare {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .priceHighlight {
+        color: var(--white);
+        font-weight: 800;
+    }
+}
+
+.priceCardInactive {
+    background: #f3f4f7;
+    border: 2px solid transparent;
+    color: var(--fn-fg-light);
+    cursor: pointer;
+    opacity: 0.5;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.15s ease;
+
+    &:hover,
+    &:focus-visible {
+        border-color: var(--n300, #c9cad1);
+        background: #ecedf2;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--p500);
+        outline-offset: 2px;
+    }
+
+    &:active {
+        transform: translateY(1px);
+    }
+}
+
+.priceCardDisabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+
+    &:hover,
+    &:focus-visible {
+        border-color: transparent;
+        background: #f3f4f7;
+    }
+}
+
+.foundersBadge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--a1500);
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 200;
+    padding: 6px 26px;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+}
+
+.priceLabel {
+    color: var(--n700);
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 8px;
+}
+
+.priceCardInactive .priceLabel {
+    color: var(--fn-fg-light);
+}
+
+.priceMain {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    line-height: 1;
+}
+
+.priceAmount {
+    color: var(--p500);
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+
+    @media (max-width: 640px) {
+        font-size: 48px;
+    }
+}
+
+.priceCardInactive .priceAmount {
+    color: var(--fn-fg-light);
+    font-size: 44px;
+    line-height: 52px;
+
+    @media (max-width: 640px) {
+        font-size: 32px;
+    }
+}
+
+.pricePeriod {
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.priceCardInactive .pricePeriod {
+    color: var(--fn-fg-light);
+}
+
+.priceSubtext {
+    color: var(--n700);
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+.priceCardInactive .priceSubtext {
+    color: var(--fn-fg-light);
+}
+
+.priceCompare {
+    font-size: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    s {
+        text-decoration: line-through;
+        opacity: 0.8;
+        margin: 0 2px;
+    }
+}
+
+.priceHighlight {
+    margin-top: 6px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.priceHighlightPositive {
+    color: var(--s500, #2bb673);
+}
+
+.priceHighlightNegative {
+    color: var(--e500);
+}
+
+.featuresList {
+    list-style: none;
+    padding: 24px 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--n800);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.featureIcon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e9f7ef;
+    color: #2bb673;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ctaButton {
+    width: 100%;
+    background-color: var(--p500) !important;
+    color: var(--white) !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 18px 24px !important;
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 20px rgba(0, 102, 255, 0.25);
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--p600) !important;
+    }
+}
+
+.ctaFootnote {
+    color: var(--fn-fg-lightest) !important;
+    font-size: 14px !important;
+    text-align: center;
+    font-weight: 300 !important;
+}
