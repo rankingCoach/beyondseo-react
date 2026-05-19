@@ -2,66 +2,52 @@
     width: 100%;
     max-width: 720px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
     box-sizing: border-box;
     padding: 0 16px;
 }
 
-.header {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-}
-
-.title {
-    color: var(--n800) !important;
-    font-size: 42px !important;
-    line-height: 1.15 !important;
-
-    @media (max-width: 768px) {
-        font-size: 32px !important;
-    }
-}
-
-.subtitle {
-    color: var(--fn-fg-light) !important;
-    font-size: 18px !important;
-    line-height: 1.5 !important;
-
-    @media (max-width: 768px) {
-        font-size: 16px !important;
-    }
-}
-
 .card {
     background: var(--white);
-    border: 2px solid var(--p500);
-    border-radius: 28px;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    box-shadow: 0 18px 38px rgba(0, 102, 255, 0.12);
+    border-radius: 40px;
+    overflow: hidden;
     box-sizing: border-box;
 
     @media (max-width: 640px) {
-        padding: 20px;
         border-radius: 22px;
-        gap: 20px;
     }
 }
 
-.spotsBanner {
-    background: linear-gradient(180deg, #fff8e6 0%, #fff1cc 100%);
-    border: 1px solid #ffe1a8;
-    border-radius: 14px;
-    padding: 16px 18px;
+.gradientHeader {
+    position: relative;
+    background: linear-gradient(135deg, #ff528b 40%, #ffb114 100%);
+    padding: 24px 28px 60px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow: hidden;
+
+    @media (max-width: 640px) {
+        padding: 20px 20px 60px;
+    }
+}
+
+.flameDecoration {
+    position: absolute;
+    right: 16px;
+    top: -4px;
+    width: 103px;
+    height: 180px;
+    opacity: 0.9;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+}
+
+.spotsHeader,
+.progressBar,
+.spotsDescription {
+    position: relative;
+    z-index: 1;
 }
 
 .spotsHeader {
@@ -73,8 +59,8 @@
 }
 
 .spotsTitle {
-    color: var(--n800);
-    font-size: 15px;
+    color: var(--white);
+    font-size: 16px;
     font-weight: 700;
     display: inline-flex;
     align-items: center;
@@ -82,41 +68,56 @@
 }
 
 .spotsLimit {
-    background: #fff1cc;
-    color: #8a5a00;
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--w900);
     font-size: 12px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 999px;
-    border: 1px solid #ffe1a8;
+    padding: 4px 12px;
+    border-radius: 8px;
     white-space: nowrap;
 }
 
 .progressBar {
     width: 100%;
-    height: 8px;
-    background: #fff1cc;
+    height: 16px;
+    background: var(--a2100);
     border-radius: 999px;
     overflow: hidden;
 }
 
 .progressFill {
     height: 100%;
-    background: linear-gradient(90deg, #f6c343 0%, #ff8b3d 60%, #e8472b 100%);
+    background: linear-gradient(90deg, #f6c343 0%, #fbbf24 100%);
     border-radius: 999px;
     transition: width 0.4s ease;
 }
 
 .spotsDescription {
-    color: var(--n700) !important;
-    font-size: 13px !important;
-    line-height: 1.5 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 14px !important;
+    line-height: 24px !important;
+    display: flex !important;
+}
+
+.cardBody {
+    position: relative;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: var(--white);
+    border-radius: 40px;
+    margin-top: -36px;
+
+    @media (max-width: 640px) {
+        padding: 20px;
+        gap: 20px;
+    }
 }
 
 .pricingComparison {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 8px;
 
     @media (max-width: 640px) {
         grid-template-columns: 1fr;
@@ -125,7 +126,7 @@
 
 .priceCard {
     position: relative;
-    border-radius: 18px;
+    border-radius: 24px;
     padding: 28px 20px 24px;
     display: flex;
     flex-direction: column;
@@ -136,8 +137,33 @@
 }
 
 .priceCardActive {
-    background: #eef0ff;
-    border: 2px solid var(--p500);
+    border-radius: 24px;
+    background: radial-gradient(107.01% 191.74% at 106.32% 133.66%, rgba(0, 249, 255, 0.80) 24.6%, rgba(0, 249, 255, 0.00) 58.27%), radial-gradient(274.5% 130.92% at 176.43% 140.21%, rgba(0, 249, 255, 0.80) 14.64%, rgba(0, 249, 255, 0.00) 47.3%), radial-gradient(103.36% 123.01% at 119.41% 105.94%, #00F9FF 30.58%, rgba(0, 249, 255, 0.00) 47.9%), radial-gradient(265.57% 40.47% at 103.07% -76.85%, #F0F 0%, rgba(255, 0, 255, 0.00) 98.56%), radial-gradient(298.26% 101.65% at -78.22% 3%, #F0F 33.3%, rgba(255, 0, 255, 0.00) 63.78%), #0062FF;
+
+    .priceLabel {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .priceAmount {
+        color: var(--white);
+    }
+
+    .pricePeriod {
+        color: var(--white);
+    }
+
+    .priceSubtext {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .priceCompare {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .priceHighlight {
+        color: var(--white);
+        font-weight: 800;
+    }
 }
 
 .priceCardInactive {
@@ -145,6 +171,7 @@
     border: 2px solid transparent;
     color: var(--fn-fg-light);
     cursor: pointer;
+    opacity: 0.5;
     transition:
         border-color 0.2s ease,
         background-color 0.2s ease,
@@ -182,21 +209,21 @@
     top: -14px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--p500);
+    background: var(--a1500);
     color: var(--white);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 16px;
+    font-size: 16px;
+    font-weight: 200;
+    padding: 6px 26px;
     border-radius: 999px;
-    box-shadow: 0 4px 10px rgba(0, 102, 255, 0.25);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     white-space: nowrap;
 }
 
 .priceLabel {
     color: var(--n700);
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 4px;
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 8px;
 }
 
 .priceCardInactive .priceLabel {
@@ -212,8 +239,8 @@
 
 .priceAmount {
     color: var(--p500);
-    font-size: 56px;
-    font-weight: 800;
+    font-size: 64px;
+    font-weight: 700;
     line-height: 1;
 
     @media (max-width: 640px) {
@@ -223,12 +250,18 @@
 
 .priceCardInactive .priceAmount {
     color: var(--fn-fg-light);
+    font-size: 44px;
+    line-height: 52px;
+
+    @media (max-width: 640px) {
+        font-size: 32px;
+    }
 }
 
 .pricePeriod {
-    color: var(--n700);
+    color: var(--white);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 700;
 }
 
 .priceCardInactive .pricePeriod {
@@ -246,8 +279,9 @@
 }
 
 .priceCompare {
-    color: var(--fn-fg-light);
-    font-size: 13px;
+    font-size: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 
     s {
         text-decoration: line-through;
@@ -258,8 +292,8 @@
 
 .priceHighlight {
     margin-top: 6px;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .priceHighlightPositive {
@@ -267,12 +301,12 @@
 }
 
 .priceHighlightNegative {
-    color: var(--e400, #d14b4b);
+    color: var(--e500);
 }
 
 .featuresList {
     list-style: none;
-    padding: 0;
+    padding: 24px 0;
     margin: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -323,7 +357,8 @@
 }
 
 .ctaFootnote {
-    color: var(--fn-fg-light) !important;
-    font-size: 13px !important;
+    color: var(--fn-fg-lightest) !important;
+    font-size: 14px !important;
     text-align: center;
+    font-weight: 300 !important;
 }
