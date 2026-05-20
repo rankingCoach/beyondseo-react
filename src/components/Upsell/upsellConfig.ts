@@ -479,7 +479,7 @@ export const launchOfferConfig: LaunchOfferConfig = {
     { text: __("AI review management", "beyondseo") },
     { text: __("5 competitors monitored", "beyondseo") },
     { text: __("Weekly AI growth reports", "beyondseo") },
-    { text: __("Instant access to everything", "beyondseo") },
+    { text: __("AI Social Media Posting", "beyondseo") },
   ],
   ctaLabel: __("Start for $99 — Get Full Access", "beyondseo"),
   ctaFootnote: __("Annual billing · Instant access · Cancel anytime", "beyondseo"),

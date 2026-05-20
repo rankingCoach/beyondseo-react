@@ -704,7 +704,7 @@ const UpsellContent = () => {
                         onClick={openContactModal}
                     >
                         <span className={styles.impactButtonContent}>
-                            {__('Agency or Enterprise? See our special offers', 'beyondseo')}
+                            {__('Agency or Enterprise? Talk to us', 'beyondseo')}
                             <Icon type={IconSize.small} color="var(--n000)">
                                 {IconNames.chevronRight}
                             </Icon>
