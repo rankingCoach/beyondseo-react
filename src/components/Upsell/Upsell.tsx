@@ -323,7 +323,7 @@ const UpsellContent = () => {
                     type={ButtonTypes.secondary}
                     size={ButtonSizes.medium}
                     className={styles.heroButton}
-                    onClick={isOnboardingCompleted ? (LAUNCH_OFFER_ENABLED ? scrollToLaunchOffer : handleUpgradeClick) : handleActivateForFree}
+                    onClick={isOnboardingCompleted ? scrollToLaunchOffer : handleActivateForFree}
                     isLoading={isOnboardingCompleted ? isLoading : false}
                     disabled={isOnboardingCompleted ? isLoading : false}
                 >
@@ -630,7 +630,7 @@ const UpsellContent = () => {
                                 <Button
                                     type={ButtonTypes.primary}
                                     size={ButtonSizes.medium}
-                                    onClick={isOnboardingCompleted ? handleUpgradeClick : handleActivateForFree}
+                                    onClick={isOnboardingCompleted ? scrollToLaunchOffer : handleActivateForFree}
                                     isLoading={isOnboardingCompleted ? isLoading : false}
                                     disabled={isOnboardingCompleted ? isLoading : false}
                                     className={styles.legendButton}
