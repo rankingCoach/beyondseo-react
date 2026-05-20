@@ -201,15 +201,22 @@ const UpsellContent = () => {
                 url.searchParams.set('sessionId', generateSessionId());
                 url.searchParams.set('parentOrigin', getCurrentOrigin());
                 url.searchParams.set('autoClose', String(Number(autoClose)));
+                url.searchParams.set('do', 'register');
+                url.searchParams.set('payment_type', paymentType);
 
                 const fullRegistrationURL = url.toString().replace('&amp;', '&').replace('?&', '?');
                 let finalUrl = fullRegistrationURL;
 
-                if (data.voucherURL) {
-                    const voucherUrlObj = new URL(window.rcUpsell.baseUrl + '/' + window.rcUpsell.locale + data.voucherURL);
-                    voucherUrlObj.searchParams.set('redirecturl', fullRegistrationURL);
-                    finalUrl = voucherUrlObj.toString();
+                if (data.couponCode) {
+                    const couponUrl = new URL(
+                        `${window.rcUpsell.baseUrl}/${window.rcUpsell.locale}/c/${encodeURIComponent(data.couponCode)}`
+                    );
+                    couponUrl.searchParams.set('redirecturl', fullRegistrationURL);
+                    finalUrl = couponUrl.toString();
                 }
+
+                console.log('Upsell data:', data);
+                console.log('Final Upsell URL:', finalUrl);
 
                 if (windowOpened && window.BSEORegistration.navigateWindow) {
                     window.BSEORegistration.navigateWindow(finalUrl);
