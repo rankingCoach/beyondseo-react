@@ -35,6 +35,8 @@ type LaunchOfferUpsellProps = {
      * Pass `null` to opt out (useful when the same component is rendered twice on the page).
      */
     scrollId?: string | null;
+    /** Stack the annual and monthly price cards vertically instead of side by side. */
+    stackPricingCards?: boolean;
 };
 
 export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
@@ -42,6 +44,7 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
     isLoading = false,
     config = launchOfferConfig,
     scrollId = LAUNCH_OFFER_SCROLL_ID,
+    stackPricingCards = false,
 }) => {
     const [selectedPlan, setSelectedPlan] = useState<LaunchPaymentType>('annual');
 
@@ -97,7 +100,7 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
                 </div>
 
                 <div className={styles.cardBody}>
-                    <div className={styles.pricingComparison}>
+                    <div className={classNames(styles.pricingComparison, stackPricingCards ? styles.pricingComparisonStacked: '')}>
                         <div
                             role={isAnnualActive ? undefined : 'button'}
                             tabIndex={isAnnualActive ? undefined : (isLoading ? -1 : 0)}
