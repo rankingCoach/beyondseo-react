@@ -118,14 +118,17 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+    min-height: 260px;
 
     @media (max-width: 640px) {
         grid-template-columns: 1fr;
+        min-height: auto;
     }
 }
 
 .pricingComparisonStacked {
     grid-template-columns: 1fr;
+    min-height: auto;
 }
 
 .priceCard {
