@@ -10,13 +10,16 @@ import {
     IconNames,
     IconSize,
 } from 'vanguard';
+import { rcWindow } from "@stores/window.store";
 import styles from './LaunchOfferUpsell.module.scss';
 import flameSvg from './img/Flame.svg';
 import {
+    applyUpgradablePlansToLaunchOfferConfig,
     launchOfferConfig,
     type LaunchOfferConfig,
     type LaunchOfferPlan,
     type LaunchOfferFeature,
+    type UpgradablePlans,
 } from './upsellConfig';
 
 export const LAUNCH_OFFER_SCROLL_ID = 'wp-launch-offer';
@@ -40,7 +43,11 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
     config = launchOfferConfig,
     scrollId = LAUNCH_OFFER_SCROLL_ID,
 }) => {
-    const spotsFilled = Math.max(0, Math.min(100, config.spotsFilledPercent));
+    const upgradablePlans: UpgradablePlans | null | undefined =
+        rcWindow?.rankingCoachReactData?.upgradablePlans;
+    const resolvedConfig = applyUpgradablePlansToLaunchOfferConfig(config, upgradablePlans);
+    console.log('resolvedConfig', resolvedConfig);
+    const spotsFilled = Math.max(0, Math.min(100, resolvedConfig.spotsFilledPercent));
 
     const handleAnnualClick = (event: React.MouseEvent<HTMLElement>) => onUpgrade('annual', event);
     const handleMonthlyClick = (event: React.MouseEvent<HTMLElement>) => onUpgrade('monthly', event);
@@ -57,8 +64,8 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
                 <div className={styles.gradientHeader}>
                     <img src={flameSvg} alt="" aria-hidden="true" className={styles.flameDecoration} />
                     <div className={styles.spotsHeader}>
-                        <span className={styles.spotsTitle}>{config.spotsBadge}</span>
-                        <span className={styles.spotsLimit}>{config.spotsLimit}</span>
+                        <span className={styles.spotsTitle}>{resolvedConfig.spotsBadge}</span>
+                        <span className={styles.spotsLimit}>{resolvedConfig.spotsLimit}</span>
                     </div>
                     <div
                         className={styles.progressBar}
@@ -70,13 +77,13 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
                         <div className={styles.progressFill} style={{ width: `${spotsFilled}%` }} />
                     </div>
                     <Text type={TextTypes.text} className={styles.spotsDescription}>
-                        {config.spotsDescription}
+                        {resolvedConfig.spotsDescription}
                     </Text>
                 </div>
 
                 <div className={styles.cardBody}>
                     <div className={styles.pricingComparison}>
-                        {renderPlanCard(config.founders, true)}
+                        {renderPlanCard(resolvedConfig.founders, true)}
                         <div
                             role="button"
                             tabIndex={isLoading ? -1 : 0}
@@ -89,12 +96,12 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
                             onClick={isLoading ? undefined : handleMonthlyClick}
                             onKeyDown={isLoading ? undefined : handleMonthlyKey}
                         >
-                            {renderPlanContent(config.alternative)}
+                            {renderPlanContent(resolvedConfig.alternative)}
                         </div>
                     </div>
 
                     <ul className={styles.featuresList}>
-                        {config.features.map((feature: LaunchOfferFeature, index: number) => (
+                        {resolvedConfig.features.map((feature: LaunchOfferFeature, index: number) => (
                             <li key={index} className={styles.featureItem}>
                                 <span className={styles.featureIcon}>
                                     <Icon type={IconSize.small} color="var(--s900)">{IconNames.check}</Icon>
@@ -112,11 +119,11 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
                         isLoading={isLoading}
                         disabled={isLoading}
                     >
-                        {config.ctaLabel}
+                        {resolvedConfig.ctaLabel}
                     </Button>
 
                     <Text type={TextTypes.text} className={styles.ctaFootnote}>
-                        {config.ctaFootnote}
+                        {resolvedConfig.ctaFootnote}
                     </Text>
                 </div>
             </div>

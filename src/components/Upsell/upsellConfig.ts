@@ -1,4 +1,4 @@
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import { IconNames } from "vanguard";
 import avatar1 from "@assets/upsell-page/avatar-1.svg";
 import avatar2 from "@assets/upsell-page/avatar-2.svg";
@@ -441,6 +441,94 @@ export interface LaunchOfferConfig {
   ctaLabel: string;
   ctaFootnote: string;
 }
+
+export type UpgradablePlanCadence = "annual" | "monthly";
+
+export type UpgradablePlan = {
+  slug: string;
+  price: number;
+  currency: string;
+  currencySymbol: string;
+  billingPeriod: UpgradablePlanCadence;
+  discountedPrice?: number;
+  marketingDiscount?: number;
+};
+
+export type UpgradablePlans = {
+  annual?: UpgradablePlan;
+  monthly?: UpgradablePlan;
+};
+
+const formatPrice = (amount: number, symbol: string): string =>
+  `${symbol}${Number.isInteger(amount) ? amount : amount.toFixed(2)}`;
+
+export const applyUpgradablePlansToLaunchOfferConfig = (
+  baseConfig: LaunchOfferConfig,
+  upgradablePlans: UpgradablePlans | null | undefined,
+): LaunchOfferConfig => {
+  const annual = upgradablePlans?.annual;
+  const monthly = upgradablePlans?.monthly;
+
+  if (!annual || !monthly) {
+    return baseConfig;
+  }
+
+  const marketingDiscount = annual.marketingDiscount ?? 0;
+  const hasMarketingDiscount =
+    marketingDiscount > 0 &&
+    typeof annual.discountedPrice === "number" &&
+    annual.discountedPrice < annual.price;
+
+  const effectiveAnnualPrice = hasMarketingDiscount
+    ? (annual.discountedPrice as number)
+    : annual.price;
+
+  const monthlyEquivalentOfAnnual = formatPrice(effectiveAnnualPrice / 12, annual.currencySymbol);
+  const yearlyTotalOfMonthly = formatPrice(monthly.price * 12, monthly.currencySymbol);
+
+  const canCompareWithMonthly = effectiveAnnualPrice > 0 && monthly.price > 0;
+  const savingsVsMonthlyPercent = canCompareWithMonthly
+    ? Math.max(0, Math.round((1 - effectiveAnnualPrice / (monthly.price * 12)) * 100))
+    : 0;
+  const monthlyMoreExpensivePercent = canCompareWithMonthly
+    ? Math.max(0, Math.round(((monthly.price * 12) / effectiveAnnualPrice - 1) * 100))
+    : 0;
+
+  const formattedEffectiveAnnualPrice = formatPrice(effectiveAnnualPrice, annual.currencySymbol);
+
+  const foundersDiscountOverlay = hasMarketingDiscount
+    ? {
+        strikethroughSubtext: formatPrice(annual.price, annual.currencySymbol),
+        secondarySubtext: undefined,
+        highlightText: sprintf(__("%d%% off", "beyondseo"), marketingDiscount),
+        highlightType: "positive" as const,
+      }
+    : {
+        strikethroughSubtext: sprintf(__("%s/year", "beyondseo"), yearlyTotalOfMonthly),
+        highlightText: sprintf(__("%d%% off vs. monthly billing", "beyondseo"), savingsVsMonthlyPercent),
+      };
+
+  return {
+    ...baseConfig,
+    founders: {
+      ...baseConfig.founders,
+      price: formattedEffectiveAnnualPrice,
+      primarySubtext: sprintf(__("≈ %s/month", "beyondseo"), monthlyEquivalentOfAnnual),
+      ...foundersDiscountOverlay,
+    },
+    alternative: {
+      ...baseConfig.alternative,
+      price: formatPrice(monthly.price, monthly.currencySymbol),
+      primarySubtext: sprintf(__("%s/year", "beyondseo"), yearlyTotalOfMonthly),
+      highlightText: sprintf(__("%d%% more expensive", "beyondseo"), monthlyMoreExpensivePercent),
+    },
+    features: [
+      { text: sprintf(__("Full first year for %s", "beyondseo"), formattedEffectiveAnnualPrice) },
+      ...baseConfig.features.slice(1),
+    ],
+    ctaLabel: sprintf(__("Start for %s — Get Full Access", "beyondseo"), formattedEffectiveAnnualPrice),
+  };
+};
 
 export const launchOfferConfig: LaunchOfferConfig = {
   title: __("Your WordPress Launch Offer", "beyondseo"),
