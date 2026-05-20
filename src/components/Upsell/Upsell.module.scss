@@ -784,7 +784,7 @@
 }
 
 .planSubtitle {
-    color: var(--white);
+    color: var(--white) !important;
     font-size: 14px;
     line-height: 24px;
     font-weight: 400;
@@ -834,7 +834,7 @@
 }
 
 .planFeatureText {
-    color: var(--white);
+    color: var(--white) !important;
     font-size: 14px;
     line-height: 24px;
     font-weight: 400;
