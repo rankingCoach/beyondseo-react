@@ -124,6 +124,10 @@
     }
 }
 
+.pricingComparisonStacked {
+    grid-template-columns: 1fr;
+}
+
 .priceCard {
     position: relative;
     border-radius: 24px;

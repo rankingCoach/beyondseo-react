@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     ButtonTypes,
@@ -35,6 +35,8 @@ type LaunchOfferUpsellProps = {
      * Pass `null` to opt out (useful when the same component is rendered twice on the page).
      */
     scrollId?: string | null;
+    /** Stack the annual and monthly price cards vertically instead of side by side. */
+    stackPricingCards?: boolean;
 };
 
 export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
@@ -42,21 +44,37 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
     isLoading = false,
     config = launchOfferConfig,
     scrollId = LAUNCH_OFFER_SCROLL_ID,
+    stackPricingCards = false,
 }) => {
+    const [selectedPlan, setSelectedPlan] = useState<LaunchPaymentType>('annual');
+
     const upgradablePlans: UpgradablePlans | null | undefined =
         rcWindow?.rankingCoachReactData?.upgradablePlans;
     const resolvedConfig = applyUpgradablePlansToLaunchOfferConfig(config, upgradablePlans);
-    console.log('resolvedConfig', resolvedConfig);
     const spotsFilled = Math.max(0, Math.min(100, resolvedConfig.spotsFilledPercent));
 
-    const handleAnnualClick = (event: React.MouseEvent<HTMLElement>) => onUpgrade('annual', event);
-    const handleMonthlyClick = (event: React.MouseEvent<HTMLElement>) => onUpgrade('monthly', event);
-    const handleMonthlyKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'Enter' || event.key === ' ') {
+    const isAnnualActive = selectedPlan === 'annual';
+
+    const handleCtaClick = (event: React.MouseEvent<HTMLElement>) => onUpgrade(selectedPlan, event);
+
+    const handleAnnualCardClick = () => { if (!isAnnualActive) setSelectedPlan('annual'); };
+    const handleMonthlyCardClick = () => { if (isAnnualActive) setSelectedPlan('monthly'); };
+
+    const handleAnnualCardKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if ((event.key === 'Enter' || event.key === ' ') && !isAnnualActive) {
             event.preventDefault();
-            onUpgrade('monthly', event as unknown as React.MouseEvent<HTMLElement>);
+            setSelectedPlan('annual');
         }
     };
+    const handleMonthlyCardKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if ((event.key === 'Enter' || event.key === ' ') && isAnnualActive) {
+            event.preventDefault();
+            setSelectedPlan('monthly');
+        }
+    };
+
+    const monthlyCtaLabel = `Start for ${resolvedConfig.alternative.price}${resolvedConfig.alternative.pricePeriod}`;
+    const ctaLabel = isAnnualActive ? resolvedConfig.ctaLabel : monthlyCtaLabel;
 
     return (
         <div className={styles.launchOffer} id={scrollId ?? undefined}>
@@ -82,19 +100,32 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
                 </div>
 
                 <div className={styles.cardBody}>
-                    <div className={styles.pricingComparison}>
-                        {renderPlanCard(resolvedConfig.founders, true)}
+                    <div className={classNames(styles.pricingComparison, stackPricingCards ? styles.pricingComparisonStacked: '')}>
                         <div
-                            role="button"
-                            tabIndex={isLoading ? -1 : 0}
-                            aria-disabled={isLoading}
+                            role={isAnnualActive ? undefined : 'button'}
+                            tabIndex={isAnnualActive ? undefined : (isLoading ? -1 : 0)}
+                            aria-disabled={isAnnualActive ? undefined : isLoading}
                             className={classNames(
                                 styles.priceCard,
-                                styles.priceCardInactive,
-                                isLoading ? styles.priceCardDisabled : '',
+                                isAnnualActive ? styles.priceCardActive : styles.priceCardInactive,
+                                !isAnnualActive && isLoading ? styles.priceCardDisabled : '',
                             )}
-                            onClick={isLoading ? undefined : handleMonthlyClick}
-                            onKeyDown={isLoading ? undefined : handleMonthlyKey}
+                            onClick={!isAnnualActive && !isLoading ? handleAnnualCardClick : undefined}
+                            onKeyDown={!isAnnualActive && !isLoading ? handleAnnualCardKey : undefined}
+                        >
+                            {renderPlanContent(resolvedConfig.founders)}
+                        </div>
+                        <div
+                            role={isAnnualActive ? 'button' : undefined}
+                            tabIndex={isAnnualActive ? (isLoading ? -1 : 0) : undefined}
+                            aria-disabled={isAnnualActive ? isLoading : undefined}
+                            className={classNames(
+                                styles.priceCard,
+                                isAnnualActive ? styles.priceCardInactive : styles.priceCardActive,
+                                isAnnualActive && isLoading ? styles.priceCardDisabled : '',
+                            )}
+                            onClick={isAnnualActive && !isLoading ? handleMonthlyCardClick : undefined}
+                            onKeyDown={isAnnualActive && !isLoading ? handleMonthlyCardKey : undefined}
                         >
                             {renderPlanContent(resolvedConfig.alternative)}
                         </div>
@@ -115,11 +146,11 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
                         type={ButtonTypes.primary}
                         size={ButtonSizes.medium}
                         className={styles.ctaButton}
-                        onClick={handleAnnualClick}
+                        onClick={handleCtaClick}
                         isLoading={isLoading}
                         disabled={isLoading}
                     >
-                        {resolvedConfig.ctaLabel}
+                        {ctaLabel}
                     </Button>
 
                     <Text type={TextTypes.text} className={styles.ctaFootnote}>
@@ -130,12 +161,6 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
         </div>
     );
 };
-
-const renderPlanCard = (plan: LaunchOfferPlan, isActive: boolean) => (
-    <div className={classNames(styles.priceCard, isActive ? styles.priceCardActive : styles.priceCardInactive)}>
-        {renderPlanContent(plan)}
-    </div>
-);
 
 const renderPlanContent = (plan: LaunchOfferPlan) => (
     <>
