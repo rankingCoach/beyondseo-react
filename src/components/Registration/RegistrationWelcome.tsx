@@ -8,9 +8,11 @@ const ACTIVATION_URL = `${(window as any).rankingCoachReactData?.adminurl || 'ad
 
 interface RegistrationWelcomeProps {
   onContinueWithEmail: () => void;
+  showEmail: boolean;
+  showActivation: boolean;
 }
 
-export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onContinueWithEmail }) => {
+export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onContinueWithEmail, showEmail, showActivation }) => {
   const handleActivationCode = () => {
     window.location.href = ACTIVATION_URL;
   };
@@ -38,23 +40,27 @@ export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onCont
         </Text>
 
         <div className={styles.optionsList}>
-          <button className={styles.optionCard} onClick={onContinueWithEmail}>
-            <Text type={TextTypes.text} fontWeight={FontWeights.bold} className={styles.optionTitle}>
-              {__("Continue with email", "beyondseo")}
-            </Text>
-            <Text type={TextTypes.text} className={styles.optionDescription}>
-              {__("Log in or create a free account to start using the plugin.", "beyondseo")}
-            </Text>
-          </button>
+          {showEmail && (
+            <button className={styles.optionCard} onClick={onContinueWithEmail}>
+              <Text type={TextTypes.text} fontWeight={FontWeights.bold} className={styles.optionTitle}>
+                {__("Continue with email", "beyondseo")}
+              </Text>
+              <Text type={TextTypes.text} className={styles.optionDescription}>
+                {__("Log in or create a free account to start using the plugin.", "beyondseo")}
+              </Text>
+            </button>
+          )}
 
-          <button className={styles.optionCard} onClick={handleActivationCode}>
-            <Text type={TextTypes.text} fontWeight={FontWeights.bold} className={styles.optionTitle}>
-              {__("Use an activation code", "beyondseo")}
-            </Text>
-            <Text type={TextTypes.text} className={styles.optionDescription}>
-              {__("Already received a code by email? Enter it here to activate your plugin.", "beyondseo")}
-            </Text>
-          </button>
+          {showActivation && (
+            <button className={styles.optionCard} onClick={handleActivationCode}>
+              <Text type={TextTypes.text} fontWeight={FontWeights.bold} className={styles.optionTitle}>
+                {__("Use an activation code", "beyondseo")}
+              </Text>
+              <Text type={TextTypes.text} className={styles.optionDescription}>
+                {__("Already received a code by email? Enter it here to activate your plugin.", "beyondseo")}
+              </Text>
+            </button>
+          )}
         </div>
       </div>
 

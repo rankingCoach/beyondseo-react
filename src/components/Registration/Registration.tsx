@@ -434,7 +434,14 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
   }, [allowedCountries]);
 
   if (showWelcome) {
-    return <RegistrationWelcome onContinueWithEmail={() => setShowWelcome(false)} />;
+    const rcData = (window as any).rankingCoachReactData;
+    return (
+      <RegistrationWelcome
+        onContinueWithEmail={() => setShowWelcome(false)}
+        showEmail={rcData?.registrationShowEmail !== 'false'}
+        showActivation={rcData?.registrationShowActivation !== 'false'}
+      />
+    );
   }
 
   return (
