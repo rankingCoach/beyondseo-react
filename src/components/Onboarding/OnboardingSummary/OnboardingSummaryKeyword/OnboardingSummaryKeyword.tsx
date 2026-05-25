@@ -13,9 +13,10 @@ const MAX_KEYWORDS = 50;
 interface OnboardingSummaryKeywordProps {
   keywords: Array<{ id: number; text: string }>;
   setKeywords: React.Dispatch<React.SetStateAction<Array<{ id: number; text: string }>>>;
+  maxKeywords?: number;
 }
 
-export const OnboardingSummaryKeyword: React.FC<OnboardingSummaryKeywordProps> = ({ keywords, setKeywords }) => {
+export const OnboardingSummaryKeyword: React.FC<OnboardingSummaryKeywordProps> = ({ keywords, setKeywords, maxKeywords }) => {
   const [newKeyword, setNewKeyword] = useState("");
   const [keywordError, setKeywordError] = useState("");
   const dispatch = useAppDispatch();
@@ -79,8 +80,9 @@ export const OnboardingSummaryKeyword: React.FC<OnboardingSummaryKeywordProps> =
               continue;
             }
 
-            if (keywords.length >= MAX_KEYWORDS) {
-              setKeywordError(__("You have reached max number of keywords", "beyondseo"));
+            const effectiveMaxKeywords = maxKeywords || MAX_KEYWORDS;
+            if (keywords.length >= effectiveMaxKeywords) {
+              setKeywordError(__(`You have reached max number of keywords`, "beyondseo"));
               break;
             }
 
@@ -123,8 +125,9 @@ export const OnboardingSummaryKeyword: React.FC<OnboardingSummaryKeywordProps> =
         return;
       }
 
-      if (keywords.length >= MAX_KEYWORDS) {
-        setKeywordError(__("You have reached max number of keywords", "beyondseo"));
+      const effectiveMaxKeywords = maxKeywords || MAX_KEYWORDS;
+      if (keywords.length >= effectiveMaxKeywords) {
+        setKeywordError(__(`You have reached max number of keywords`, "beyondseo"));
         return;
       }
 

@@ -25,6 +25,7 @@ import "@components/Common/DonutChart/DonutChart.module.scss";
 
 import { rcWindow } from "@stores/window.store";
 import { ComponentContainer, Render } from "vanguard";
+import { Activation } from "@src/components/Activation/Activation";
 import { Onboarding } from "@src/components/Onboarding/Onboarding";
 import { Registration } from "@src/components/Registration/Registration";
 import { SEOOptimiser } from "@components/SEO/SEOOptimiser/SEOOptimiser";
@@ -145,7 +146,7 @@ const MainComponent: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   return (
     <ComponentContainer testId={"rc-main-container"} style={{ width: "100%" }}>
       {React.Children.map(children, (child) => {
-        if (React.isValidElement(child) && (child.type === Onboarding || child.type === Registration)) {
+        if (React.isValidElement(child) && (child.type === Onboarding || child.type === Registration || child.type === Activation)) {
           // @ts-ignore
           return React.cloneElement(child, { isPluginLoading: isLoading });
         }
@@ -271,6 +272,10 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
   },
   onboarding: () => {
     return <Onboarding />;
+  },
+
+  activation: () => {
+    return <Activation />;
   },
 
   registration: () => {
@@ -408,6 +413,7 @@ export function initializeApp() {
   const CONTAINERS = {
     edit: document.getElementById("edit-rankingcoach-react"),
     float: document.getElementById("seo-optimiser-rankingcoach-react"),
+    activation: document.getElementById("activation-rankingcoach-page"),
     onboarding: document.getElementById("onboarding-rankingcoach-page"),
     registration: document.getElementById("registration-rankingcoach-page"),
     upsell: document.getElementById("upsell-rankingcoach-page"),

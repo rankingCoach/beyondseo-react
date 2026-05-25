@@ -280,7 +280,7 @@ export const OptimisationTabSEOOptimiser = (props: SEOOptimiserProps) => {
             type={ButtonTypes.default}
             iconLeft={isExpanded ? IconNames.caretUp : IconNames.caretDown}
             size={ButtonSizes.small}
-            onClick={(e:any) => {
+q            onClick={(e:any) => {
               e.stopPropagation();
               handleContentItemExpand(itemKey, !isExpanded);
             }}

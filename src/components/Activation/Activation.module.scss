@@ -1,4 +1,4 @@
-.registration-container {
+.activation-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -14,7 +14,6 @@
     min-height: 120px;
     transition: padding 0.3s ease-in-out;
 
-    // Responsive to WordPress admin sidebar - when folded (collapsed), reduce left padding
     :global(body.folded) & {
         padding: 40px 40px 20px 100px;
     }
@@ -62,7 +61,7 @@
     margin: 0;
 }
 
-.registration-content {
+.activation-content {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -96,24 +95,17 @@
     color: var(--fn-fg-light);
 }
 
-.features-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 32px;
+.activation-input {
     width: 100%;
     max-width: 480px;
 }
 
-.email-input {
+.code-error {
     width: 100%;
     max-width: 480px;
-}
-
-.country-select {
-    width: 100%;
-    max-width: 480px;
-    margin-top: 20px;
+    color: var(--fn-error, #e53e3e);
+    font-size: 14px;
+    margin-top: 4px;
 }
 
 .terms-container {
@@ -141,29 +133,18 @@
     }
 }
 
-.terms-text {
-    display: inline !important;
-
-    :global(a) {
-        display: inline !important;
-        font-size: 14px !important;
-        line-height: inherit !important;
-        vertical-align: baseline !important;
-    }
-}
-
-.activation-code-hint {
-    width: 100%;
-    max-width: 480px;
-    margin-top: 24px;
-    color: var(--fn-fg-light);
-    font-size: 14px;
-
-    :global(a) {
-        display: inline-flex !important;
-        font-size: 14px !important;
-        vertical-align: baseline !important;
-    }
+.error-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--fn-error, #e53e3e);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 auto 16px;
 }
 
 .bottom-divider {
@@ -182,10 +163,6 @@
     min-height: 80px;
     transition: padding 0.3s ease-in-out;
 
-    &:has(.registrationResetButton) {
-        justify-content: space-between;
-    }
-
     :global(body.folded) & {
         padding: 20px 80px 20px 100px;
     }
@@ -193,35 +170,5 @@
     @media screen and (max-width: 782px) {
         padding: 16px 40px 16px 40px;
         justify-content: center;
-    }
-}
-
-.verifyTitle {
-    margin-bottom: 32px;
-    text-align: center;
-}
-
-.verifyImage {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 32px;
-    display: block;
-}
-
-.verifyDescription {
-    text-align: center;
-    color: var(--fn-fg-light);
-    max-width: 480px;
-    line-height: 1.6;
-
-    strong {
-        color: var(--fn-fg);
-        font-weight: 600;
-    }
-}
-
-.registrationResetButton {
-    @media screen and (max-width: 782px) {
-        display: none;
     }
 }

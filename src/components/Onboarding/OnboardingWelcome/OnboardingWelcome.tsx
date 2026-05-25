@@ -115,6 +115,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
   const [showThankYouScreen, setShowThankYouScreen] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [errorDetails, setErrorDetails] = useState<any>(null);
   const [thankYouTextRendered, setThankYouTextRendered] = useState(false);
   const thankYouStartTimeRef = useRef<number | null>(null);
 
@@ -152,7 +153,9 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
             requestBody: null,
             queryParams,
           }),
-        ).catch(() => {
+        ).unwrap().catch((error) => {
+          setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
+          setErrorDetails(error);
           setShowErrorModal(true);
         });
       } else {
@@ -165,7 +168,9 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
             requestBody: null,
             queryParams: { noCache: true, debug: true },
           }),
-        ).catch(() => {
+        ).unwrap().catch((error) => {
+          setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
+          setErrorDetails(error);
           setShowErrorModal(true);
         });
       }
@@ -180,8 +185,10 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
           requestBody: null,
           queryParams: { noCache: true, debug: true },
         }),
-      ).catch(() => {
+      ).unwrap().catch((error) => {
         setIsOnboardingStarted(false);
+        setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
+        setErrorDetails(error);
         setShowErrorModal(true);
       });
     } else {
@@ -332,6 +339,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
       setStep(8);
 
       setErrorMessage(error?.message || __("An unexpected error occurred", "beyondseo"));
+      setErrorDetails(error?.content || error);
       setShowErrorModal(true);
     }
   };
@@ -486,6 +494,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
         isOpen={showErrorModal}
         onClose={() => setShowErrorModal(false)}
         errorMessage={errorMessage || __("Something went wrong from our side, please try again!", "beyondseo")}
+        errorDetails={errorDetails}
       />
     </ComponentContainer>
   );
