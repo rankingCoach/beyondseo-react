@@ -1,0 +1,7 @@
+allowBuilds:
+  '@parcel/watcher': true
+  '@rankingcoach/vanguard': true
+  core-js-pure: true
+  esbuild: true
+minimumReleaseAgeExclude:
+  - '@rankingcoach/vanguard@1.12.3'

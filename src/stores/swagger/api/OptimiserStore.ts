@@ -12,88 +12,88 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { SeoDataExtractionResponseDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/Seo/SeoDataExtractionResponseDto';
     import type { BadRequestException } from '@models/swagger/BeyondSEODeps/DDD/Infrastructure/Exceptions/BadRequestException';
     import type { SeoOptimiserResponseDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/Seo/SeoOptimiserResponseDto';
-    
+
 
 
  export type GetApiOptimiserDataByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* $context List of context keys to be loaded, separated by comma 
+  /**
+* $context List of context keys to be loaded, separated by comma
 */
   context? : string,
-  /** 
-* $factor List of factor keys to be loaded, separated by comma 
+  /**
+* $factor List of factor keys to be loaded, separated by comma
 */
   factor? : string,
-  /** 
-* $operation List of operation keys to be loaded, separated by comma 
+  /**
+* $operation List of operation keys to be loaded, separated by comma
 */
   operation? : string,
-  
+
   export? : string,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type GetApiOptimiserByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* $context List of context keys to be loaded, separated by comma 
+  /**
+* $context List of context keys to be loaded, separated by comma
 */
   context? : string,
-  /** 
-* $factor List of factor keys to be loaded, separated by comma 
+  /**
+* $factor List of factor keys to be loaded, separated by comma
 */
   factor? : string,
-  /** 
-* $operation List of operation keys to be loaded, separated by comma 
+  /**
+* $operation List of operation keys to be loaded, separated by comma
 */
   operation? : string,
-  
+
   export? : string,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type PostApiOptimiserByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* $context List of context keys to be loaded, separated by comma 
+  /**
+* $context List of context keys to be loaded, separated by comma
 */
   context? : string,
-  /** 
-* $factor List of factor keys to be loaded, separated by comma 
+  /**
+* $factor List of factor keys to be loaded, separated by comma
 */
   factor? : string,
-  /** 
-* $operation List of operation keys to be loaded, separated by comma 
+  /**
+* $operation List of operation keys to be loaded, separated by comma
 */
   operation? : string,
-  
+
   export? : string,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
 
 export class OptimiserStore extends HttpStore {
- 
- 
+
+
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getApiOptimiserDataByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Extract SEO data 
+/**
+* Extract SEO data
 */
 
 
-/** 
-* Extract SEO Data 
-* Extract SEO data 
+/**
+* Extract SEO Data
+* Extract SEO data
 */
 getApiOptimiserDataByPostId( postId: number,  queryParams: GetApiOptimiserDataByPostIdOpts, signal?: AbortSignal ): Observable<SeoDataExtractionResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/api/optimiser/${postId}/data`), queryParams, signal) as Observable<SeoDataExtractionResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/optimiser/${postId}/data`), queryParams, signal) as Observable<SeoDataExtractionResponseDto>;
 }
 
 static getApiOptimiserDataByPostIdThunk = createAsyncThunk<
@@ -104,9 +104,9 @@ static getApiOptimiserDataByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Extract SEO Data 
-* Extract SEO data 
+/**
+* Extract SEO Data
+* Extract SEO data
 */
 ("getApiOptimiserDataByPostId", async ({postId,  queryParams } : {postId: number,  queryParams: GetApiOptimiserDataByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -135,25 +135,25 @@ static getApiOptimiserDataByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiOptimiserDataByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/optimiser/{postId}/data');
-static getApiOptimiserDataByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/optimiser/{postId}/data(.*)';
+static getApiOptimiserDataByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/optimiser/{postId}/data');
+static getApiOptimiserDataByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/optimiser/{postId}/data(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getApiOptimiserByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Retrieve the SEO Optimiser 
+/**
+* Retrieve the SEO Optimiser
 */
 
 
-/** 
-* Retrieve SEO Optimiser 
-* Retrieve the SEO Optimiser 
+/**
+* Retrieve SEO Optimiser
+* Retrieve the SEO Optimiser
 */
 getApiOptimiserByPostId( postId: number,  queryParams: GetApiOptimiserByPostIdOpts, signal?: AbortSignal ): Observable<SeoOptimiserResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/api/optimiser/${postId}`), queryParams, signal) as Observable<SeoOptimiserResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/optimiser/${postId}`), queryParams, signal) as Observable<SeoOptimiserResponseDto>;
 }
 
 static getApiOptimiserByPostIdThunk = createAsyncThunk<
@@ -164,9 +164,9 @@ static getApiOptimiserByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Retrieve SEO Optimiser 
-* Retrieve the SEO Optimiser 
+/**
+* Retrieve SEO Optimiser
+* Retrieve the SEO Optimiser
 */
 ("getApiOptimiserByPostId", async ({postId,  queryParams } : {postId: number,  queryParams: GetApiOptimiserByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -195,25 +195,25 @@ static getApiOptimiserByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiOptimiserByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/optimiser/{postId}');
-static getApiOptimiserByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/optimiser/{postId}(.*)';
+static getApiOptimiserByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/optimiser/{postId}');
+static getApiOptimiserByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/optimiser/{postId}(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static postApiOptimiserByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Process the SEO Optimizer 
+/**
+* Process the SEO Optimizer
 */
 
 
-/** 
-* Proceed SEO Optimiser 
-* Process the SEO Optimizer 
+/**
+* Proceed SEO Optimiser
+* Process the SEO Optimizer
 */
 postApiOptimiserByPostId( postId: number,  requestBody: null, queryParams: PostApiOptimiserByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<SeoOptimiserResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/api/optimiser/${postId}`), requestBody, queryParams, signal, contentType) as Observable<SeoOptimiserResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/optimiser/${postId}`), requestBody, queryParams, signal, contentType) as Observable<SeoOptimiserResponseDto>;
 }
 
 static postApiOptimiserByPostIdThunk = createAsyncThunk<
@@ -224,9 +224,9 @@ static postApiOptimiserByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Proceed SEO Optimiser 
-* Process the SEO Optimizer 
+/**
+* Proceed SEO Optimiser
+* Process the SEO Optimizer
 */
 ("postApiOptimiserByPostId", async ({postId,  requestBody, queryParams, contentType = 'application/json'} : {postId: number,  requestBody: null, queryParams: PostApiOptimiserByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -255,11 +255,10 @@ static postApiOptimiserByPostIdThunk = createAsyncThunk<
     }
 });
 
-static postApiOptimiserByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/optimiser/{postId}');
-static postApiOptimiserByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/optimiser/{postId}(.*)';
+static postApiOptimiserByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/optimiser/{postId}');
+static postApiOptimiserByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/optimiser/{postId}(.*)';
 
 
-  
+
  }
  export const optimiserStore = new OptimiserStore();
- 

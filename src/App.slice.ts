@@ -17,6 +17,7 @@ import { OptimiserResult } from "@models/swagger/BeyondSEO/Domain/Integrations/W
 import { OptimiserStore } from "@stores/swagger/api/OptimiserStore";
 import { OnboardingStore } from "@stores/swagger/api/OnboardingStore";
 import { WPFlowStepsResponseDto } from "@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/Flow/WPFlowStepsResponseDto";
+import { rcWindow } from "@stores/window.store";
 
 export type AppSliceType = {
   appLoadedModalId: string;
@@ -69,10 +70,19 @@ export type AppSliceType = {
   onboardingError: any;
 };
 
+// Plugin information is provided up-front through the localized `rankingCoachReactData`
+// window object so the metabox, settings and connect/upsell areas can render without an
+// extra `pluginInformation` API round-trip. When the window carries it we seed the store
+// from it and mark the data as loaded; the API call in main.tsx is then only used as a
+// fallback for pages where the window does not include the payload. This is inert until
+// PHP populates `rankingCoachReactData.pluginInformation` (consumers use optional chaining).
+const seededPluginInformation: PluginInformationResponseDto | undefined =
+  rcWindow?.rankingCoachReactData?.pluginInformation;
+
 const initialState: AppSliceType = {
   appLoadedModalId: "",
-  plugin: undefined,
-  isPluginDataLoaded: false,
+  plugin: seededPluginInformation,
+  isPluginDataLoaded: !!seededPluginInformation,
   isMetaTagsDataLoaded: false,
   isFetchingPluginData: false,
   metaTagsData: undefined,
