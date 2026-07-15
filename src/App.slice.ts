@@ -8,29 +8,32 @@ import { useMapLocationKeywords } from "@hooks/use-map-location-keywords";
 
 import { PluginInformationStore } from "@stores/swagger/api/PluginInformationStore";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
+import { SocialStore } from "@stores/swagger/api/SocialStore";
+import { WpVariablesStore } from "@stores/wp-variables.store";
 import { PluginInformationResponseDto } from "@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/PluginInformationResponseDto";
-import { MetaTagsGetResponseDto } from "@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/MetaTagsGetResponseDto";
 import { SchemaMarkupGetDataResponseDto } from "@models/swagger/RankingCoach/Inc/Modules/ModuleLibrary/Schema/SchemaMarkup/Dtos/SchemaMarkupGetDataResponseDto";
-import { WPWebPageKeywordsMetaTag } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/MetaTags/Tags/WPWebPageKeywordsMetaTag";
 import { WPKeywordsAnalysis } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/ContentAnalysis/WPKeywordsAnalysis";
 import { OptimiserResult } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/Optimiser/Base/Models/Results/OptimiserResult";
 import { OptimiserStore } from "@stores/swagger/api/OptimiserStore";
 import { OnboardingStore } from "@stores/swagger/api/OnboardingStore";
 import { WPFlowStepsResponseDto } from "@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/Flow/WPFlowStepsResponseDto";
 import { rcWindow } from "@stores/window.store";
+import { KeywordsTagDto, MetaTagsApiResponse, WPVariableData } from "@src/types/meta-tags";
+import { buildVariablesMap, resolveTemplate } from "@helpers/template-helpers";
 
 export type AppSliceType = {
   appLoadedModalId: string;
   plugin: PluginInformationResponseDto | undefined;
   isPluginDataLoaded: boolean;
-  metaTagsData: MetaTagsGetResponseDto | undefined;
+  metaTagsData: MetaTagsApiResponse | undefined;
+  wpVariables: WPVariableData[] | null;
   seoTitle: string | null;
   seoDescription: string | null;
   previewTitle: string | null;
   previewDescription: string | null;
   parsedTitle: string | null;
   parsedDescription: string | null;
-  seoKeywords: WPWebPageKeywordsMetaTag | null;
+  seoKeywords: KeywordsTagDto | null;
   currentPost: Post | null;
   currentPostStatus: string | null;
   isCurrentPostLoaded: boolean;
@@ -86,6 +89,7 @@ const initialState: AppSliceType = {
   isMetaTagsDataLoaded: false,
   isFetchingPluginData: false,
   metaTagsData: undefined,
+  wpVariables: null,
   seoTitle: "",
   seoDescription: "",
   previewTitle: "",
@@ -127,6 +131,37 @@ const initialState: AppSliceType = {
   onboardingSteps: undefined,
   isGeneratingOnboardingSteps: false,
   onboardingError: null,
+};
+
+/**
+ * Apply a full meta tags payload (returned by both the metatags and social
+ * GET/POST endpoints) to the app state. Templates are resolved client-side
+ * against the loaded WP variables — the API no longer returns `parsed`.
+ *
+ * `updatePreviews` is true for initial loads only; save responses must not
+ * override the live preview the editors already computed locally (avoids
+ * flicker from debounced-save races while typing).
+ */
+const applyMetaTagsPayload = (state: AppSliceType, payload: MetaTagsApiResponse, updatePreviews: boolean): void => {
+  const variablesMap = buildVariablesMap(state.wpVariables);
+
+  state.metaTagsData = payload;
+  state.seoTitle = payload.title ? resolveTemplate(payload.title.template, variablesMap) : null;
+  state.seoDescription = payload.description ? resolveTemplate(payload.description.template, variablesMap) : null;
+  state.seoKeywords = payload.keywords ?? null;
+  state.primaryKeyword = payload.keywords?.primaryKeyword ?? "";
+  state.additionalKeywords = payload.keywords?.additionalKeywords ?? [];
+
+  if (updatePreviews) {
+    state.parsedTitle = state.seoTitle || null;
+    state.parsedDescription = state.seoDescription || null;
+    if (state.parsedTitle) {
+      state.previewTitle = state.parsedTitle;
+    }
+    if (state.parsedDescription) {
+      state.previewDescription = state.parsedDescription;
+    }
+  }
 };
 
 const G = new ReduxGenerator<AppSliceType>();
@@ -198,12 +233,7 @@ const appSlice = createSlice({
     // Meta-tags remove keywords
     builder.addCase(MetatagsStore.deleteApiMetatagsKeywordByPostIdThunk.fulfilled, (state, action) => {
       state.isMetaTagsDataLoaded = true;
-      state.metaTagsData = action.payload;
-      state.seoTitle = action.payload.title?.content ?? null;
-      state.seoDescription = action.payload.description?.content ?? null;
-      state.seoKeywords = action.payload.keywords ?? null;
-      state.primaryKeyword = state.seoKeywords?.primaryKeyword ?? "";
-      state.additionalKeywords = state.seoKeywords?.additionalKeywords ?? [];
+      applyMetaTagsPayload(state, action.payload as unknown as MetaTagsApiResponse, false);
     });
     builder.addCase(MetatagsStore.deleteApiMetatagsKeywordByPostIdThunk.rejected, (state, action) => {
       //state.response = action.payload;
@@ -216,13 +246,7 @@ const appSlice = createSlice({
 
     // Meta-tags swap keyword from additional to primary
     builder.addCase(MetatagsStore.postApiMetatagsKeywordSwapByPostIdThunk.fulfilled, (state, action) => {
-      //state.isMetaTagsDataLoaded = true;
-      state.metaTagsData = action.payload;
-      state.seoTitle = action.payload.title?.content ?? null;
-      state.seoDescription = action.payload.description?.content ?? null;
-      state.seoKeywords = action.payload.keywords ?? null;
-      state.primaryKeyword = state.seoKeywords?.primaryKeyword ?? "";
-      state.additionalKeywords = state.seoKeywords?.additionalKeywords ?? [];
+      applyMetaTagsPayload(state, action.payload as unknown as MetaTagsApiResponse, false);
     });
     builder.addCase(MetatagsStore.postApiMetatagsKeywordSwapByPostIdThunk.rejected, (state, action) => {
       //state.response = action.payload;
@@ -233,34 +257,10 @@ const appSlice = createSlice({
       //state.isMetaTagsDataLoaded = false;
     });
 
-    // Retrieve meta-tag title, description, keywords
+    // Retrieve meta-tag title, description, keywords, social fields
     builder.addCase(MetatagsStore.getApiMetatagsByPostIdThunk.fulfilled, (state, action) => {
       state.isMetaTagsDataLoaded = true;
-      state.metaTagsData = action.payload;
-
-      state.parsedTitle = action.payload.title?.parsed ?? null;
-      state.parsedDescription = action.payload.description?.parsed ?? null;
-
-      if (state.parsedTitle) {
-        state.previewTitle = state.parsedTitle;
-      } else {
-        const titleForPreview = action.payload.title
-          ? {
-            ...action.payload.title,
-            parsed: undefined, // Force building from variables
-          }
-          : null;
-      }
-
-      if (state.parsedDescription) {
-        state.previewDescription = state.parsedDescription;
-      }
-
-      state.seoTitle = action.payload.title?.content ?? null;
-      state.seoDescription = action.payload.description?.content ?? null;
-      state.seoKeywords = action.payload.keywords ?? null;
-      state.primaryKeyword = state.seoKeywords?.primaryKeyword ?? "";
-      state.additionalKeywords = state.seoKeywords?.additionalKeywords ?? [];
+      applyMetaTagsPayload(state, action.payload as unknown as MetaTagsApiResponse, true);
     });
     builder.addCase(MetatagsStore.getApiMetatagsByPostIdThunk.rejected, (state, action) => {
       //state.response = action.payload;
@@ -271,15 +271,11 @@ const appSlice = createSlice({
       //state.isMetaTagsDataLoaded = false;
     });
 
-    // Meta-tags update/create title, description, keywords
+    // Meta-tags update/create title, description, keywords, social fields.
+    // Previews are NOT overridden here: the editors already updated them
+    // locally, and the save response may be stale while the user keeps typing.
     builder.addCase(MetatagsStore.postApiMetatagsByPostIdThunk.fulfilled, (state, action) => {
-      //state.isMetaTagsDataLoaded = true;
-      state.metaTagsData = action.payload;
-      state.seoTitle = action.payload.title?.content ?? null;
-      state.seoDescription = action.payload.description?.content ?? null;
-      state.seoKeywords = action.payload.keywords ?? null;
-      state.primaryKeyword = state.seoKeywords?.primaryKeyword ?? "";
-      state.additionalKeywords = state.seoKeywords?.additionalKeywords ?? [];
+      applyMetaTagsPayload(state, action.payload as unknown as MetaTagsApiResponse, false);
     });
     builder.addCase(MetatagsStore.postApiMetatagsByPostIdThunk.rejected, (state, action) => {
       //state.response = action.payload;
@@ -288,6 +284,25 @@ const appSlice = createSlice({
     builder.addCase(MetatagsStore.postApiMetatagsByPostIdThunk.pending, (state, action) => {
       //state.response = action.payload;
       //state.isMetaTagsDataLoaded = false;
+    });
+
+    // Social meta tags: both endpoints return the same full meta tags payload
+    // (enriched with selectedImageSource / selectedImageUrl / imageSources),
+    // so keep the shared state in sync with it.
+    builder.addCase(SocialStore.getApiSocialByPostIdThunk.fulfilled, (state, action) => {
+      applyMetaTagsPayload(state, action.payload as unknown as MetaTagsApiResponse, false);
+    });
+    builder.addCase(SocialStore.postApiSocialByPostIdThunk.fulfilled, (state, action) => {
+      applyMetaTagsPayload(state, action.payload as unknown as MetaTagsApiResponse, false);
+    });
+
+    // Resolved WordPress variables (used to resolve structured templates into
+    // preview text). When they arrive after the meta tags, re-resolve.
+    builder.addCase(WpVariablesStore.getVariablesByPostIdThunk.fulfilled, (state, action) => {
+      state.wpVariables = action.payload ?? [];
+      if (state.metaTagsData) {
+        applyMetaTagsPayload(state, state.metaTagsData, state.isMetaTagsDataLoaded);
+      }
     });
 
     // Account location keywords

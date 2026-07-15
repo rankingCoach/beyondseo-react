@@ -33,7 +33,6 @@ import { fetchPost } from "@helpers/post-helpers";
 import { PluginInformationStore } from "@stores/swagger/api/PluginInformationStore";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { WPKeywordsAnalysis } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/ContentAnalysis/WPKeywordsAnalysis";
-import { WPWebPageKeywordsMetaTag } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/MetaTags/Tags/WPWebPageKeywordsMetaTag";
 import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
 import { ScoreButtonHeader } from "@components/ScoreButtonHeader/ScoreButtonHeader";
 import Settings from "@components/Settings/Settings";
@@ -242,7 +241,6 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
 
     const handleOnUseKeywordsFunction = (keywords: WPKeywordsAnalysis) => {
       let currentPostId = getPathId();
-      let oldKeywords = { ...metaTagsData?.keywords } as WPWebPageKeywordsMetaTag;
 
       const uniqueKeywordsSet = new Set<string>();
 
@@ -275,17 +273,27 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
       }
 
       const uniqueKeywords = Array.from(uniqueKeywordsSet);
-
-      if (uniqueKeywords.length > 0) {
-        oldKeywords.content = uniqueKeywords.join(",");
+      if (uniqueKeywords.length === 0) {
+        setShowFloating(false);
+        return;
       }
+
+      // The keywords API expects primaryKeyword/additionalKeywords directly;
+      // the backend serializes them into the template column itself. Keep an
+      // already-assigned primary keyword, everything else becomes additional.
+      const existingPrimary = metaTagsData?.keywords?.primaryKeyword || "";
+      const primaryKeyword = existingPrimary || uniqueKeywords[0];
+      const existingAdditional = metaTagsData?.keywords?.additionalKeywords ?? [];
+      const additionalKeywords = Array.from(
+        new Set([...existingAdditional, ...uniqueKeywords.filter((keyword) => keyword !== primaryKeyword)]),
+      );
 
       dispatch(
         MetatagsStore.postApiMetatagsByPostIdThunk({
           postId: currentPostId,
           requestBody: {
-            keywords: oldKeywords,
-          },
+            keywords: { primaryKeyword, additionalKeywords },
+          } as any,
           queryParams: {},
         }),
       ).then(() => {

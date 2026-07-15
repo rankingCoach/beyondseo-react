@@ -20,8 +20,9 @@ import { AppSlice } from "@src/App.slice";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
-import { WPWebPageDescriptionMetaTag } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/MetaTags/Tags/WPWebPageDescriptionMetaTag";
+import { MetaTagsPostRequestDto } from "@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/MetaTagsPostRequestDto";
 import { SEOMetaTitleEditorProps } from "@components/SEOMetadataAndKeywords/SEOMetadataAndKeywords";
+import { templateIsEmpty, textToTemplate } from "@helpers/template-helpers";
 import { useElementorDirtyTrigger } from "@hooks/use-elementor-dirty-trigger";
 
 export const seoMetaDescriptionEditorProps: SEOMetaTitleEditorProps = {
@@ -45,20 +46,17 @@ export const SEOMetaDescriptionEditor = (props: SEOMetaTitleEditorProps) => {
   // Trigger Elementor's dirty state when SEO meta description changes
   useElementorDirtyTrigger([previewDescription]);
 
-  // Debounced save function - saves to server after 500ms delay
+  // Debounced save function - saves to server after a short delay.
+  // The description is sent as a structured template array; a plain textarea
+  // edit is a single text element.
   const debouncedSaveRef = useRef(
     debounce((descriptionText: string) => {
-      const oldDescription = { ...metaTagsData?.description } as WPWebPageDescriptionMetaTag;
-      if (oldDescription) {
-        oldDescription.content = descriptionText;
-      }
-
       dispatch(
         MetatagsStore.postApiMetatagsByPostIdThunk({
           postId: getPathId(),
           requestBody: {
-            description: oldDescription,
-          },
+            description: { template: textToTemplate(descriptionText) },
+          } as unknown as MetaTagsPostRequestDto,
           queryParams: { noCache: true },
         }),
       )
@@ -96,19 +94,18 @@ export const SEOMetaDescriptionEditor = (props: SEOMetaTitleEditorProps) => {
     setTextareaValue(seoDescription);
   }, [seoDescription]);
 
+  // Seed the description on the server when nothing is stored yet (the API
+  // returns an empty template when no row exists and no legacy meta is found).
   useEffect(() => {
-    if (!initialSaveDone && seoDescription && !metaTagsData?.description) {
-      const descriptionObject = {
-        content: seoDescription,
-        postId: getPathId(),
-        objectType:
-          "App\\Domain\\Integrations\\WordPress\\Seo\\Entities\\WebPages\\Content\\Elements\\MetaTags\\Tags\\WPWebPageDescriptionMetaTag",
-      };
+    const isDescriptionStored = metaTagsData?.description && !templateIsEmpty(metaTagsData.description.template);
 
+    if (!initialSaveDone && seoDescription && !isDescriptionStored) {
       dispatch(
         MetatagsStore.postApiMetatagsByPostIdThunk({
           postId: getPathId(),
-          requestBody: { description: descriptionObject },
+          requestBody: {
+            description: { template: textToTemplate(seoDescription) },
+          } as unknown as MetaTagsPostRequestDto,
           queryParams: { noCache: true },
         }),
       ).then((response) => {

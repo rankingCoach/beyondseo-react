@@ -7,6 +7,7 @@ import { getPathId } from "@helpers/get-path-id";
 import { rcWindow } from "@stores/window.store";
 import { SEOMetadataAndKeywords } from "@components/SEOMetadataAndKeywords/SEOMetadataAndKeywords";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
+import { WpVariablesStore } from "@stores/wp-variables.store";
 import { GeneralTabPlaceholder } from "./GeneralTabPlaceholder";
 import styles from "./GeneralTab.module.scss";
 import tabsStyles from "../Tabs.module.scss";
@@ -34,7 +35,8 @@ export const GeneralTab = (props: any) => {
     try {
       setIsLoading(true);
       if (postId && postId > 0) {
-        const [metatags, breadcrumbs] = await Promise.all([
+        const [variables, metatags, breadcrumbs] = await Promise.all([
+          dispatch(WpVariablesStore.getVariablesByPostIdThunk({ postId })),
           dispatch(
             MetatagsStore.getApiMetatagsByPostIdThunk({
               postId,

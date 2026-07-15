@@ -17,6 +17,7 @@ import { KeywordManager } from "@components/SEOMetadataAndKeywords/SEOKeywords/K
 import { AppSlice } from "@src/App.slice";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { useScoreRecalculation } from "@contexts/ScoreRecalculationContext";
+import { templateIsEmpty } from "@helpers/template-helpers";
 
 export interface SEOMetaTitleEditorProps {
   title: string | null;
@@ -36,10 +37,12 @@ export const SEOMetadataAndKeywords = (props: any) => {
   const previousValues = useRef({ seoTitle: "", seoDescription: "" });
 
   useEffect(() => {
-    if (isCurrentPostLoaded && !metaTagsData?.title) {
+    // The API always returns title/description objects (with fallbacks), so
+    // "nothing stored yet" now means an empty structured template.
+    if (isCurrentPostLoaded && templateIsEmpty(metaTagsData?.title?.template)) {
       if (!seoTitle) dispatch(setSeoTitle(currentPost?.title.rendered));
     }
-    if (isCurrentPostLoaded && !metaTagsData?.description) {
+    if (isCurrentPostLoaded && templateIsEmpty(metaTagsData?.description?.template)) {
       if (!seoDescription) dispatch(setSeoDescription(currentPost?.excerpt.filtered));
     }
   }, [isCurrentPostLoaded, metaTagsData]);

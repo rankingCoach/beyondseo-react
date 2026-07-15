@@ -23,9 +23,21 @@ export type OptimiserResult = {
     */
   analyzedAt?: string
    /**
-    * <string> The URLs that were consumed during the analysis
+    * <array{url: string, duration: float|null}> The URLs that were consumed during the analysis
     */
   urlsConsumed?: any []
+   /**
+    * Total duration in seconds of all URL fetches
+    */
+  totalFetchDuration?: number
+   /**
+    * Total duration in seconds of all operation executions
+    */
+  totalOperationsDuration?: number
+   /**
+    * <array{name: string, key: string, duration: float}> Operations sorted by duration descending
+    */
+  operationsProfile?: any []
    /**
     * <string, mixed> The post data
     */

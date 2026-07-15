@@ -34,6 +34,10 @@ export type Operation = {
     */
   score?: number
    /**
+    * Time in seconds this operation took to execute
+    */
+  executionDuration?: number
+   /**
     * $suggestions List of suggestion types that should be triggered based on this operation's results
     */
   suggestions?: string []
@@ -41,10 +45,6 @@ export type Operation = {
     * The ID of the post/page being analyzed
     */
   postId?: number
-   /**
-    * Feature flags for this operation - exposed in JSON
-    */
-  featureFlags?: any []
    /**
     * The fully qualified class name of the object
     */
