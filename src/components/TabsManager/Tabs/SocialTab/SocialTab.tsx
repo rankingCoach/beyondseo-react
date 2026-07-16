@@ -27,14 +27,18 @@ export const SocialTab = () => {
   const [seoUrl, setSeoUrl] = useState<string | null>(null);
   const [titleSwitchOpen, setTitleSwitchOpen] = useState(false);
   const [descriptionSwitchOpen, setDescriptionSwitchOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedImageSource, setSelectedImageSource] = useState<string>("");
   const [imageSources, setImageSources] = useState<SocialImageSourceDto[]>([]);
   const [activeImageUrl, setActiveImageUrl] = useState<string>(PlaceholderImage);
   const dispatch = useAppDispatch();
-  const { seoTitle, seoDescription, wpVariables } = useSelector((state: RootState) => state.app);
+  const { seoTitle, seoDescription, wpVariables, metaTagsData } = useSelector((state: RootState) => state.app);
   const { currentPost } = useSelector((state: RootState) => state.post);
   const { triggerRecalculation } = useScoreRecalculation();
+
+  // The metatags and social endpoints return the same full payload and every
+  // response is applied to `metaTagsData` by the app slice — so if another tab
+  // already loaded it, this tab can render entirely from the store.
+  const [isLoading, setIsLoading] = useState(() => !metaTagsData);
 
   // Track the last value persisted per field so blur without an actual change
   // does not overwrite a stored variable template with its resolved text.
@@ -43,9 +47,15 @@ export const SocialTab = () => {
     description: null,
   });
 
+  // One-time hydration guard for the textareas (image data stays store-driven).
+  const hydratedRef = useRef(false);
+
   const variablesMap = useMemo(() => buildVariablesMap(wpVariables), [wpVariables]);
   const variablesMapRef = useRef(variablesMap);
   variablesMapRef.current = variablesMap;
+
+  const metaTagsDataRef = useRef(metaTagsData);
+  metaTagsDataRef.current = metaTagsData;
 
   const { formConfig } = useFormConfig({
     inputs: {
@@ -116,33 +126,72 @@ export const SocialTab = () => {
     }
   }, [currentPost]);
 
-  /**
-   * Apply a full social payload (returned by both GET and POST) to the tab:
-   * structured templates are resolved to text for the textareas, and the
-   * server-resolved `selectedImageUrl` drives the previews directly — the
-   * frontend never computes or caches the image URL itself.
-   */
-  const applySocialPayload = (payload: MetaTagsApiResponse, variables: Record<string, string>) => {
-    const resolvedTitle = payload.socialTitle && !templateIsEmpty(payload.socialTitle.template)
-      ? resolveTemplate(payload.socialTitle.template, variables)
-      : "";
-    const resolvedDescription = payload.socialDescription && !templateIsEmpty(payload.socialDescription.template)
-      ? resolveTemplate(payload.socialDescription.template, variables)
-      : "";
+  // Ensure the store holds everything this tab needs; only hit the API for
+  // what is missing (e.g. the Social tab was opened before the General tab).
+  // Runs once — later store updates flow in through the hydration effect below.
+  useEffect(() => {
+    const ensureDataLoaded = async () => {
+      try {
+        if (!variablesMapRef.current || Object.keys(variablesMapRef.current).length === 0) {
+          if (!wpVariables) {
+            await dispatch(WpVariablesStore.getVariablesByPostIdThunk({ postId: getPathId() })).unwrap();
+          }
+        }
 
-    const effectiveTitle = resolvedTitle || seoTitle || "";
-    const effectiveDescription = resolvedDescription || seoDescription || "";
+        if (!metaTagsDataRef.current) {
+          await dispatch(
+            SocialStore.getApiSocialByPostIdThunk({
+              postId: getPathId(),
+              queryParams: { noCache: true },
+            }),
+          ).unwrap();
+        }
+      } catch (error) {
+        if (!hydratedRef.current) {
+          if (seoTitle) setTitle(seoTitle);
+          if (seoDescription) setDescription(seoDescription);
+          hydratedRef.current = true;
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    setTitle(effectiveTitle);
-    setDescription(effectiveDescription);
-    lastSavedRef.current = { title: effectiveTitle, description: effectiveDescription };
+    ensureDataLoaded();
+  }, []);
 
-    const sources = payload.imageSources ?? [];
+  // Hydrate the tab from the store payload: structured templates are resolved
+  // to text for the textareas (once — later edits are local), and the
+  // server-resolved image fields stay store-driven so every save response
+  // keeps them authoritative. No API calls happen here.
+  useEffect(() => {
+    if (!metaTagsData) return;
+
+    if (!hydratedRef.current) {
+      const resolvedTitle =
+        metaTagsData.socialTitle && !templateIsEmpty(metaTagsData.socialTitle.template)
+          ? resolveTemplate(metaTagsData.socialTitle.template, variablesMap)
+          : "";
+      const resolvedDescription =
+        metaTagsData.socialDescription && !templateIsEmpty(metaTagsData.socialDescription.template)
+          ? resolveTemplate(metaTagsData.socialDescription.template, variablesMap)
+          : "";
+
+      const effectiveTitle = resolvedTitle || seoTitle || "";
+      const effectiveDescription = resolvedDescription || seoDescription || "";
+
+      setTitle(effectiveTitle);
+      setDescription(effectiveDescription);
+      lastSavedRef.current = { title: effectiveTitle, description: effectiveDescription };
+      hydratedRef.current = true;
+    }
+
+    const sources = metaTagsData.imageSources ?? [];
     setImageSources(sources);
 
-    if (payload.selectedImageSource) {
-      setSelectedImageSource(payload.selectedImageSource);
-      setActiveImageUrl(payload.selectedImageUrl || PlaceholderImage);
+    if (metaTagsData.selectedImageSource) {
+      setSelectedImageSource(metaTagsData.selectedImageSource);
+      setActiveImageUrl(metaTagsData.selectedImageUrl || PlaceholderImage);
     } else {
       // Nothing persisted yet: preselect the backend-flagged default source
       // (or the first available one) locally, without saving it.
@@ -156,36 +205,22 @@ export const SocialTab = () => {
         setActiveImageUrl(PlaceholderImage);
       }
     }
-  };
+  }, [metaTagsData, variablesMap]);
 
+  // If the social fields were empty and untouched, fill them from the SEO
+  // title/description once those resolve (same fallback as before, without
+  // refetching the social payload).
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Resolved WP variables are needed to turn structured templates into
-        // display text; load them first if another tab has not already.
-        let variables = variablesMapRef.current;
-        if (!wpVariables) {
-          const loaded = await dispatch(WpVariablesStore.getVariablesByPostIdThunk({ postId: getPathId() })).unwrap();
-          variables = buildVariablesMap(loaded);
-        }
+    if (!hydratedRef.current) return;
 
-        const socialData = (await dispatch(
-          SocialStore.getApiSocialByPostIdThunk({
-            postId: getPathId(),
-            queryParams: { noCache: true },
-          }),
-        ).unwrap()) as unknown as MetaTagsApiResponse;
-
-        applySocialPayload(socialData, variables);
-      } catch (error) {
-        if (seoTitle) setTitle(seoTitle);
-        if (seoDescription) setDescription(seoDescription);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+    if (!title && !lastSavedRef.current.title && seoTitle) {
+      setTitle(seoTitle);
+      lastSavedRef.current.title = seoTitle;
+    }
+    if (!description && !lastSavedRef.current.description && seoDescription) {
+      setDescription(seoDescription);
+      lastSavedRef.current.description = seoDescription;
+    }
   }, [seoTitle, seoDescription]);
 
   /**
@@ -290,21 +325,15 @@ export const SocialTab = () => {
   const handleImageSourceChange = async (newValue: string) => {
     setSelectedImageSource(newValue);
 
-    // Optimistic preview from the already-known source list; the response
-    // below carries the authoritative server-resolved URL.
+    // Optimistic preview from the already-known source list; the POST response
+    // carries the authoritative server-resolved URL and flows back into this
+    // tab through the store hydration effect.
     const optimistic = imageSources.find((source) => source.source === newValue);
     setActiveImageUrl(
       optimistic?.value && optimistic.value.startsWith("http") ? optimistic.value : PlaceholderImage,
     );
 
-    const response = await postSocialData({ selectedImageSource: newValue });
-    if (response) {
-      setImageSources(response.imageSources ?? []);
-      if (response.selectedImageSource) {
-        setSelectedImageSource(response.selectedImageSource);
-      }
-      setActiveImageUrl(response.selectedImageUrl || PlaceholderImage);
-    }
+    await postSocialData({ selectedImageSource: newValue });
 
     // Trigger immediate recalculation after image source change
     triggerRecalculation(true);

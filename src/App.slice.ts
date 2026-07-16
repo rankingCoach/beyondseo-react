@@ -9,6 +9,7 @@ import { useMapLocationKeywords } from "@hooks/use-map-location-keywords";
 import { PluginInformationStore } from "@stores/swagger/api/PluginInformationStore";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { SocialStore } from "@stores/swagger/api/SocialStore";
+import { AdvancedSettingsStore } from "@stores/swagger/api/AdvancedSettingsStore";
 import { WpVariablesStore } from "@stores/wp-variables.store";
 import { PluginInformationResponseDto } from "@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/PluginInformationResponseDto";
 import { SchemaMarkupGetDataResponseDto } from "@models/swagger/RankingCoach/Inc/Modules/ModuleLibrary/Schema/SchemaMarkup/Dtos/SchemaMarkupGetDataResponseDto";
@@ -42,6 +43,8 @@ export type AppSliceType = {
   isFetchingPostData: boolean;
   primaryKeyword: string;
   additionalKeywords: string[] | [];
+  // Account keywords available for the keyword autocomplete; null = not fetched yet
+  availableKeywords: Array<{ name: string }> | null;
   error: any;
 
   onboardAccountKeywords: OnboardedAccountKeywords[] | null;
@@ -59,6 +62,7 @@ export type AppSliceType = {
   disableAutoLinks: boolean;
   canonicalUrl: string;
   viewportForPage: boolean;
+  isAdvancedSettingsLoaded: boolean;
 
   // Optimiser Result
   optimiserResult: OptimiserResult | null;
@@ -103,6 +107,7 @@ const initialState: AppSliceType = {
   isFetchingPostData: false,
   primaryKeyword: "",
   additionalKeywords: [],
+  availableKeywords: null,
   error: null,
   onboardAccountKeywords: null,
   postSeoOptimiserLoading: undefined,
@@ -119,6 +124,7 @@ const initialState: AppSliceType = {
   disableAutoLinks: false,
   canonicalUrl: "",
   viewportForPage: false,
+  isAdvancedSettingsLoaded: false,
 
   //
   optimiserResult: null,
@@ -303,6 +309,30 @@ const appSlice = createSlice({
       if (state.metaTagsData) {
         applyMetaTagsPayload(state, state.metaTagsData, state.isMetaTagsDataLoaded);
       }
+    });
+
+    // Advanced settings: cache the per-post settings so re-mounting the
+    // Advanced tab does not refetch them (saves keep updating this state
+    // optimistically in the tab itself).
+    builder.addCase(AdvancedSettingsStore.getApiAdvancedSettingsByPostIdThunk.fulfilled, (state, action) => {
+      const settings = action.payload as any;
+      if (settings?.canonicalUrl !== undefined) state.canonicalUrl = settings.canonicalUrl;
+      if (settings?.noindexForPage !== undefined) state.noIndexForPage = settings.noindexForPage;
+      if (settings?.excludeSitemapForPage !== undefined) state.excludeSitemapForPage = settings.excludeSitemapForPage;
+      if (settings?.disableAutoLinks !== undefined) state.disableAutoLinks = settings.disableAutoLinks;
+      if (settings?.viewportForPage !== undefined) state.viewportForPage = settings.viewportForPage;
+      state.isAdvancedSettingsLoaded = true;
+    });
+
+    // Account keywords for the autocomplete: cache the list so re-mounting the
+    // keyword manager does not refetch it (the keywords-updated event still
+    // forces a refresh).
+    builder.addCase(MetatagsStore.getApiMetatagsKeywordsByPostIdThunk.fulfilled, (state, action) => {
+      const elements = (action.payload as any)?.keywords?.elements;
+      const keywordArray = Array.isArray(elements) ? elements : [];
+      state.availableKeywords = keywordArray.map((keyword: any) => ({
+        name: keyword.keyword || keyword.name || keyword,
+      }));
     });
 
     // Account location keywords

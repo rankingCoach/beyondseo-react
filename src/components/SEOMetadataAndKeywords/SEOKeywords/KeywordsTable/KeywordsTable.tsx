@@ -183,20 +183,12 @@ export const KeywordsTable = (props: KeywordsTableProps) => {
         dispatch(setAdditionalKeywords(newAdditionalKeywords));
       }
 
-      const result = await dispatch(
+      await dispatch(
         MetatagsStore.deleteApiMetatagsKeywordByPostIdThunk({
           postId: getPathId(),
           requestBody: {
             keyword: keyword,
           },
-          queryParams: {},
-        }),
-      );
-
-
-      await dispatch(
-        MetatagsStore.getApiMetatagsByPostIdThunk({
-          postId: getPathId(),
           queryParams: {},
         }),
       );
