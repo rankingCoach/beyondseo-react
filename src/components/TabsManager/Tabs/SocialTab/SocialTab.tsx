@@ -237,7 +237,10 @@ export const SocialTab = () => {
         }),
       ).unwrap();
 
-      const sources = ((imageSourcesData as any)?.imageSources ?? []) as SocialImageSourceDto[];
+      // The reworked endpoint returns `imageSources`; tolerate the legacy
+      // snake_case key while the generated DTOs are still in transition.
+      const raw = imageSourcesData as any;
+      const sources = (raw?.imageSources ?? raw?.image_sources ?? []) as SocialImageSourceDto[];
       if (!sources.length) return;
 
       setImageSources(sources);
@@ -316,10 +319,11 @@ export const SocialTab = () => {
     const response = await postSocialData(payload);
     if (response) {
       lastSavedRef.current[field] = value;
-    }
 
-    // Trigger immediate recalculation after social metadata change
-    triggerRecalculation(true);
+      // Trigger immediate recalculation only after a successful save — the
+      // server state is unchanged when the POST fails.
+      triggerRecalculation(true);
+    }
   };
 
   const handleImageSourceChange = async (newValue: string) => {
@@ -333,10 +337,19 @@ export const SocialTab = () => {
       optimistic?.value && optimistic.value.startsWith("http") ? optimistic.value : PlaceholderImage,
     );
 
-    await postSocialData({ selectedImageSource: newValue });
+    const response = await postSocialData({ selectedImageSource: newValue });
 
-    // Trigger immediate recalculation after image source change
-    triggerRecalculation(true);
+    if (response) {
+      // Trigger immediate recalculation only after a successful save
+      triggerRecalculation(true);
+    } else {
+      // Roll the optimistic selection back to the last known server state
+      const stored = metaTagsDataRef.current;
+      if (stored?.selectedImageSource) {
+        setSelectedImageSource(stored.selectedImageSource);
+        setActiveImageUrl(stored.selectedImageUrl || PlaceholderImage);
+      }
+    }
   };
 
   if (isLoading) {

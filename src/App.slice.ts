@@ -303,11 +303,36 @@ const appSlice = createSlice({
     });
 
     // Resolved WordPress variables (used to resolve structured templates into
-    // preview text). When they arrive after the meta tags, re-resolve.
+    // preview text). When they arrive after the meta tags, re-resolve — but
+    // only refresh a preview the user has not edited in the meantime: a
+    // preview is considered untouched while it is empty or still equals the
+    // resolution produced with the previous (usually empty) variables map.
     builder.addCase(WpVariablesStore.getVariablesByPostIdThunk.fulfilled, (state, action) => {
+      const staleMap = buildVariablesMap(state.wpVariables);
       state.wpVariables = action.payload ?? [];
-      if (state.metaTagsData) {
-        applyMetaTagsPayload(state, state.metaTagsData, state.isMetaTagsDataLoaded);
+
+      if (!state.metaTagsData) {
+        return;
+      }
+
+      const staleTitle = state.metaTagsData.title
+        ? resolveTemplate(state.metaTagsData.title.template, staleMap)
+        : "";
+      const staleDescription = state.metaTagsData.description
+        ? resolveTemplate(state.metaTagsData.description.template, staleMap)
+        : "";
+      const titleUntouched = !state.previewTitle || state.previewTitle === staleTitle;
+      const descriptionUntouched = !state.previewDescription || state.previewDescription === staleDescription;
+
+      applyMetaTagsPayload(state, state.metaTagsData, false);
+
+      if (titleUntouched && state.seoTitle) {
+        state.parsedTitle = state.seoTitle;
+        state.previewTitle = state.seoTitle;
+      }
+      if (descriptionUntouched && state.seoDescription) {
+        state.parsedDescription = state.seoDescription;
+        state.previewDescription = state.seoDescription;
       }
     });
 
