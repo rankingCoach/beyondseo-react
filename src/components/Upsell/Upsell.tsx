@@ -3,6 +3,7 @@ import { Button, ButtonTypes, ButtonSizes, Text, TextTypes, FontWeights, Switch,
 import { __ } from '@wordpress/i18n';
 import styles from './Upsell.module.scss';
 import { rcWindow } from "@stores/window.store";
+import { maybeHandleTokenInvalid } from "@helpers/auth-redirect";
 import gradientBackground from "@assets/upsell-page/gradient-background.svg";
 import aiBadges from "@assets/upsell-page/ai-badges.svg";
 import aiSparksBackgroundHorizontal from "@assets/upsell-page/ai-sparks-background-horizontal.svg";
@@ -189,6 +190,11 @@ const UpsellContent = () => {
             });
 
             const data = await response.json();
+
+            // If the token was rejected, hand off to the Connect flow.
+            if (maybeHandleTokenInvalid(response.status, data)) {
+                return;
+            }
 
             // data.registrationURL is relative to the root
             if (data.registrationURL) {

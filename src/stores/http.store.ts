@@ -8,6 +8,7 @@ import { BaseStore } from "./base.store";
 import { parseParams } from "./store-helpers/parse-params";
 import { stores } from "./stores";
 import {rcWindow} from "./window.store";
+import { maybeHandleTokenInvalid } from "@helpers/auth-redirect";
 import {
   MetaTagsGetResponseDto
 } from "@models/swagger/App/Presentation/Api/Client/Integrations/WordPress/Dtos/MetaTagsGetResponseDto";
@@ -20,37 +21,16 @@ class AxiosClass {
 
 export const Axios = new AxiosClass();
 
-// axios.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   (error) => {
-//     if (error.response.status && error.response.status == 500) {
-//       const data = [
-//         {
-//           info: {
-//             url: error.config?.url,
-//             method: error.config?.method,
-//             data: error.config?.data?.slice(0, 2000),
-//           },
-//           href: window.location.href,
-//           host: window.location.host,
-//           pathname: window.location.pathname,
-//         } as any,
-//       ];
-//
-//       fetch("https://" + window.location.host + "/rest_api/v1/log?type=error_api_logs", {
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(data),
-//       });
-//     }
-//
-//     return Promise.reject(error);
-//   },
-// );
+// Global auth guard: when the REST layer reports the token is invalid (HTTP 401 with
+// { code: "token_invalid", redirect }), send the user into the Connect flow. The
+// connection has already been reset server-side, so we only redirect here.
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    maybeHandleTokenInvalid(error?.response?.status, error?.response?.data);
+    return Promise.reject(error);
+  },
+);
 
 // https://github.com/zhaosiyang/axios-observable
 
