@@ -30,7 +30,6 @@ import { Onboarding } from "@src/components/Onboarding/Onboarding";
 import { Registration } from "@src/components/Registration/Registration";
 import { SEOOptimiser } from "@components/SEO/SEOOptimiser/SEOOptimiser";
 import { fetchPost } from "@helpers/post-helpers";
-import { PluginInformationStore } from "@stores/swagger/api/PluginInformationStore";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { WPKeywordsAnalysis } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/ContentAnalysis/WPKeywordsAnalysis";
 import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
@@ -131,13 +130,14 @@ const MainComponent: React.FC<{ children: React.ReactNode; componentKey?: string
   useEffect(() => {
     if (isPluginInformationRequired && !isPluginDataLoaded && !isFetchingPluginData) {
       dispatch(
-        PluginInformationStore.postApiPluginInformationThunk({
-          requestBody: null,
-          queryParams: { debug: true, noCache: true },
+        AppSlice.setAll({
+          plugin: rcWindow?.rankingCoachReactData?.pluginInformation,
+          isPluginDataLoaded: true,
+          isFetchingPluginData: false,
         }),
       );
     }
-  }, [isPluginDataLoaded, isFetchingPluginData]);
+  }, [isPluginInformationRequired, isPluginDataLoaded, isFetchingPluginData]);
 
   useEffect(() => {
     if (fetchPostExecuted || isCurrentPostLoaded || isFetchingPostData) return;
