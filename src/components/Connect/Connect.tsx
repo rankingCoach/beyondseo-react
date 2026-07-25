@@ -92,7 +92,7 @@ const withRcFreeItems: string[] = [
 export const Connect = () => {
   const handleActivateForFree = () => {
     const adminUrl = rcWindow?.rankingCoachReactData?.adminurl;
-    window.location.href = `${adminUrl}?page=rankingcoach-onboarding`;
+    window.location.href = `${adminUrl}?page=rankingcoach-registration`;
   };
 
   return (
