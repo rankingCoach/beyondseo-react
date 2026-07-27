@@ -6,7 +6,6 @@ import { Post } from "@helpers/post-helpers";
 import { OnboardedAccountKeywords } from "@hooks/use-get-onboarded-account-keywords";
 import { useMapLocationKeywords } from "@hooks/use-map-location-keywords";
 
-import { PluginInformationStore } from "@stores/swagger/api/PluginInformationStore";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { SocialStore } from "@stores/swagger/api/SocialStore";
 import { AdvancedSettingsStore } from "@stores/swagger/api/AdvancedSettingsStore";
@@ -218,22 +217,6 @@ const appSlice = createSlice({
       //state.response = action.payload;
       state.hasValidSEOKeywords = false;
       state.postSeoOptimiserLoading = true;
-    });
-
-    builder.addCase(PluginInformationStore.postApiPluginInformationThunk.fulfilled, (state, action) => {
-      state.plugin = action.payload;
-      state.isPluginDataLoaded = true;
-      state.isFetchingPluginData = false;
-    });
-    builder.addCase(PluginInformationStore.postApiPluginInformationThunk.rejected, (state, action) => {
-      //state.response = action.payload;
-      state.isPluginDataLoaded = true;
-      state.isFetchingPluginData = false;
-    });
-    builder.addCase(PluginInformationStore.postApiPluginInformationThunk.pending, (state, action) => {
-      //state.response = action.payload;
-      state.isPluginDataLoaded = false;
-      state.isFetchingPluginData = true;
     });
 
     // Meta-tags remove keywords
