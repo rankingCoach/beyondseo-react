@@ -49,7 +49,7 @@ export class AdvancedSettingsStore extends HttpStore {
 * Get MetaTags
 */
 getApiAdvancedSettingsByPostId( postId: number,  queryParams: GetApiAdvancedSettingsByPostIdOpts, signal?: AbortSignal ): Observable<AdvancedSettingsMetaTagsGetResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/advancedSettings/${postId}`), queryParams, signal) as Observable<AdvancedSettingsMetaTagsGetResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/advanced-settings/${postId}`), queryParams, signal) as Observable<AdvancedSettingsMetaTagsGetResponseDto>;
 }
 
 static getApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
@@ -91,8 +91,8 @@ static getApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiAdvancedSettingsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/advancedSettings/{postId}');
-static getApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/advancedSettings/{postId}(.*)';
+static getApiAdvancedSettingsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/advanced-settings/{postId}');
+static getApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/advanced-settings/{postId}(.*)';
 
 
 /**
@@ -109,7 +109,7 @@ static getApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo
 * Save MetaTag Keywords
 */
 postApiAdvancedSettingsByPostId( postId: number,  requestBody: AdvancedSettingsMetaTagsPostRequestDto, queryParams: PostApiAdvancedSettingsByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<AdvancedSettingsMetaTagsGetResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/advancedSettings/${postId}`), requestBody, queryParams, signal, contentType) as Observable<AdvancedSettingsMetaTagsGetResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/advanced-settings/${postId}`), requestBody, queryParams, signal, contentType) as Observable<AdvancedSettingsMetaTagsGetResponseDto>;
 }
 
 static postApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
@@ -151,8 +151,8 @@ static postApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
     }
 });
 
-static postApiAdvancedSettingsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/advancedSettings/{postId}');
-static postApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/advancedSettings/{postId}(.*)';
+static postApiAdvancedSettingsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/advanced-settings/{postId}');
+static postApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/advanced-settings/{postId}(.*)';
 
 
 

@@ -124,7 +124,7 @@ export class OnboardingStore extends HttpStore {
     contentType?: "application/json",
   ): Observable<OnboardingDataResponseDto> {
     return this.post(
-      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/submitOnboarding`),
+      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/submit`),
       requestBody,
       queryParams,
       signal,
@@ -180,9 +180,9 @@ export class OnboardingStore extends HttpStore {
   );
 
   static postApiOnboardingSubmitOnboardingUrlRegEx = new RegExp(
-    "/wp-json/rankingcoach/seo/onboarding/submitOnboarding",
+    "/wp-json/rankingcoach/seo/onboarding/submit",
   );
-  static postApiOnboardingSubmitOnboardingUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/submitOnboarding(.*)";
+  static postApiOnboardingSubmitOnboardingUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/submit(.*)";
 
   /**
    * Manager of list of AbortControllers for the Request
@@ -203,7 +203,7 @@ export class OnboardingStore extends HttpStore {
     contentType?: "application/json",
   ): Observable<OnboardingDataResponseDto> {
     return this.post(
-      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/scanPages`),
+      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/scan`),
       requestBody,
       queryParams,
       signal,
@@ -258,8 +258,8 @@ export class OnboardingStore extends HttpStore {
     },
   );
 
-  static postApiOnboardingScanPagesUrlRegEx = new RegExp("/wp-json/rankingcoach/seo/onboarding/scanPages");
-  static postApiOnboardingScanPagesUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/scanPages(.*)";
+  static postApiOnboardingScanPagesUrlRegEx = new RegExp("/wp-json/rankingcoach/seo/onboarding/scan");
+  static postApiOnboardingScanPagesUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/scan(.*)";
 
   /**
    * Manager of list of AbortControllers for the Request
@@ -494,7 +494,7 @@ export class OnboardingStore extends HttpStore {
     contentType?: "application/json",
   ): Observable<WPFlowStepAndNextStepResponseDto> {
     return this.post(
-      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/submitStepAnswer`),
+      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/steps/submit`),
       requestBody,
       queryParams,
       signal,
@@ -558,9 +558,9 @@ export class OnboardingStore extends HttpStore {
   );
 
   static postApiOnboardingSubmitStepAnswerUrlRegEx = new RegExp(
-    "/wp-json/rankingcoach/seo/onboarding/submitStepAnswer",
+    "/wp-json/rankingcoach/seo/onboarding/steps/submit",
   );
-  static postApiOnboardingSubmitStepAnswerUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/submitStepAnswer(.*)";
+  static postApiOnboardingSubmitStepAnswerUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/steps/submit(.*)";
 
   /**
    * Manager of list of AbortControllers for the Request

@@ -17,6 +17,10 @@ export type PluginInformationResponseDto = {
     */
   rcSubscriptionName?: string
    /**
+    * $rcActivationCode The activation code used for the rankingCoach account
+    */
+  rcActivationCode?: string
+   /**
     * $rcRemainingKeywords The number of remaining keywords available in the rankingCoach account
     */
   rcRemainingKeywords?: number 
