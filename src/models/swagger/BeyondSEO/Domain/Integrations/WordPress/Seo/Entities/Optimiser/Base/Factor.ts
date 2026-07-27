@@ -49,6 +49,10 @@ export type Factor = {
   operations?: Operations
   suggestions?: FactorSuggestions
    /**
+    * Feature flags for this factor - exposed in JSON
+    */
+  featureFlags?: any []
+   /**
     * The fully qualified class name of the object
     */
   objectType: typeof FactorObjectType[keyof typeof FactorObjectType] 

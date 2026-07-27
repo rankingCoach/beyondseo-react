@@ -31,6 +31,10 @@ export type OptimiserContext = {
   score?: number
   factors?: Factors
    /**
+    * Feature flags for this context - exposed in JSON
+    */
+  featureFlags?: any []
+   /**
     * The fully qualified class name of the object
     */
   objectType: typeof OptimiserContextObjectType[keyof typeof OptimiserContextObjectType] 

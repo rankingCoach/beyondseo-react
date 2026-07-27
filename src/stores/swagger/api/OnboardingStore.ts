@@ -106,29 +106,23 @@ import type { OnboardingDataResponseDto } from '@models/swagger/BeyondSEO/Presen
 
 export class OnboardingStore extends HttpStore {
 
-
-/**
-    * Manager of list of AbortControllers for the Request
-    */
-    static postApiOnboardingSubmitOnboardingAbortManager: AbortControllersManager = new AbortControllersManager();
-/**
-* Save onboarding data
-*/
-
-
-/**
-* Save onboarding data on completion
-* Save onboarding data
-*/
-postApiOnboardingSubmitOnboarding(  requestBody: null, queryParams?: PostApiOnboardingSubmitOnboardingOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<OnboardingDataResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/onboarding/submit`), requestBody, queryParams, signal, contentType) as Observable<OnboardingDataResponseDto>;
-}
-
-static postApiOnboardingSubmitOnboardingThunk = createAsyncThunk<
-  OnboardingDataResponseDto,
-  { requestBody: null, queryParams?: PostApiOnboardingSubmitOnboardingOpts, contentType?: 'application/json'},
-  {
-      rejectValue:  | BadRequestException | InternalErrorException
+  /**
+   * Save onboarding data on completion
+   * Save onboarding data
+   */
+  postApiOnboardingSubmitOnboarding(
+    requestBody: null,
+    queryParams?: PostApiOnboardingSubmitOnboardingOpts,
+    signal?: AbortSignal,
+    contentType?: "application/json",
+  ): Observable<OnboardingDataResponseDto> {
+    return this.post(
+      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/submit`),
+      requestBody,
+      queryParams,
+      signal,
+      contentType,
+    ) as Observable<OnboardingDataResponseDto>;
   }
 >
 
@@ -163,32 +157,29 @@ static postApiOnboardingSubmitOnboardingThunk = createAsyncThunk<
     }
 });
 
-static postApiOnboardingSubmitOnboardingUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/onboarding/submit');
-static postApiOnboardingSubmitOnboardingUrlMockRequest = '/wp-json/rankingcoach/seo/onboarding/submit(.*)';
+  static postApiOnboardingSubmitOnboardingUrlRegEx = new RegExp(
+    "/wp-json/rankingcoach/seo/onboarding/submit",
+  );
+  static postApiOnboardingSubmitOnboardingUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/submit(.*)";
 
 
-/**
-    * Manager of list of AbortControllers for the Request
-    */
-    static postApiOnboardingScanPagesAbortManager: AbortControllersManager = new AbortControllersManager();
-/**
-* Scan all posts and pages
-*/
-
-
-/**
-* Scan all posts and pages
-* Scan all posts and pages
-*/
-postApiOnboardingScanPages(  requestBody: null, queryParams?: PostApiOnboardingScanPagesOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<OnboardingDataResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/onboarding/scan`), requestBody, queryParams, signal, contentType) as Observable<OnboardingDataResponseDto>;
-}
-
-static postApiOnboardingScanPagesThunk = createAsyncThunk<
-  OnboardingDataResponseDto,
-  { requestBody: null, queryParams?: PostApiOnboardingScanPagesOpts, contentType?: 'application/json'},
-  {
-      rejectValue: any
+  /**
+   * Scan all posts and pages
+   * Scan all posts and pages
+   */
+  postApiOnboardingScanPages(
+    requestBody: null,
+    queryParams?: PostApiOnboardingScanPagesOpts,
+    signal?: AbortSignal,
+    contentType?: "application/json",
+  ): Observable<OnboardingDataResponseDto> {
+    return this.post(
+      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/scan`),
+      requestBody,
+      queryParams,
+      signal,
+      contentType,
+    ) as Observable<OnboardingDataResponseDto>;
   }
 >
 
@@ -223,8 +214,8 @@ static postApiOnboardingScanPagesThunk = createAsyncThunk<
     }
 });
 
-static postApiOnboardingScanPagesUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/onboarding/scan');
-static postApiOnboardingScanPagesUrlMockRequest = '/wp-json/rankingcoach/seo/onboarding/scan(.*)';
+  static postApiOnboardingScanPagesUrlRegEx = new RegExp("/wp-json/rankingcoach/seo/onboarding/scan");
+  static postApiOnboardingScanPagesUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/scan(.*)";
 
 
 /**
@@ -407,28 +398,23 @@ static postApiOnboardingExtractAutoUrlRegEx = new RegExp('/wp-json/rankingcoach/
 static postApiOnboardingExtractAutoUrlMockRequest = '/wp-json/rankingcoach/seo/onboarding/extract(.*)';
 
 
-/**
-    * Manager of list of AbortControllers for the Request
-    */
-    static postApiOnboardingSubmitStepAnswerAbortManager: AbortControllersManager = new AbortControllersManager();
-/**
-* Save answer data from a step's question
-*/
-
-
-/**
-* Save completion data from a specific step
-* Save answer data from a step's question
-*/
-postApiOnboardingSubmitStepAnswer(  requestBody: WPFlowStepCompletionRequestDto, queryParams: PostApiOnboardingSubmitStepAnswerOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<WPFlowStepAndNextStepResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/onboarding/steps/submit`), requestBody, queryParams, signal, contentType) as Observable<WPFlowStepAndNextStepResponseDto>;
-}
-
-static postApiOnboardingSubmitStepAnswerThunk = createAsyncThunk<
-  WPFlowStepAndNextStepResponseDto,
-  { requestBody: WPFlowStepCompletionRequestDto, queryParams: PostApiOnboardingSubmitStepAnswerOpts, contentType?: 'application/json'},
-  {
-      rejectValue:  | BadRequestException | InternalErrorException
+  /**
+   * Save completion data from a specific step
+   * Save answer data from a step's question
+   */
+  postApiOnboardingSubmitStepAnswer(
+    requestBody: WPFlowStepCompletionRequestDto,
+    queryParams: PostApiOnboardingSubmitStepAnswerOpts,
+    signal?: AbortSignal,
+    contentType?: "application/json",
+  ): Observable<WPFlowStepAndNextStepResponseDto> {
+    return this.post(
+      new EndPoint(`/wp-json/rankingcoach/seo/onboarding/steps/submit`),
+      requestBody,
+      queryParams,
+      signal,
+      contentType,
+    ) as Observable<WPFlowStepAndNextStepResponseDto>;
   }
 >
 
@@ -463,8 +449,10 @@ static postApiOnboardingSubmitStepAnswerThunk = createAsyncThunk<
     }
 });
 
-static postApiOnboardingSubmitStepAnswerUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/onboarding/steps/submit');
-static postApiOnboardingSubmitStepAnswerUrlMockRequest = '/wp-json/rankingcoach/seo/onboarding/steps/submit(.*)';
+  static postApiOnboardingSubmitStepAnswerUrlRegEx = new RegExp(
+    "/wp-json/rankingcoach/seo/onboarding/steps/submit",
+  );
+  static postApiOnboardingSubmitStepAnswerUrlMockRequest = "/wp-json/rankingcoach/seo/onboarding/steps/submit(.*)";
 
 
 /**
