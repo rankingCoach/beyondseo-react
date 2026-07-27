@@ -86,7 +86,10 @@ function getCurrentOrigin() {
 }
 
 export const Upsell = () => {
-    const isOnboardingCompleted = rcWindow?.rankingCoachReactData?.isOnboardingCompleted !== "false";
+    const isOnboardingCompleted =
+        rcWindow?.rankingCoachReactData?.isOnboardingCompleted === "1" ||
+        rcWindow?.rankingCoachReactData?.isOnboardingCompleted === "true" ||
+        rcWindow?.rankingCoachReactData?.isOnboardingCompleted === true;
 
     if (!isOnboardingCompleted) {
         return <Connect />;
@@ -96,7 +99,10 @@ export const Upsell = () => {
 };
 
 const UpsellContent = () => {
-    const isOnboardingCompleted = rcWindow?.rankingCoachReactData?.isOnboardingCompleted !== "false";
+    const isOnboardingCompleted =
+        rcWindow?.rankingCoachReactData?.isOnboardingCompleted === "1" ||
+        rcWindow?.rankingCoachReactData?.isOnboardingCompleted === "true" ||
+        rcWindow?.rankingCoachReactData?.isOnboardingCompleted === true;
     const [paymentPeriod, setPaymentPeriod] = useState<'monthly' | 'annual'>('annual');
     const [isLoading, setIsLoading] = useState(false);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -146,7 +152,7 @@ const UpsellContent = () => {
      */
     const handleActivateForFree = () => {
         const adminUrl = rcWindow?.rankingCoachReactData?.adminurl;
-        window.location.href = `${adminUrl}?page=rankingcoach-onboarding`;
+        window.location.href = `${adminUrl}?page=rankingcoach-registration`;
     };
 
     /**
