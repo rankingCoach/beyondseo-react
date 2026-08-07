@@ -336,11 +336,14 @@ const appSlice = createSlice({
     // keyword manager does not refetch it (the keywords-updated event still
     // forces a refresh).
     builder.addCase(MetatagsStore.getApiMetatagsKeywordsByPostIdThunk.fulfilled, (state, action) => {
-      const elements = (action.payload as any)?.keywords?.elements;
+      const keywords = (action.payload as any)?.keywords;
+      const elements = Array.isArray(keywords) ? keywords : keywords?.elements;
       const keywordArray = Array.isArray(elements) ? elements : [];
-      state.availableKeywords = keywordArray.map((keyword: any) => ({
-        name: keyword.keyword || keyword.name || keyword,
-      }));
+      state.availableKeywords = keywordArray
+        .map((keyword: any) => ({
+          name: typeof keyword === "string" ? keyword : keyword?.keyword || keyword?.name || "",
+        }))
+        .filter((keyword) => !!keyword.name);
     });
 
     // Account location keywords
