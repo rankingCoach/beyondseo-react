@@ -29,7 +29,7 @@ export const AdvancedTab = () => {
   const { triggerRecalculation } = useScoreRecalculation();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { noIndexForPage, excludeSitemapForPage, canonicalUrl, disableAutoLinks, viewportForPage } = useSelector((state: RootState) => state.app);
+  const { noIndexForPage, excludeSitemapForPage, canonicalUrl, disableAutoLinks, viewportForPage, isAdvancedSettingsLoaded } = useSelector((state: RootState) => state.app);
   const { currentPost, isCurrentPostLoaded } = useSelector((state: RootState) => state.post);
   const { setNoIndexForPage, setExcludeSitemapForPage, setCanonicalUrl, setDisableAutoLinks, setViewportForPage } = AppSlice;
 
@@ -72,31 +72,20 @@ export const AdvancedTab = () => {
   }, []);
 
   useEffect(() => {
+    if (isAdvancedSettingsLoaded) {
+      setIsLoading(false);
+      return;
+    }
+
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const advancedSettingsData = await dispatch(
+        await dispatch(
           AdvancedSettingsStore.getApiAdvancedSettingsByPostIdThunk({
             postId: getPathId(),
             queryParams: { noCache: true },
           }),
         ).unwrap();
-
-        if (advancedSettingsData?.canonicalUrl) {
-          dispatch(setCanonicalUrl(advancedSettingsData.canonicalUrl));
-        }
-        if (advancedSettingsData?.noindexForPage !== undefined) {
-          dispatch(setNoIndexForPage(advancedSettingsData.noindexForPage));
-        }
-        if (advancedSettingsData?.excludeSitemapForPage !== undefined) {
-          dispatch(setExcludeSitemapForPage(advancedSettingsData.excludeSitemapForPage));
-        }
-        if (advancedSettingsData?.disableAutoLinks !== undefined) {
-          dispatch(setDisableAutoLinks(advancedSettingsData.disableAutoLinks));
-        }
-        if (advancedSettingsData?.viewportForPage !== undefined) {
-          dispatch(setViewportForPage(advancedSettingsData.viewportForPage));
-        }
       } catch (error) {
       } finally {
         setIsLoading(false);
@@ -104,7 +93,7 @@ export const AdvancedTab = () => {
     };
 
     fetchData();
-  }, [dispatch, currentPostId]);
+  }, [dispatch, currentPostId, isAdvancedSettingsLoaded]);
 
   const handleCanonicalUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setCanonicalUrl(e.target.value));

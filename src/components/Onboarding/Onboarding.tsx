@@ -54,16 +54,14 @@ export const Onboarding: React.FC<OnboardingProps> = ({ isPluginLoading }) => {
         queryParams.skipWelcomeScreen = 1;
       }
 
-      if(initialSettings?.allow_auto_onboarding) {
-        // CRITICAL: Call extractAuto FIRST and wait for it to complete
-        // This ensures auto-extraction data is available before generating steps
-        await dispatch(
-          OnboardingStore.postApiOnboardingExtractAutoThunk({
-            requestBody: null,
-            queryParams: { noCache: true, debug: true },
-          }),
-        );
-      }
+      // CRITICAL: Call extractAuto FIRST and wait for it to complete
+      // This ensures auto-extraction data is available before generating steps
+      await dispatch(
+        OnboardingStore.postApiOnboardingExtractAutoThunk({
+          requestBody: null,
+          queryParams: { noCache: true, debug: true },
+        }),
+      );
 
       // THEN call generateSteps after extractAuto completes
       const response = await dispatch(
@@ -89,10 +87,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ isPluginLoading }) => {
   };
 
   if (isPluginLoading || isStepsLoading) {
-    if(initialSettings?.allow_auto_onboarding) {
-      return <OnboardingPreloader />;
-    }
-    return <OnboardingPlaceholder />;
+    return <OnboardingPreloader />;
   }
 
   return (

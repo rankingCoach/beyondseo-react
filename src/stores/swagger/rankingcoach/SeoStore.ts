@@ -32,7 +32,7 @@ import type { ModulesResponseDto } from '@models/swagger/BeyondSEO/Presentation/
     import type { DeleteRedirectRequestDto } from '@models/swagger/RankingCoach/Inc/Modules/ModuleLibrary/Links/RedirectManager/Dtos/DeleteRedirectRequestDto';
     import type { SchemaMarkupGetDataResponseDto } from '@models/swagger/RankingCoach/Inc/Modules/ModuleLibrary/Schema/SchemaMarkup/Dtos/SchemaMarkupGetDataResponseDto';
     import type { SchemaMarkupPostSaveDataRequestDto } from '@models/swagger/RankingCoach/Inc/Modules/ModuleLibrary/Schema/SchemaMarkup/Dtos/SchemaMarkupPostSaveDataRequestDto';
-    
+
 
 
  export type GetRankingcoachSeoFeatureModulesOpts = {FE_UNIQUE_ID?: string
@@ -58,6 +58,8 @@ import type { ModulesResponseDto } from '@models/swagger/BeyondSEO/Presentation/
  export type DeleteRankingcoachSeoSettingsByKeyOpts = {FE_UNIQUE_ID?: string
 }
  export type PostRankingcoachSeoBreadcrumbsOpts = {FE_UNIQUE_ID?: string
+}
+ export type PostRankingcoachSeoAccountActivateOpts = {FE_UNIQUE_ID?: string
 }
  export type PostRankingcoachSeoAccountChallengeOpts = {FE_UNIQUE_ID?: string
 }
@@ -97,20 +99,20 @@ import type { ModulesResponseDto } from '@models/swagger/BeyondSEO/Presentation/
 }
 
 export class SeoStore extends HttpStore {
- 
- 
+
+
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoFeatureModulesAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Returns the list of available modules with their names. 
+/**
+* Returns the list of available modules with their names.
 */
 
 
-/** 
-* Get the list of available modules. 
-* Returns the list of available modules with their names. 
+/**
+* Get the list of available modules.
+* Returns the list of available modules with their names.
 */
 getRankingcoachSeoFeatureModules(  queryParams?: GetRankingcoachSeoFeatureModulesOpts, signal?: AbortSignal ): Observable<ModulesResponseDto> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/feature_modules`), queryParams, signal) as Observable<ModulesResponseDto>;
@@ -124,9 +126,9 @@ static getRankingcoachSeoFeatureModulesThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get the list of available modules. 
-* Returns the list of available modules with their names. 
+/**
+* Get the list of available modules.
+* Returns the list of available modules with their names.
 */
 ("getRankingcoachSeoFeatureModules", async ( queryParams?: GetRankingcoachSeoFeatureModulesOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -163,14 +165,14 @@ static getRankingcoachSeoFeatureModulesUrlMockRequest = '/wp-json/rankingcoach/s
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoAccountDetailsAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Returns the rankingCoach account details including user data, subscription data, and other account details. 
+/**
+* Returns the rankingCoach account details including user data, subscription data, and other account details.
 */
 
 
-/** 
-* Get the current logged account details. 
-* Returns the rankingCoach account details including user data, subscription data, and other account details. 
+/**
+* Get the current logged account details.
+* Returns the rankingCoach account details including user data, subscription data, and other account details.
 */
 getRankingcoachSeoAccountDetails(  queryParams?: GetRankingcoachSeoAccountDetailsOpts, signal?: AbortSignal ): Observable<any> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/account_details`), queryParams, signal) as Observable<any>;
@@ -184,9 +186,9 @@ static getRankingcoachSeoAccountDetailsThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get the current logged account details. 
-* Returns the rankingCoach account details including user data, subscription data, and other account details. 
+/**
+* Get the current logged account details.
+* Returns the rankingCoach account details including user data, subscription data, and other account details.
 */
 ("getRankingcoachSeoAccountDetails", async ( queryParams?: GetRankingcoachSeoAccountDetailsOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -223,14 +225,14 @@ static getRankingcoachSeoAccountDetailsUrlMockRequest = '/wp-json/rankingcoach/s
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoLocationKeywordsAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Returns from rankingCoach the location keywords for the current logged account. 
+/**
+* Returns from rankingCoach the location keywords for the current logged account.
 */
 
 
-/** 
-* Get the location keywords. 
-* Returns from rankingCoach the location keywords for the current logged account. 
+/**
+* Get the location keywords.
+* Returns from rankingCoach the location keywords for the current logged account.
 */
 getRankingcoachSeoLocationKeywords(  queryParams?: GetRankingcoachSeoLocationKeywordsOpts, signal?: AbortSignal ): Observable<any> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/location_keywords`), queryParams, signal) as Observable<any>;
@@ -244,9 +246,9 @@ static getRankingcoachSeoLocationKeywordsThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get the location keywords. 
-* Returns from rankingCoach the location keywords for the current logged account. 
+/**
+* Get the location keywords.
+* Returns from rankingCoach the location keywords for the current logged account.
 */
 ("getRankingcoachSeoLocationKeywords", async ( queryParams?: GetRankingcoachSeoLocationKeywordsOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -283,14 +285,14 @@ static getRankingcoachSeoLocationKeywordsUrlMockRequest = '/wp-json/rankingcoach
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoRcVariablesDataByIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Returns the available variables for a post. 
+/**
+* Returns the available variables for a post.
 */
 
 
-/** 
-* Get the available variables for a post. 
-* Returns the available variables for a post. 
+/**
+* Get the available variables for a post.
+* Returns the available variables for a post.
 */
 getRankingcoachSeoRcVariablesDataById(  queryParams?: GetRankingcoachSeoRcVariablesDataByIdOpts, signal?: AbortSignal ): Observable<any> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/rc_variables/${id}/data`), queryParams, signal) as Observable<any>;
@@ -304,9 +306,9 @@ static getRankingcoachSeoRcVariablesDataByIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get the available variables for a post. 
-* Returns the available variables for a post. 
+/**
+* Get the available variables for a post.
+* Returns the available variables for a post.
 */
 ("getRankingcoachSeoRcVariablesDataById", async ( queryParams?: GetRankingcoachSeoRcVariablesDataByIdOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -343,14 +345,14 @@ static getRankingcoachSeoRcVariablesDataByIdUrlMockRequest = '/wp-json/rankingco
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoGenerateSdkAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Generates the OpenAPI spec for registered routes. This is used for generating stores on frontend. 
+/**
+* Generates the OpenAPI spec for registered routes. This is used for generating stores on frontend.
 */
 
 
-/** 
-* Generate OpenAPI specification. 
-* Generates the OpenAPI spec for registered routes. This is used for generating stores on frontend. 
+/**
+* Generate OpenAPI specification.
+* Generates the OpenAPI spec for registered routes. This is used for generating stores on frontend.
 */
 getRankingcoachSeoGenerateSdk(  queryParams?: GetRankingcoachSeoGenerateSdkOpts, signal?: AbortSignal ): Observable<any> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/generate_sdk`), queryParams, signal) as Observable<any>;
@@ -364,9 +366,9 @@ static getRankingcoachSeoGenerateSdkThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Generate OpenAPI specification. 
-* Generates the OpenAPI spec for registered routes. This is used for generating stores on frontend. 
+/**
+* Generate OpenAPI specification.
+* Generates the OpenAPI spec for registered routes. This is used for generating stores on frontend.
 */
 ("getRankingcoachSeoGenerateSdk", async ( queryParams?: GetRankingcoachSeoGenerateSdkOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -403,14 +405,14 @@ static getRankingcoachSeoGenerateSdkUrlMockRequest = '/wp-json/rankingcoach/seo/
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoSdkTokenAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Creates a temporary token for SDK generation. The token is valid for 10 minutes and allows access to documentation/OpenAPI endpoints. 
+/**
+* Creates a temporary token for SDK generation. The token is valid for 10 minutes and allows access to documentation/OpenAPI endpoints.
 */
 
 
-/** 
-* Create SDK Generation Token 
-* Creates a temporary token for SDK generation. The token is valid for 10 minutes and allows access to documentation/OpenAPI endpoints. 
+/**
+* Create SDK Generation Token
+* Creates a temporary token for SDK generation. The token is valid for 10 minutes and allows access to documentation/OpenAPI endpoints.
 */
 postRankingcoachSeoSdkToken(  requestBody: null, queryParams?: PostRankingcoachSeoSdkTokenOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<any> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/sdk_token`), requestBody, queryParams, signal, contentType) as Observable<any>;
@@ -424,9 +426,9 @@ static postRankingcoachSeoSdkTokenThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Create SDK Generation Token 
-* Creates a temporary token for SDK generation. The token is valid for 10 minutes and allows access to documentation/OpenAPI endpoints. 
+/**
+* Create SDK Generation Token
+* Creates a temporary token for SDK generation. The token is valid for 10 minutes and allows access to documentation/OpenAPI endpoints.
 */
 ("postRankingcoachSeoSdkToken", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostRankingcoachSeoSdkTokenOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -463,14 +465,14 @@ static postRankingcoachSeoSdkTokenUrlMockRequest = '/wp-json/rankingcoach/seo/sd
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoSettingsAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Handle general settings CRUD operations 
+/**
+* Handle general settings CRUD operations
 */
 
 
-/** 
-* General Settings Management 
-* Handle general settings CRUD operations 
+/**
+* General Settings Management
+* Handle general settings CRUD operations
 */
 getRankingcoachSeoSettings(  queryParams?: GetRankingcoachSeoSettingsOpts, signal?: AbortSignal ): Observable<SettingsResponseDto> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/settings`), queryParams, signal) as Observable<SettingsResponseDto>;
@@ -484,9 +486,9 @@ static getRankingcoachSeoSettingsThunk = createAsyncThunk<
   }
 >
 
-/** 
-* General Settings Management 
-* Handle general settings CRUD operations 
+/**
+* General Settings Management
+* Handle general settings CRUD operations
 */
 ("getRankingcoachSeoSettings", async ( queryParams?: GetRankingcoachSeoSettingsOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -523,14 +525,14 @@ static getRankingcoachSeoSettingsUrlMockRequest = '/wp-json/rankingcoach/seo/set
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoSettingsAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Handle general settings CRUD operations 
+/**
+* Handle general settings CRUD operations
 */
 
 
-/** 
-* General Settings Management 
-* Handle general settings CRUD operations 
+/**
+* General Settings Management
+* Handle general settings CRUD operations
 */
 postRankingcoachSeoSettings(  requestBody: SettingsRequestDto, queryParams?: PostRankingcoachSeoSettingsOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<SettingsResponseDto> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/settings`), requestBody, queryParams, signal, contentType) as Observable<SettingsResponseDto>;
@@ -544,9 +546,9 @@ static postRankingcoachSeoSettingsThunk = createAsyncThunk<
   }
 >
 
-/** 
-* General Settings Management 
-* Handle general settings CRUD operations 
+/**
+* General Settings Management
+* Handle general settings CRUD operations
 */
 ("postRankingcoachSeoSettings", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: SettingsRequestDto, queryParams?: PostRankingcoachSeoSettingsOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -583,14 +585,14 @@ static postRankingcoachSeoSettingsUrlMockRequest = '/wp-json/rankingcoach/seo/se
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoSettingsByKeyAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Handle individual setting CRUD operations 
+/**
+* Handle individual setting CRUD operations
 */
 
 
-/** 
-* Single Setting Management 
-* Handle individual setting CRUD operations 
+/**
+* Single Setting Management
+* Handle individual setting CRUD operations
 */
 getRankingcoachSeoSettingsByKey(  queryParams?: GetRankingcoachSeoSettingsByKeyOpts, signal?: AbortSignal ): Observable<SingleSettingResponseDto> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/settings/${key}`), queryParams, signal) as Observable<SingleSettingResponseDto>;
@@ -604,9 +606,9 @@ static getRankingcoachSeoSettingsByKeyThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Single Setting Management 
-* Handle individual setting CRUD operations 
+/**
+* Single Setting Management
+* Handle individual setting CRUD operations
 */
 ("getRankingcoachSeoSettingsByKey", async ( queryParams?: GetRankingcoachSeoSettingsByKeyOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -643,14 +645,14 @@ static getRankingcoachSeoSettingsByKeyUrlMockRequest = '/wp-json/rankingcoach/se
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoSettingsByKeyAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Handle individual setting CRUD operations 
+/**
+* Handle individual setting CRUD operations
 */
 
 
-/** 
-* Single Setting Management 
-* Handle individual setting CRUD operations 
+/**
+* Single Setting Management
+* Handle individual setting CRUD operations
 */
 postRankingcoachSeoSettingsByKey(  requestBody: SingleSettingRequestDto, queryParams?: PostRankingcoachSeoSettingsByKeyOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<SingleSettingResponseDto> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/settings/${key}`), requestBody, queryParams, signal, contentType) as Observable<SingleSettingResponseDto>;
@@ -664,9 +666,9 @@ static postRankingcoachSeoSettingsByKeyThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Single Setting Management 
-* Handle individual setting CRUD operations 
+/**
+* Single Setting Management
+* Handle individual setting CRUD operations
 */
 ("postRankingcoachSeoSettingsByKey", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: SingleSettingRequestDto, queryParams?: PostRankingcoachSeoSettingsByKeyOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -703,14 +705,14 @@ static postRankingcoachSeoSettingsByKeyUrlMockRequest = '/wp-json/rankingcoach/s
     * Manager of list of AbortControllers for the Request
     */
     static deleteRankingcoachSeoSettingsByKeyAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Handle individual setting CRUD operations 
+/**
+* Handle individual setting CRUD operations
 */
 
 
-/** 
-* Single Setting Management 
-* Handle individual setting CRUD operations 
+/**
+* Single Setting Management
+* Handle individual setting CRUD operations
 */
 deleteRankingcoachSeoSettingsByKey(  requestBody: SingleSettingRequestDto, queryParams?: DeleteRankingcoachSeoSettingsByKeyOpts, signal?: AbortSignal ): Observable<SingleSettingResponseDto> {
   return this.delete(new EndPoint(`/wp-json/rankingcoach/seo/settings/${key}`), requestBody, queryParams, signal) as Observable<SingleSettingResponseDto>;
@@ -724,9 +726,9 @@ static deleteRankingcoachSeoSettingsByKeyThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Single Setting Management 
-* Handle individual setting CRUD operations 
+/**
+* Single Setting Management
+* Handle individual setting CRUD operations
 */
 ("deleteRankingcoachSeoSettingsByKey", async ({ requestBody , queryParams} : { requestBody: SingleSettingRequestDto, queryParams?: DeleteRankingcoachSeoSettingsByKeyOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -763,14 +765,14 @@ static deleteRankingcoachSeoSettingsByKeyUrlMockRequest = '/wp-json/rankingcoach
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoBreadcrumbsAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Generate breadcrumbs for multiple context types with full customization support. Supports post types, archives, search results, 404 pages, taxonomies, and date archives. Context-aware generation based on provided parameters. 
+/**
+* Generate breadcrumbs for multiple context types with full customization support. Supports post types, archives, search results, 404 pages, taxonomies, and date archives. Context-aware generation based on provided parameters.
 */
 
 
-/** 
-* Multi-context Breadcrumbs Generator 
-* Generate breadcrumbs for multiple context types with full customization support. Supports post types, archives, search results, 404 pages, taxonomies, and date archives. Context-aware generation based on provided parameters. 
+/**
+* Multi-context Breadcrumbs Generator
+* Generate breadcrumbs for multiple context types with full customization support. Supports post types, archives, search results, 404 pages, taxonomies, and date archives. Context-aware generation based on provided parameters.
 */
 postRankingcoachSeoBreadcrumbs(  requestBody: BreadcrumbsRequestDto, queryParams?: PostRankingcoachSeoBreadcrumbsOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<BreadcrumbsResponseDto> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/breadcrumbs`), requestBody, queryParams, signal, contentType) as Observable<BreadcrumbsResponseDto>;
@@ -784,9 +786,9 @@ static postRankingcoachSeoBreadcrumbsThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Multi-context Breadcrumbs Generator 
-* Generate breadcrumbs for multiple context types with full customization support. Supports post types, archives, search results, 404 pages, taxonomies, and date archives. Context-aware generation based on provided parameters. 
+/**
+* Multi-context Breadcrumbs Generator
+* Generate breadcrumbs for multiple context types with full customization support. Supports post types, archives, search results, 404 pages, taxonomies, and date archives. Context-aware generation based on provided parameters.
 */
 ("postRankingcoachSeoBreadcrumbs", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: BreadcrumbsRequestDto, queryParams?: PostRankingcoachSeoBreadcrumbsOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -822,13 +824,71 @@ static postRankingcoachSeoBreadcrumbsUrlMockRequest = '/wp-json/rankingcoach/seo
 /**
     * Manager of list of AbortControllers for the Request
     */
+    static postRankingcoachSeoAccountActivateAbortManager: AbortControllersManager = new AbortControllersManager();
+
+
+
+/**
+*
+*
+*/
+postRankingcoachSeoAccountActivate(  requestBody: null, queryParams?: PostRankingcoachSeoAccountActivateOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<any> {
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/account/activate`), requestBody, queryParams, signal, contentType) as Observable<any>;
+}
+
+static postRankingcoachSeoAccountActivateThunk = createAsyncThunk<
+  any,
+  { requestBody: null, queryParams?: PostRankingcoachSeoAccountActivateOpts, contentType?: 'application/json'},
+  {
+      rejectValue: any
+  }
+>
+
+/**
+*
+*
+*/
+("postRankingcoachSeoAccountActivate", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostRankingcoachSeoAccountActivateOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
+  // Generate a random request Id
+  const requestId = new Date().getTime().toString();
+
+  try {
+    // Create a new Abort controller for the request
+    const controller = new AbortController();
+
+    const signal = controller.signal;
+    this.postRankingcoachSeoAccountActivateAbortManager._push(requestId, controller);
+
+    const result = await firstValueFrom(
+      seoStore.postRankingcoachSeoAccountActivate( requestBody, queryParams, signal, contentType)
+    );
+
+    // After the Request is completed, remove the Abort controller from Manager, since we don't need it anymore.
+    this.postRankingcoachSeoAccountActivateAbortManager._remove(requestId);
+
+    return result;
+  } catch (err: any) {
+        // In case the Request fails, remove the Abort controller from Manager, since we don't need it anymore.
+        this.postRankingcoachSeoAccountActivateAbortManager._remove(requestId);
+
+        return rejectWithValue(err.response.data);
+    }
+});
+
+static postRankingcoachSeoAccountActivateUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/account/activate');
+static postRankingcoachSeoAccountActivateUrlMockRequest = '/wp-json/rankingcoach/seo/account/activate(.*)';
+
+
+/**
+    * Manager of list of AbortControllers for the Request
+    */
     static postRankingcoachSeoAccountChallengeAbortManager: AbortControllersManager = new AbortControllersManager();
 
 
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 postRankingcoachSeoAccountChallenge(  requestBody: null, queryParams?: PostRankingcoachSeoAccountChallengeOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<any> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/account/challenge`), requestBody, queryParams, signal, contentType) as Observable<any>;
@@ -842,9 +902,9 @@ static postRankingcoachSeoAccountChallengeThunk = createAsyncThunk<
   }
 >
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 ("postRankingcoachSeoAccountChallenge", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostRankingcoachSeoAccountChallengeOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -884,9 +944,9 @@ static postRankingcoachSeoAccountChallengeUrlMockRequest = '/wp-json/rankingcoac
 
 
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 getRankingcoachSeoAccountVerificationStatus(  queryParams?: GetRankingcoachSeoAccountVerificationStatusOpts, signal?: AbortSignal ): Observable<any> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/account/verificationStatus`), queryParams, signal) as Observable<any>;
@@ -900,9 +960,9 @@ static getRankingcoachSeoAccountVerificationStatusThunk = createAsyncThunk<
   }
 >
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 ("getRankingcoachSeoAccountVerificationStatus", async ( queryParams?: GetRankingcoachSeoAccountVerificationStatusOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -942,9 +1002,9 @@ static getRankingcoachSeoAccountVerificationStatusUrlMockRequest = '/wp-json/ran
 
 
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 postRankingcoachSeoAccountRegister(  requestBody: null, queryParams?: PostRankingcoachSeoAccountRegisterOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<any> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/account/register`), requestBody, queryParams, signal, contentType) as Observable<any>;
@@ -958,9 +1018,9 @@ static postRankingcoachSeoAccountRegisterThunk = createAsyncThunk<
   }
 >
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 ("postRankingcoachSeoAccountRegister", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostRankingcoachSeoAccountRegisterOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1000,9 +1060,9 @@ static postRankingcoachSeoAccountRegisterUrlMockRequest = '/wp-json/rankingcoach
 
 
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 postRankingcoachSeoAccountFinalizeRegister(  requestBody: null, queryParams?: PostRankingcoachSeoAccountFinalizeRegisterOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<any> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/account/finalizeRegister`), requestBody, queryParams, signal, contentType) as Observable<any>;
@@ -1016,9 +1076,9 @@ static postRankingcoachSeoAccountFinalizeRegisterThunk = createAsyncThunk<
   }
 >
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 ("postRankingcoachSeoAccountFinalizeRegister", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostRankingcoachSeoAccountFinalizeRegisterOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1058,9 +1118,9 @@ static postRankingcoachSeoAccountFinalizeRegisterUrlMockRequest = '/wp-json/rank
 
 
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 getRankingcoachSeoFlowguardState(  queryParams?: GetRankingcoachSeoFlowguardStateOpts, signal?: AbortSignal ): Observable<any> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/flowguard/state`), queryParams, signal) as Observable<any>;
@@ -1074,9 +1134,9 @@ static getRankingcoachSeoFlowguardStateThunk = createAsyncThunk<
   }
 >
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 ("getRankingcoachSeoFlowguardState", async ( queryParams?: GetRankingcoachSeoFlowguardStateOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1116,9 +1176,9 @@ static getRankingcoachSeoFlowguardStateUrlMockRequest = '/wp-json/rankingcoach/s
 
 
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 postRankingcoachSeoUpsellUrl(  requestBody: null, queryParams?: PostRankingcoachSeoUpsellUrlOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<any> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/upsell/url`), requestBody, queryParams, signal, contentType) as Observable<any>;
@@ -1132,9 +1192,9 @@ static postRankingcoachSeoUpsellUrlThunk = createAsyncThunk<
   }
 >
 
-/** 
-*  
-*  
+/**
+*
+*
 */
 ("postRankingcoachSeoUpsellUrl", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostRankingcoachSeoUpsellUrlOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1171,14 +1231,14 @@ static postRankingcoachSeoUpsellUrlUrlMockRequest = '/wp-json/rankingcoach/seo/u
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoLinkAnalyzerAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get all links with pagination 
+/**
+* Get all links with pagination
 */
 
 
-/** 
-* Get All Links 
-* Get all links with pagination 
+/**
+* Get All Links
+* Get all links with pagination
 */
 getRankingcoachSeoLinkAnalyzer(  queryParams?: GetRankingcoachSeoLinkAnalyzerOpts, signal?: AbortSignal ): Observable<GetAllLinksResponseDto> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/linkAnalyzer`), queryParams, signal) as Observable<GetAllLinksResponseDto>;
@@ -1192,9 +1252,9 @@ static getRankingcoachSeoLinkAnalyzerThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get All Links 
-* Get all links with pagination 
+/**
+* Get All Links
+* Get all links with pagination
 */
 ("getRankingcoachSeoLinkAnalyzer", async ( queryParams?: GetRankingcoachSeoLinkAnalyzerOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1231,14 +1291,14 @@ static getRankingcoachSeoLinkAnalyzerUrlMockRequest = '/wp-json/rankingcoach/seo
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoLinkAnalyzerByIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get links for a specific post 
+/**
+* Get links for a specific post
 */
 
 
-/** 
-* Get Links For Post 
-* Get links for a specific post 
+/**
+* Get Links For Post
+* Get links for a specific post
 */
 getRankingcoachSeoLinkAnalyzerById( id: number,  queryParams?: GetRankingcoachSeoLinkAnalyzerByIdOpts, signal?: AbortSignal ): Observable<GetLinksForPostResponseDto> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/linkAnalyzer/${id}`), queryParams, signal) as Observable<GetLinksForPostResponseDto>;
@@ -1252,9 +1312,9 @@ static getRankingcoachSeoLinkAnalyzerByIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get Links For Post 
-* Get links for a specific post 
+/**
+* Get Links For Post
+* Get links for a specific post
 */
 ("getRankingcoachSeoLinkAnalyzerById", async ({id,  queryParams } : {id: number,  queryParams?: GetRankingcoachSeoLinkAnalyzerByIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1291,14 +1351,14 @@ static getRankingcoachSeoLinkAnalyzerByIdUrlMockRequest = '/wp-json/rankingcoach
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoLinkAnalyzerIndexByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Index links from posts 
+/**
+* Index links from posts
 */
 
 
-/** 
-* Index Links 
-* Index links from posts 
+/**
+* Index Links
+* Index links from posts
 */
 postRankingcoachSeoLinkAnalyzerIndexByPostId( post_id: number,  requestBody: IndexLinksRequestDto, queryParams?: PostRankingcoachSeoLinkAnalyzerIndexByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<IndexLinksResponseDto> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/linkAnalyzer/index/${post_id}`), requestBody, queryParams, signal, contentType) as Observable<IndexLinksResponseDto>;
@@ -1312,9 +1372,9 @@ static postRankingcoachSeoLinkAnalyzerIndexByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Index Links 
-* Index links from posts 
+/**
+* Index Links
+* Index links from posts
 */
 ("postRankingcoachSeoLinkAnalyzerIndexByPostId", async ({post_id,  requestBody, queryParams, contentType = 'application/json'} : {post_id: number,  requestBody: IndexLinksRequestDto, queryParams?: PostRankingcoachSeoLinkAnalyzerIndexByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1351,14 +1411,14 @@ static postRankingcoachSeoLinkAnalyzerIndexByPostIdUrlMockRequest = '/wp-json/ra
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoLinkAnalyzerScanByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Scan links for broken status 
+/**
+* Scan links for broken status
 */
 
 
-/** 
-* Scan Links 
-* Scan links for broken status 
+/**
+* Scan Links
+* Scan links for broken status
 */
 postRankingcoachSeoLinkAnalyzerScanByPostId( post_id: number,  requestBody: ScanLinksRequestDto, queryParams?: PostRankingcoachSeoLinkAnalyzerScanByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<ScanLinksResponseDto> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/linkAnalyzer/scan/${post_id}`), requestBody, queryParams, signal, contentType) as Observable<ScanLinksResponseDto>;
@@ -1372,9 +1432,9 @@ static postRankingcoachSeoLinkAnalyzerScanByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Scan Links 
-* Scan links for broken status 
+/**
+* Scan Links
+* Scan links for broken status
 */
 ("postRankingcoachSeoLinkAnalyzerScanByPostId", async ({post_id,  requestBody, queryParams, contentType = 'application/json'} : {post_id: number,  requestBody: ScanLinksRequestDto, queryParams?: PostRankingcoachSeoLinkAnalyzerScanByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1411,14 +1471,14 @@ static postRankingcoachSeoLinkAnalyzerScanByPostIdUrlMockRequest = '/wp-json/ran
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoLinkAnalyzerVerifyByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Verify links for status 
+/**
+* Verify links for status
 */
 
 
-/** 
-* Verify Links 
-* Verify links for status 
+/**
+* Verify Links
+* Verify links for status
 */
 postRankingcoachSeoLinkAnalyzerVerifyByPostId( post_id: number,  requestBody: IndexLinksRequestDto, queryParams?: PostRankingcoachSeoLinkAnalyzerVerifyByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<IndexLinksResponseDto> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/linkAnalyzer/verify/${post_id}`), requestBody, queryParams, signal, contentType) as Observable<IndexLinksResponseDto>;
@@ -1432,9 +1492,9 @@ static postRankingcoachSeoLinkAnalyzerVerifyByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Verify Links 
-* Verify links for status 
+/**
+* Verify Links
+* Verify links for status
 */
 ("postRankingcoachSeoLinkAnalyzerVerifyByPostId", async ({post_id,  requestBody, queryParams, contentType = 'application/json'} : {post_id: number,  requestBody: IndexLinksRequestDto, queryParams?: PostRankingcoachSeoLinkAnalyzerVerifyByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1471,14 +1531,14 @@ static postRankingcoachSeoLinkAnalyzerVerifyByPostIdUrlMockRequest = '/wp-json/r
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoRedirectManagerAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get all redirects 
+/**
+* Get all redirects
 */
 
 
-/** 
-* Get All Redirects 
-* Get all redirects 
+/**
+* Get All Redirects
+* Get all redirects
 */
 getRankingcoachSeoRedirectManager(  queryParams?: GetRankingcoachSeoRedirectManagerOpts, signal?: AbortSignal ): Observable<GetRedirectsResponseDto> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/redirectManager`), queryParams, signal) as Observable<GetRedirectsResponseDto>;
@@ -1492,9 +1552,9 @@ static getRankingcoachSeoRedirectManagerThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get All Redirects 
-* Get all redirects 
+/**
+* Get All Redirects
+* Get all redirects
 */
 ("getRankingcoachSeoRedirectManager", async ( queryParams?: GetRankingcoachSeoRedirectManagerOpts, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1531,14 +1591,14 @@ static getRankingcoachSeoRedirectManagerUrlMockRequest = '/wp-json/rankingcoach/
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoRedirectManagerAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Create a new redirect 
+/**
+* Create a new redirect
 */
 
 
-/** 
-* Create Redirect 
-* Create a new redirect 
+/**
+* Create Redirect
+* Create a new redirect
 */
 postRankingcoachSeoRedirectManager(  requestBody: CreateRedirectRequestDto, queryParams?: PostRankingcoachSeoRedirectManagerOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<CreateRedirectResponseDto> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/redirectManager`), requestBody, queryParams, signal, contentType) as Observable<CreateRedirectResponseDto>;
@@ -1552,9 +1612,9 @@ static postRankingcoachSeoRedirectManagerThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Create Redirect 
-* Create a new redirect 
+/**
+* Create Redirect
+* Create a new redirect
 */
 ("postRankingcoachSeoRedirectManager", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: CreateRedirectRequestDto, queryParams?: PostRankingcoachSeoRedirectManagerOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1591,14 +1651,14 @@ static postRankingcoachSeoRedirectManagerUrlMockRequest = '/wp-json/rankingcoach
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoRedirectManagerByIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get a single redirect by ID 
+/**
+* Get a single redirect by ID
 */
 
 
-/** 
-* Get Redirect 
-* Get a single redirect by ID 
+/**
+* Get Redirect
+* Get a single redirect by ID
 */
 getRankingcoachSeoRedirectManagerById( id: number,  queryParams?: GetRankingcoachSeoRedirectManagerByIdOpts, signal?: AbortSignal ): Observable<GetRedirectResponseDto> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/redirectManager/${id}`), queryParams, signal) as Observable<GetRedirectResponseDto>;
@@ -1612,9 +1672,9 @@ static getRankingcoachSeoRedirectManagerByIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get Redirect 
-* Get a single redirect by ID 
+/**
+* Get Redirect
+* Get a single redirect by ID
 */
 ("getRankingcoachSeoRedirectManagerById", async ({id,  queryParams } : {id: number,  queryParams?: GetRankingcoachSeoRedirectManagerByIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1651,14 +1711,14 @@ static getRankingcoachSeoRedirectManagerByIdUrlMockRequest = '/wp-json/rankingco
     * Manager of list of AbortControllers for the Request
     */
     static patchRankingcoachSeoRedirectManagerByIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Update an existing redirect 
+/**
+* Update an existing redirect
 */
 
 
-/** 
-* Update Redirect 
-* Update an existing redirect 
+/**
+* Update Redirect
+* Update an existing redirect
 */
 patchRankingcoachSeoRedirectManagerById( id: number,  requestBody: UpdateRedirectRequestDto, queryParams?: PatchRankingcoachSeoRedirectManagerByIdOpts, signal?: AbortSignal ): Observable<UpdateRedirectResponseDto> {
   return this.patch(new EndPoint(`/wp-json/rankingcoach/seo/redirectManager/${id}`), requestBody, queryParams, signal) as Observable<UpdateRedirectResponseDto>;
@@ -1672,9 +1732,9 @@ static patchRankingcoachSeoRedirectManagerByIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Update Redirect 
-* Update an existing redirect 
+/**
+* Update Redirect
+* Update an existing redirect
 */
 ("patchRankingcoachSeoRedirectManagerById", async ({id,  requestBody, queryParams } : {id: number,  requestBody: UpdateRedirectRequestDto, queryParams?: PatchRankingcoachSeoRedirectManagerByIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1711,14 +1771,14 @@ static patchRankingcoachSeoRedirectManagerByIdUrlMockRequest = '/wp-json/ranking
     * Manager of list of AbortControllers for the Request
     */
     static deleteRankingcoachSeoRedirectManagerByIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Delete a redirect 
+/**
+* Delete a redirect
 */
 
 
-/** 
-* Delete Redirect 
-* Delete a redirect 
+/**
+* Delete Redirect
+* Delete a redirect
 */
 deleteRankingcoachSeoRedirectManagerById( id: number,  requestBody: DeleteRedirectRequestDto, queryParams?: DeleteRankingcoachSeoRedirectManagerByIdOpts, signal?: AbortSignal ): Observable<DeleteRedirectResponseDto> {
   return this.delete(new EndPoint(`/wp-json/rankingcoach/seo/redirectManager/${id}`), requestBody, queryParams, signal) as Observable<DeleteRedirectResponseDto>;
@@ -1732,9 +1792,9 @@ static deleteRankingcoachSeoRedirectManagerByIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Delete Redirect 
-* Delete a redirect 
+/**
+* Delete Redirect
+* Delete a redirect
 */
 ("deleteRankingcoachSeoRedirectManagerById", async ({id,  requestBody , queryParams} : {id: number,  requestBody: DeleteRedirectRequestDto, queryParams?: DeleteRankingcoachSeoRedirectManagerByIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1771,14 +1831,14 @@ static deleteRankingcoachSeoRedirectManagerByIdUrlMockRequest = '/wp-json/rankin
     * Manager of list of AbortControllers for the Request
     */
     static getRankingcoachSeoSchemaMarkupByIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get the schema settings data for the module. 
+/**
+* Get the schema settings data for the module.
 */
 
 
-/** 
-* Get Schema Data 
-* Get the schema settings data for the module. 
+/**
+* Get Schema Data
+* Get the schema settings data for the module.
 */
 getRankingcoachSeoSchemaMarkupById( id: number,  queryParams?: GetRankingcoachSeoSchemaMarkupByIdOpts, signal?: AbortSignal ): Observable<SchemaMarkupGetDataResponseDto> {
   return this.get(new EndPoint(`/wp-json/rankingcoach/seo/schemaMarkup/${id}`), queryParams, signal) as Observable<SchemaMarkupGetDataResponseDto>;
@@ -1792,9 +1852,9 @@ static getRankingcoachSeoSchemaMarkupByIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get Schema Data 
-* Get the schema settings data for the module. 
+/**
+* Get Schema Data
+* Get the schema settings data for the module.
 */
 ("getRankingcoachSeoSchemaMarkupById", async ({id,  queryParams } : {id: number,  queryParams?: GetRankingcoachSeoSchemaMarkupByIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1831,14 +1891,14 @@ static getRankingcoachSeoSchemaMarkupByIdUrlMockRequest = '/wp-json/rankingcoach
     * Manager of list of AbortControllers for the Request
     */
     static postRankingcoachSeoSchemaMarkupSaveByIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Save the schema settings data for the module 
+/**
+* Save the schema settings data for the module
 */
 
 
-/** 
-* Save Schema Data 
-* Save the schema settings data for the module 
+/**
+* Save Schema Data
+* Save the schema settings data for the module
 */
 postRankingcoachSeoSchemaMarkupSaveById( id: number,  requestBody: SchemaMarkupPostSaveDataRequestDto, queryParams?: PostRankingcoachSeoSchemaMarkupSaveByIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<SchemaMarkupGetDataResponseDto> {
   return this.post(new EndPoint(`/wp-json/rankingcoach/seo/schemaMarkup/${id}/save`), requestBody, queryParams, signal, contentType) as Observable<SchemaMarkupGetDataResponseDto>;
@@ -1852,9 +1912,9 @@ static postRankingcoachSeoSchemaMarkupSaveByIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Save Schema Data 
-* Save the schema settings data for the module 
+/**
+* Save Schema Data
+* Save the schema settings data for the module
 */
 ("postRankingcoachSeoSchemaMarkupSaveById", async ({id,  requestBody, queryParams, contentType = 'application/json'} : {id: number,  requestBody: SchemaMarkupPostSaveDataRequestDto, queryParams?: PostRankingcoachSeoSchemaMarkupSaveByIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -1887,7 +1947,6 @@ static postRankingcoachSeoSchemaMarkupSaveByIdUrlRegEx = new RegExp('/wp-json/ra
 static postRankingcoachSeoSchemaMarkupSaveByIdUrlMockRequest = '/wp-json/rankingcoach/seo/schemaMarkup/{id}/save(.*)';
 
 
-  
+
  }
  export const seoStore = new SeoStore();
- 

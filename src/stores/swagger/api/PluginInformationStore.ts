@@ -11,38 +11,38 @@ import { AbortControllersManager } from "../../store-helpers/abort-controllers-m
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { PluginInformationResponseDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/PluginInformationResponseDto';
     import type { BadRequestException } from '@models/swagger/BeyondSEODeps/DDD/Infrastructure/Exceptions/BadRequestException';
-    
+
 
 
  export type PostApiPluginInformationOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, debug mode will be activated 
+  /**
+* If set to true, debug mode will be activated
 */
   debug? : boolean,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
 
 export class PluginInformationStore extends HttpStore {
- 
- 
+
+
 /**
     * Manager of list of AbortControllers for the Request
     */
     static postApiPluginInformationAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get plugin data / information and current user data 
+/**
+* Get plugin data / information and current user data
 */
 
 
-/** 
-* Get plugin information 
-* Get plugin data / information and current user data 
+/**
+* Get plugin information
+* Get plugin data / information and current user data
 */
 postApiPluginInformation(  requestBody: null, queryParams: PostApiPluginInformationOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<PluginInformationResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/api/pluginInformation`), requestBody, queryParams, signal, contentType) as Observable<PluginInformationResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/pluginInformation`), requestBody, queryParams, signal, contentType) as Observable<PluginInformationResponseDto>;
 }
 
 static postApiPluginInformationThunk = createAsyncThunk<
@@ -53,9 +53,9 @@ static postApiPluginInformationThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get plugin information 
-* Get plugin data / information and current user data 
+/**
+* Get plugin information
+* Get plugin data / information and current user data
 */
 ("postApiPluginInformation", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams: PostApiPluginInformationOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -84,11 +84,10 @@ static postApiPluginInformationThunk = createAsyncThunk<
     }
 });
 
-static postApiPluginInformationUrlRegEx = new RegExp('/wp-json/rankingcoach/api/pluginInformation');
-static postApiPluginInformationUrlMockRequest = '/wp-json/rankingcoach/api/pluginInformation(.*)';
+static postApiPluginInformationUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/pluginInformation');
+static postApiPluginInformationUrlMockRequest = '/wp-json/rankingcoach/seo/pluginInformation(.*)';
 
 
-  
+
  }
  export const pluginInformationStore = new PluginInformationStore();
- 

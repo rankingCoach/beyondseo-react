@@ -12,44 +12,44 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AdvancedSettingsMetaTagsGetResponseDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/AdvancedSettingsMetaTagsGetResponseDto';
     import type { BadRequestException } from '@models/swagger/BeyondSEODeps/DDD/Infrastructure/Exceptions/BadRequestException';
     import type { AdvancedSettingsMetaTagsPostRequestDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/AdvancedSettingsMetaTagsPostRequestDto';
-    
+
 
 
  export type GetApiAdvancedSettingsByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, debug mode will be activated 
+  /**
+* If set to true, debug mode will be activated
 */
   debug? : boolean,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type PostApiAdvancedSettingsByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
 
 export class AdvancedSettingsStore extends HttpStore {
- 
- 
+
+
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getApiAdvancedSettingsByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get MetaTags 
+/**
+* Get MetaTags
 */
 
 
-/** 
-* Get all advanced settings metaTags 
-* Get MetaTags 
+/**
+* Get all advanced settings metaTags
+* Get MetaTags
 */
 getApiAdvancedSettingsByPostId( postId: number,  queryParams: GetApiAdvancedSettingsByPostIdOpts, signal?: AbortSignal ): Observable<AdvancedSettingsMetaTagsGetResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/api/advancedSettings/${postId}`), queryParams, signal) as Observable<AdvancedSettingsMetaTagsGetResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/advanced-settings/${postId}`), queryParams, signal) as Observable<AdvancedSettingsMetaTagsGetResponseDto>;
 }
 
 static getApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
@@ -60,9 +60,9 @@ static getApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get all advanced settings metaTags 
-* Get MetaTags 
+/**
+* Get all advanced settings metaTags
+* Get MetaTags
 */
 ("getApiAdvancedSettingsByPostId", async ({postId,  queryParams } : {postId: number,  queryParams: GetApiAdvancedSettingsByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -91,25 +91,25 @@ static getApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiAdvancedSettingsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/advancedSettings/{postId}');
-static getApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/advancedSettings/{postId}(.*)';
+static getApiAdvancedSettingsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/advanced-settings/{postId}');
+static getApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/advanced-settings/{postId}(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static postApiAdvancedSettingsByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Save MetaTag Keywords 
+/**
+* Save MetaTag Keywords
 */
 
 
-/** 
-* Update all advanced settings metaTags 
-* Save MetaTag Keywords 
+/**
+* Update all advanced settings metaTags
+* Save MetaTag Keywords
 */
 postApiAdvancedSettingsByPostId( postId: number,  requestBody: AdvancedSettingsMetaTagsPostRequestDto, queryParams: PostApiAdvancedSettingsByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<AdvancedSettingsMetaTagsGetResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/api/advancedSettings/${postId}`), requestBody, queryParams, signal, contentType) as Observable<AdvancedSettingsMetaTagsGetResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/advanced-settings/${postId}`), requestBody, queryParams, signal, contentType) as Observable<AdvancedSettingsMetaTagsGetResponseDto>;
 }
 
 static postApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
@@ -120,9 +120,9 @@ static postApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Update all advanced settings metaTags 
-* Save MetaTag Keywords 
+/**
+* Update all advanced settings metaTags
+* Save MetaTag Keywords
 */
 ("postApiAdvancedSettingsByPostId", async ({postId,  requestBody, queryParams, contentType = 'application/json'} : {postId: number,  requestBody: AdvancedSettingsMetaTagsPostRequestDto, queryParams: PostApiAdvancedSettingsByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -151,11 +151,10 @@ static postApiAdvancedSettingsByPostIdThunk = createAsyncThunk<
     }
 });
 
-static postApiAdvancedSettingsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/advancedSettings/{postId}');
-static postApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/advancedSettings/{postId}(.*)';
+static postApiAdvancedSettingsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/advanced-settings/{postId}');
+static postApiAdvancedSettingsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/advanced-settings/{postId}(.*)';
 
 
-  
+
  }
  export const advancedSettingsStore = new AdvancedSettingsStore();
- 

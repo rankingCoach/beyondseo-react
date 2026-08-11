@@ -19,112 +19,112 @@ import type { MetaTagsGetResponseDto } from '@models/swagger/BeyondSEO/Presentat
     import type { ContentAnalysisResponseDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/ContentAnalysisResponseDto';
     import type { MetaTagsSeparatorResponseDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/MetaTagsSeparatorResponseDto';
     import type { MetaTagsSeparatorRequestDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/MetaTagsSeparatorRequestDto';
-    
+
 
 
  export type GetApiMetatagsByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, debug mode will be activated 
+  /**
+* If set to true, debug mode will be activated
 */
   debug? : boolean,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type PostApiMetatagsByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type PostApiMetatagsKeywordSwapByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type PutApiMetatagsKeywordByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type DeleteApiMetatagsKeywordByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type GetApiMetatagsKeywordsByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, debug mode will be activated 
+  /**
+* If set to true, debug mode will be activated
 */
   debug? : boolean,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type PostApiMetatagsContentKeywordsByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, debug mode will be activated 
+  /**
+* If set to true, debug mode will be activated
 */
   debug? : boolean,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type GetApiMetatagsSeparatorByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type PutApiMetatagsSeparatorByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
 
 export class MetatagsStore extends HttpStore {
- 
- 
+
+
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getApiMetatagsByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
+/**
 * Get MetaTags
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 
 
-/** 
-* Get all MetaTags 
+/**
+* Get all MetaTags
 * Get MetaTags
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 getApiMetatagsByPostId( postId: number,  queryParams: GetApiMetatagsByPostIdOpts, signal?: AbortSignal ): Observable<MetaTagsGetResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}`), queryParams, signal) as Observable<MetaTagsGetResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}`), queryParams, signal) as Observable<MetaTagsGetResponseDto>;
 }
 
 static getApiMetatagsByPostIdThunk = createAsyncThunk<
@@ -135,18 +135,18 @@ static getApiMetatagsByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get all MetaTags 
+/**
+* Get all MetaTags
 * Get MetaTags
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 ("getApiMetatagsByPostId", async ({postId,  queryParams } : {postId: number,  queryParams: GetApiMetatagsByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -175,25 +175,25 @@ static getApiMetatagsByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiMetatagsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}');
-static getApiMetatagsByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}(.*)';
+static getApiMetatagsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}');
+static getApiMetatagsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static postApiMetatagsByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Save MetaTag Keywords 
+/**
+* Save MetaTag Keywords
 */
 
 
-/** 
-* Update or create all MetaTags 
-* Save MetaTag Keywords 
+/**
+* Update or create all MetaTags
+* Save MetaTag Keywords
 */
 postApiMetatagsByPostId( postId: number,  requestBody: MetaTagsPostRequestDto, queryParams: PostApiMetatagsByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<MetaTagsGetResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}`), requestBody, queryParams, signal, contentType) as Observable<MetaTagsGetResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}`), requestBody, queryParams, signal, contentType) as Observable<MetaTagsGetResponseDto>;
 }
 
 static postApiMetatagsByPostIdThunk = createAsyncThunk<
@@ -204,9 +204,9 @@ static postApiMetatagsByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Update or create all MetaTags 
-* Save MetaTag Keywords 
+/**
+* Update or create all MetaTags
+* Save MetaTag Keywords
 */
 ("postApiMetatagsByPostId", async ({postId,  requestBody, queryParams, contentType = 'application/json'} : {postId: number,  requestBody: MetaTagsPostRequestDto, queryParams: PostApiMetatagsByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -235,51 +235,51 @@ static postApiMetatagsByPostIdThunk = createAsyncThunk<
     }
 });
 
-static postApiMetatagsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}');
-static postApiMetatagsByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}(.*)';
+static postApiMetatagsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}');
+static postApiMetatagsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static postApiMetatagsKeywordSwapByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
+/**
 * Save MetaTag Keywords
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 
 
-/** 
-* Update or create all MetaTags 
+/**
+* Update or create all MetaTags
 * Save MetaTag Keywords
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 postApiMetatagsKeywordSwapByPostId( postId: number,  requestBody: KeywordsMetaTagsKeywordRequestDto, queryParams: PostApiMetatagsKeywordSwapByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<MetaTagsGetResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}/keyword/swap`), requestBody, queryParams, signal, contentType) as Observable<MetaTagsGetResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}/keyword/swap`), requestBody, queryParams, signal, contentType) as Observable<MetaTagsGetResponseDto>;
 }
 
 static postApiMetatagsKeywordSwapByPostIdThunk = createAsyncThunk<
@@ -290,22 +290,22 @@ static postApiMetatagsKeywordSwapByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Update or create all MetaTags 
+/**
+* Update or create all MetaTags
 * Save MetaTag Keywords
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 ("postApiMetatagsKeywordSwapByPostId", async ({postId,  requestBody, queryParams, contentType = 'application/json'} : {postId: number,  requestBody: KeywordsMetaTagsKeywordRequestDto, queryParams: PostApiMetatagsKeywordSwapByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -334,25 +334,25 @@ static postApiMetatagsKeywordSwapByPostIdThunk = createAsyncThunk<
     }
 });
 
-static postApiMetatagsKeywordSwapByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}/keyword/swap');
-static postApiMetatagsKeywordSwapByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}/keyword/swap(.*)';
+static postApiMetatagsKeywordSwapByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}/keyword/swap');
+static postApiMetatagsKeywordSwapByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}/keyword/swap(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static putApiMetatagsKeywordByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Save MetaTags Keyword 
+/**
+* Save MetaTags Keyword
 */
 
 
-/** 
-* Save MetaTags Keyword 
-* Save MetaTags Keyword 
+/**
+* Save MetaTags Keyword
+* Save MetaTags Keyword
 */
 putApiMetatagsKeywordByPostId( postId: number,  requestBody: KeywordsMetaTagsKeywordRequestDto, queryParams: PutApiMetatagsKeywordByPostIdOpts, signal?: AbortSignal ): Observable<MetaTagsGetResponseDto> {
-  return this.put(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}/keyword`), requestBody, queryParams, signal) as Observable<MetaTagsGetResponseDto>;
+  return this.put(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}/keyword`), requestBody, queryParams, signal) as Observable<MetaTagsGetResponseDto>;
 }
 
 static putApiMetatagsKeywordByPostIdThunk = createAsyncThunk<
@@ -363,9 +363,9 @@ static putApiMetatagsKeywordByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Save MetaTags Keyword 
-* Save MetaTags Keyword 
+/**
+* Save MetaTags Keyword
+* Save MetaTags Keyword
 */
 ("putApiMetatagsKeywordByPostId", async ({postId,  requestBody, queryParams } : {postId: number,  requestBody: KeywordsMetaTagsKeywordRequestDto, queryParams: PutApiMetatagsKeywordByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -394,57 +394,57 @@ static putApiMetatagsKeywordByPostIdThunk = createAsyncThunk<
     }
 });
 
-static putApiMetatagsKeywordByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}/keyword');
-static putApiMetatagsKeywordByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}/keyword(.*)';
+static putApiMetatagsKeywordByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}/keyword');
+static putApiMetatagsKeywordByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}/keyword(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static deleteApiMetatagsKeywordByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
+/**
 * Save MetaTags Keyword
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 
 
-/** 
-* Remove MetaTags Keyword 
+/**
+* Remove MetaTags Keyword
 * Save MetaTags Keyword
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 deleteApiMetatagsKeywordByPostId( postId: number,  requestBody: KeywordsMetaTagsKeywordRequestDto, queryParams: DeleteApiMetatagsKeywordByPostIdOpts, signal?: AbortSignal ): Observable<MetaTagsGetResponseDto> {
-  return this.delete(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}/keyword`), requestBody, queryParams, signal) as Observable<MetaTagsGetResponseDto>;
+  return this.delete(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}/keyword`), requestBody, queryParams, signal) as Observable<MetaTagsGetResponseDto>;
 }
 
 static deleteApiMetatagsKeywordByPostIdThunk = createAsyncThunk<
@@ -455,25 +455,25 @@ static deleteApiMetatagsKeywordByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Remove MetaTags Keyword 
+/**
+* Remove MetaTags Keyword
 * Save MetaTags Keyword
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 ("deleteApiMetatagsKeywordByPostId", async ({postId,  requestBody , queryParams} : {postId: number,  requestBody: KeywordsMetaTagsKeywordRequestDto, queryParams: DeleteApiMetatagsKeywordByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -502,43 +502,43 @@ static deleteApiMetatagsKeywordByPostIdThunk = createAsyncThunk<
     }
 });
 
-static deleteApiMetatagsKeywordByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}/keyword');
-static deleteApiMetatagsKeywordByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}/keyword(.*)';
+static deleteApiMetatagsKeywordByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}/keyword');
+static deleteApiMetatagsKeywordByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}/keyword(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getApiMetatagsKeywordsByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
+/**
 * Retrieve Location Keywords
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 
 
-/** 
-* Retrieve Location Keywords 
+/**
 * Retrieve Location Keywords
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+* Retrieve Location Keywords
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 getApiMetatagsKeywordsByPostId( postId: number,  queryParams: GetApiMetatagsKeywordsByPostIdOpts, signal?: AbortSignal ): Observable<KeywordsResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}/keywords`), queryParams, signal) as Observable<KeywordsResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}/keywords`), queryParams, signal) as Observable<KeywordsResponseDto>;
 }
 
 static getApiMetatagsKeywordsByPostIdThunk = createAsyncThunk<
@@ -549,18 +549,18 @@ static getApiMetatagsKeywordsByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Retrieve Location Keywords 
+/**
 * Retrieve Location Keywords
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException 
+* Retrieve Location Keywords
+*
+*
+*
+*
+*
+*
+*
+*
+* @throws \BeyondSEODeps\Doctrine\ORM\Mapping\MappingException
 */
 ("getApiMetatagsKeywordsByPostId", async ({postId,  queryParams } : {postId: number,  queryParams: GetApiMetatagsKeywordsByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -589,25 +589,25 @@ static getApiMetatagsKeywordsByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiMetatagsKeywordsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}/keywords');
-static getApiMetatagsKeywordsByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}/keywords(.*)';
+static getApiMetatagsKeywordsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}/keywords');
+static getApiMetatagsKeywordsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}/keywords(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static postApiMetatagsContentKeywordsByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Retrieve Keywords After Analyzing The Content 
+/**
+* Retrieve Keywords After Analyzing The Content
 */
 
 
-/** 
-* Retrieve Content Keywords 
-* Retrieve Keywords After Analyzing The Content 
+/**
+* Retrieve Content Keywords
+* Retrieve Keywords After Analyzing The Content
 */
 postApiMetatagsContentKeywordsByPostId( postId: number,  requestBody: null, queryParams: PostApiMetatagsContentKeywordsByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<ContentAnalysisResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}/content/keywords`), requestBody, queryParams, signal, contentType) as Observable<ContentAnalysisResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}/content/keywords`), requestBody, queryParams, signal, contentType) as Observable<ContentAnalysisResponseDto>;
 }
 
 static postApiMetatagsContentKeywordsByPostIdThunk = createAsyncThunk<
@@ -618,9 +618,9 @@ static postApiMetatagsContentKeywordsByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Retrieve Content Keywords 
-* Retrieve Keywords After Analyzing The Content 
+/**
+* Retrieve Content Keywords
+* Retrieve Keywords After Analyzing The Content
 */
 ("postApiMetatagsContentKeywordsByPostId", async ({postId,  requestBody, queryParams, contentType = 'application/json'} : {postId: number,  requestBody: null, queryParams: PostApiMetatagsContentKeywordsByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -649,25 +649,25 @@ static postApiMetatagsContentKeywordsByPostIdThunk = createAsyncThunk<
     }
 });
 
-static postApiMetatagsContentKeywordsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}/content/keywords');
-static postApiMetatagsContentKeywordsByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}/content/keywords(.*)';
+static postApiMetatagsContentKeywordsByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}/content/keywords');
+static postApiMetatagsContentKeywordsByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}/content/keywords(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getApiMetatagsSeparatorByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get Post Separator 
+/**
+* Get Post Separator
 */
 
 
-/** 
-* Get Post Separator 
-* Get Post Separator 
+/**
+* Get Post Separator
+* Get Post Separator
 */
 getApiMetatagsSeparatorByPostId( postId: number,  queryParams: GetApiMetatagsSeparatorByPostIdOpts, signal?: AbortSignal ): Observable<MetaTagsSeparatorResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}/separator`), queryParams, signal) as Observable<MetaTagsSeparatorResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}/separator`), queryParams, signal) as Observable<MetaTagsSeparatorResponseDto>;
 }
 
 static getApiMetatagsSeparatorByPostIdThunk = createAsyncThunk<
@@ -678,9 +678,9 @@ static getApiMetatagsSeparatorByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get Post Separator 
-* Get Post Separator 
+/**
+* Get Post Separator
+* Get Post Separator
 */
 ("getApiMetatagsSeparatorByPostId", async ({postId,  queryParams } : {postId: number,  queryParams: GetApiMetatagsSeparatorByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -709,25 +709,25 @@ static getApiMetatagsSeparatorByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiMetatagsSeparatorByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}/separator');
-static getApiMetatagsSeparatorByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}/separator(.*)';
+static getApiMetatagsSeparatorByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}/separator');
+static getApiMetatagsSeparatorByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}/separator(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static putApiMetatagsSeparatorByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Update Post Separator 
+/**
+* Update Post Separator
 */
 
 
-/** 
-* Update Post Separator 
-* Update Post Separator 
+/**
+* Update Post Separator
+* Update Post Separator
 */
 putApiMetatagsSeparatorByPostId( postId: number,  requestBody: MetaTagsSeparatorRequestDto, queryParams: PutApiMetatagsSeparatorByPostIdOpts, signal?: AbortSignal ): Observable<MetaTagsSeparatorResponseDto> {
-  return this.put(new EndPoint(`/wp-json/rankingcoach/api/metatags/${postId}/separator`), requestBody, queryParams, signal) as Observable<MetaTagsSeparatorResponseDto>;
+  return this.put(new EndPoint(`/wp-json/rankingcoach/seo/metatags/${postId}/separator`), requestBody, queryParams, signal) as Observable<MetaTagsSeparatorResponseDto>;
 }
 
 static putApiMetatagsSeparatorByPostIdThunk = createAsyncThunk<
@@ -738,9 +738,9 @@ static putApiMetatagsSeparatorByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Update Post Separator 
-* Update Post Separator 
+/**
+* Update Post Separator
+* Update Post Separator
 */
 ("putApiMetatagsSeparatorByPostId", async ({postId,  requestBody, queryParams } : {postId: number,  requestBody: MetaTagsSeparatorRequestDto, queryParams: PutApiMetatagsSeparatorByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -769,11 +769,10 @@ static putApiMetatagsSeparatorByPostIdThunk = createAsyncThunk<
     }
 });
 
-static putApiMetatagsSeparatorByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/metatags/{postId}/separator');
-static putApiMetatagsSeparatorByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/metatags/{postId}/separator(.*)';
+static putApiMetatagsSeparatorByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/metatags/{postId}/separator');
+static putApiMetatagsSeparatorByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/metatags/{postId}/separator(.*)';
 
 
-  
+
  }
  export const metatagsStore = new MetatagsStore();
- 

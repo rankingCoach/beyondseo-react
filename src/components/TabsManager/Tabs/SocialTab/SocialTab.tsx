@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./SocialTab.module.scss";
 import tabStyles from "../Tabs.module.scss";
@@ -10,9 +10,12 @@ import { LinkedInPreview } from "./SocialTabPreviews/LinkedInPreview";
 import { RootState } from "@src/main.store";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
-import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { SocialTabPlaceholder } from "./SocialTabPlaceholder";
 import { SocialStore } from "@src/stores/swagger/api/SocialStore";
+import { WpVariablesStore } from "@stores/wp-variables.store";
+import { SocialMetaTagsPostRequestDto } from "@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/SocialMetaTagsPostRequestDto";
+import { MetaTagsApiResponse, SocialImageSourceDto, SocialSaveRequest } from "@src/types/meta-tags";
+import { buildVariablesMap, resolveTemplate, templateIsEmpty, textToTemplate } from "@helpers/template-helpers";
 import PlaceholderImage from "@src/assets/image-placeholder.svg";
 import { useScoreRecalculation } from "@contexts/ScoreRecalculationContext";
 import classNames from "classnames";
@@ -24,16 +27,35 @@ export const SocialTab = () => {
   const [seoUrl, setSeoUrl] = useState<string | null>(null);
   const [titleSwitchOpen, setTitleSwitchOpen] = useState(false);
   const [descriptionSwitchOpen, setDescriptionSwitchOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedImageSource, setSelectedImageSource] = useState<string>("");
-  const [imageSources, setImageSources] = useState<
-    Array<{ source?: string; label: string; value?: string; default?: boolean }>
-  >([]);
+  const [imageSources, setImageSources] = useState<SocialImageSourceDto[]>([]);
   const [activeImageUrl, setActiveImageUrl] = useState<string>(PlaceholderImage);
   const dispatch = useAppDispatch();
-  const { metaTagsData, seoTitle, seoDescription } = useSelector((state: RootState) => state.app);
+  const { seoTitle, seoDescription, wpVariables, metaTagsData } = useSelector((state: RootState) => state.app);
   const { currentPost } = useSelector((state: RootState) => state.post);
   const { triggerRecalculation } = useScoreRecalculation();
+
+  // The metatags and social endpoints return the same full payload and every
+  // response is applied to `metaTagsData` by the app slice — so if another tab
+  // already loaded it, this tab can render entirely from the store.
+  const [isLoading, setIsLoading] = useState(() => !metaTagsData);
+
+  // Track the last value persisted per field so blur without an actual change
+  // does not overwrite a stored variable template with its resolved text.
+  const lastSavedRef = useRef<{ title: string | null; description: string | null }>({
+    title: null,
+    description: null,
+  });
+
+  // One-time hydration guard for the textareas (image data stays store-driven).
+  const hydratedRef = useRef(false);
+
+  const variablesMap = useMemo(() => buildVariablesMap(wpVariables), [wpVariables]);
+  const variablesMapRef = useRef(variablesMap);
+  variablesMapRef.current = variablesMap;
+
+  const metaTagsDataRef = useRef(metaTagsData);
+  metaTagsDataRef.current = metaTagsData;
 
   const { formConfig } = useFormConfig({
     inputs: {
@@ -104,32 +126,110 @@ export const SocialTab = () => {
     }
   }, [currentPost]);
 
-  const refreshReactComponent = async () => {
-    setIsLoading(true);
+  // Ensure the store holds everything this tab needs; only hit the API for
+  // what is missing (e.g. the Social tab was opened before the General tab).
+  // Runs once — later store updates flow in through the hydration effect below.
+  useEffect(() => {
+    const ensureDataLoaded = async () => {
+      try {
+        if (!variablesMapRef.current || Object.keys(variablesMapRef.current).length === 0) {
+          if (!wpVariables) {
+            await dispatch(WpVariablesStore.getVariablesByPostIdThunk({ postId: getPathId() })).unwrap();
+          }
+        }
+
+        if (!metaTagsDataRef.current) {
+          await dispatch(
+            SocialStore.getApiSocialByPostIdThunk({
+              postId: getPathId(),
+              queryParams: { noCache: true },
+            }),
+          ).unwrap();
+        }
+      } catch (error) {
+        if (!hydratedRef.current) {
+          if (seoTitle) setTitle(seoTitle);
+          if (seoDescription) setDescription(seoDescription);
+          hydratedRef.current = true;
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    ensureDataLoaded();
+  }, []);
+
+  // Hydrate the tab from the store payload: structured templates are resolved
+  // to text for the textareas (once — later edits are local), and the
+  // server-resolved image fields stay store-driven so every save response
+  // keeps them authoritative. No API calls happen here.
+  useEffect(() => {
+    if (!metaTagsData) return;
+
+    if (!hydratedRef.current) {
+      const resolvedTitle =
+        metaTagsData.socialTitle && !templateIsEmpty(metaTagsData.socialTitle.template)
+          ? resolveTemplate(metaTagsData.socialTitle.template, variablesMap)
+          : "";
+      const resolvedDescription =
+        metaTagsData.socialDescription && !templateIsEmpty(metaTagsData.socialDescription.template)
+          ? resolveTemplate(metaTagsData.socialDescription.template, variablesMap)
+          : "";
+
+      const effectiveTitle = resolvedTitle || seoTitle || "";
+      const effectiveDescription = resolvedDescription || seoDescription || "";
+
+      setTitle(effectiveTitle);
+      setDescription(effectiveDescription);
+      lastSavedRef.current = { title: effectiveTitle, description: effectiveDescription };
+      hydratedRef.current = true;
+    }
+
+    const sources = metaTagsData.imageSources ?? [];
+    setImageSources(sources);
+
+    if (metaTagsData.selectedImageSource) {
+      setSelectedImageSource(metaTagsData.selectedImageSource);
+      setActiveImageUrl(metaTagsData.selectedImageUrl || PlaceholderImage);
+    } else {
+      // Nothing persisted yet: preselect the backend-flagged default source
+      // (or the first available one) locally, without saving it.
+      const defaultSource = sources.find((source) => source.default === true) ?? sources[0];
+      if (defaultSource?.source) {
+        setSelectedImageSource(defaultSource.source);
+        setActiveImageUrl(
+          defaultSource.value && defaultSource.value.startsWith("http") ? defaultSource.value : PlaceholderImage,
+        );
+      } else {
+        setActiveImageUrl(PlaceholderImage);
+      }
+    }
+  }, [metaTagsData, variablesMap]);
+
+  // If the social fields were empty and untouched, fill them from the SEO
+  // title/description once those resolve (same fallback as before, without
+  // refetching the social payload).
+  useEffect(() => {
+    if (!hydratedRef.current) return;
+
+    if (!title && !lastSavedRef.current.title && seoTitle) {
+      setTitle(seoTitle);
+      lastSavedRef.current.title = seoTitle;
+    }
+    if (!description && !lastSavedRef.current.description && seoDescription) {
+      setDescription(seoDescription);
+      lastSavedRef.current.description = seoDescription;
+    }
+  }, [seoTitle, seoDescription]);
+
+  /**
+   * Refresh only the image source list via the dedicated endpoint (used when
+   * the featured image changes in Gutenberg, without re-fetching the whole
+   * social payload).
+   */
+  const refreshImageSources = async () => {
     try {
-      const socialData = await dispatch(
-        SocialStore.getApiSocialByPostIdThunk({
-          postId: getPathId(),
-          queryParams: { noCache: true },
-        }),
-      ).unwrap();
-
-      if (socialData?.social_title?.content) {
-        setTitle(socialData.social_title.content);
-      } else if (seoTitle) {
-        setTitle(seoTitle);
-      }
-
-      if (socialData?.social_description?.content) {
-        setDescription(socialData.social_description.content);
-      } else if (seoDescription) {
-        setDescription(seoDescription);
-      }
-
-      if (socialData?.selected_image_source) {
-        setSelectedImageSource(socialData.selected_image_source);
-      }
-
       const imageSourcesData = await dispatch(
         SocialStore.getApiSocialImageSourcesByPostIdThunk({
           postId: getPathId(),
@@ -137,29 +237,40 @@ export const SocialTab = () => {
         }),
       ).unwrap();
 
-      if (imageSourcesData.image_sources) {
-        const sources = imageSourcesData.image_sources;
-        setImageSources(sources);
+      // The reworked endpoint returns `imageSources`; tolerate the legacy
+      // snake_case key while the generated DTOs are still in transition.
+      const raw = imageSourcesData as any;
+      const sources = (raw?.imageSources ?? raw?.image_sources ?? []) as SocialImageSourceDto[];
+      if (!sources.length) return;
 
-        if (!socialData?.selected_image_source) {
-          const defaultSource = sources.find((source) => source.default === true);
+      setImageSources(sources);
 
-          if (defaultSource?.source) {
-            setSelectedImageSource(defaultSource.source);
-            updateActiveImageUrl(defaultSource.source, sources);
-          } else if (sources.length > 0 && sources[0].source) {
-            setSelectedImageSource(sources[0].source as string);
-            updateActiveImageUrl(sources[0].source as string, sources);
-          }
-        } else {
-          updateActiveImageUrl(socialData.selected_image_source, sources);
-        }
+      const current = sources.find((source) => source.source === selectedImageSource);
+      if (current) {
+        setActiveImageUrl(current.value && current.value.startsWith("http") ? current.value : PlaceholderImage);
       }
     } catch (error) {
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  // Keep the image picker in sync with featured image changes in Gutenberg.
+  useEffect(() => {
+    const isGutenberg = typeof wp !== "undefined" && wp.data && wp.data.select("core/editor");
+    if (!isGutenberg) return;
+
+    const { select, subscribe } = wp.data;
+    let currentFeaturedImage = select("core/editor")?.getEditedPostAttribute("featured_media");
+
+    const unsubscribe = subscribe(() => {
+      const updatedFeaturedImage = select("core/editor")?.getEditedPostAttribute("featured_media");
+      if (updatedFeaturedImage !== currentFeaturedImage) {
+        currentFeaturedImage = updatedFeaturedImage;
+        refreshImageSources();
+      }
+    });
+
+    return () => unsubscribe();
+  }, [selectedImageSource]);
 
   // Listen for global score recalculation events for logging
   useEffect(() => {
@@ -177,119 +288,68 @@ export const SocialTab = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const socialData = await dispatch(
-          SocialStore.getApiSocialByPostIdThunk({
-            postId: getPathId(),
-            queryParams: { noCache: true },
-          }),
-        ).unwrap();
+  const postSocialData = async (payload: SocialSaveRequest): Promise<MetaTagsApiResponse | null> => {
+    try {
+      const response = (await dispatch(
+        SocialStore.postApiSocialByPostIdThunk({
+          postId: getPathId(),
+          requestBody: payload as unknown as SocialMetaTagsPostRequestDto,
+          queryParams: { noCache: true },
+        }),
+      ).unwrap()) as unknown as MetaTagsApiResponse;
 
-        if (socialData?.social_title?.content) {
-          setTitle(socialData.social_title.content);
-        } else if (seoTitle) {
-          setTitle(seoTitle);
-        }
-
-        if (socialData?.social_description?.content) {
-          setDescription(socialData.social_description.content);
-        } else if (seoDescription) {
-          setDescription(seoDescription);
-        }
-
-        if (socialData?.selected_image_source) {
-          setSelectedImageSource(socialData.selected_image_source);
-        }
-
-        const imageSourcesData = await dispatch(
-          SocialStore.getApiSocialImageSourcesByPostIdThunk({
-            postId: getPathId(),
-            queryParams: { noCache: true },
-          }),
-        ).unwrap();
-
-        if (imageSourcesData.image_sources) {
-          const sources = imageSourcesData.image_sources;
-          setImageSources(sources);
-
-          if (!socialData?.selected_image_source) {
-            const defaultSource = sources.find((source) => source.default === true);
-
-            if (defaultSource?.source) {
-              setSelectedImageSource(defaultSource.source);
-              updateActiveImageUrl(defaultSource.source, sources);
-            } else if (sources.length > 0 && sources[0].source) {
-              setSelectedImageSource(sources[0].source as string);
-              updateActiveImageUrl(sources[0].source as string, sources);
-            }
-          } else {
-            updateActiveImageUrl(socialData.selected_image_source, sources);
-          }
-        }
-      } catch (error) {
-
-        if (seoTitle) setTitle(seoTitle);
-        if (seoDescription) setDescription(seoDescription);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [seoTitle, seoDescription]);
-
-  const updateActiveImageUrl = (
-    sourceId: string,
-    sources: Array<{ source?: string; label: string; value?: string }> = imageSources,
-  ) => {
-    const selectedSource = sources.find((src) => src.source === sourceId);
-
-    if (selectedSource && selectedSource.value && selectedSource.value.startsWith("http")) {
-      setActiveImageUrl(selectedSource.value);
-    } else {
-      setActiveImageUrl(PlaceholderImage);
+      return response;
+    } catch (error) {
+      return null;
     }
   };
 
   const handleSave = async (field: "title" | "description", value: string) => {
-    const payload: any = {};
-
-    if (field === "title") {
-      payload.title = {
-        type: "social_title",
-        parsed: "",
-        postId: getPathId(),
-        content: value,
-        template: "{content}",
-        autoGenerated: false,
-        objectType:
-          "App\\Domain\\Integrations\\WordPress\\Seo\\Entities\\WebPages\\Content\\Elements\\MetaTags\\Social\\WPWebPageSocialTitleMetaTag",
-      };
-    } else {
-      payload.description = {
-        type: "social_description",
-        parsed: "",
-        postId: getPathId(),
-        content: value,
-        template: "{content}",
-        autoGenerated: false,
-        objectType:
-          "App\\Domain\\Integrations\\WordPress\\Seo\\Entities\\WebPages\\Content\\Elements\\MetaTags\\Social\\WPWebPageSocialDescriptionMetaTag",
-      };
+    // Only persist actual edits: saving an unchanged value would replace a
+    // stored variable template with its resolved plain text.
+    if (lastSavedRef.current[field] === value) {
+      return;
     }
 
-    await dispatch(
-      SocialStore.postApiSocialByPostIdThunk({
-        postId: getPathId(),
-        requestBody: payload,
-        queryParams: { noCache: true },
-      }),
+    const payload: SocialSaveRequest =
+      field === "title"
+        ? { socialTitle: { template: textToTemplate(value) } }
+        : { socialDescription: { template: textToTemplate(value) } };
+
+    const response = await postSocialData(payload);
+    if (response) {
+      lastSavedRef.current[field] = value;
+
+      // Trigger immediate recalculation only after a successful save — the
+      // server state is unchanged when the POST fails.
+      triggerRecalculation(true);
+    }
+  };
+
+  const handleImageSourceChange = async (newValue: string) => {
+    setSelectedImageSource(newValue);
+
+    // Optimistic preview from the already-known source list; the POST response
+    // carries the authoritative server-resolved URL and flows back into this
+    // tab through the store hydration effect.
+    const optimistic = imageSources.find((source) => source.source === newValue);
+    setActiveImageUrl(
+      optimistic?.value && optimistic.value.startsWith("http") ? optimistic.value : PlaceholderImage,
     );
 
-    // Trigger immediate recalculation after social metadata change
-    triggerRecalculation(true);
+    const response = await postSocialData({ selectedImageSource: newValue });
+
+    if (response) {
+      // Trigger immediate recalculation only after a successful save
+      triggerRecalculation(true);
+    } else {
+      // Roll the optimistic selection back to the last known server state
+      const stored = metaTagsDataRef.current;
+      if (stored?.selectedImageSource) {
+        setSelectedImageSource(stored.selectedImageSource);
+        setActiveImageUrl(stored.selectedImageUrl || PlaceholderImage);
+      }
+    }
   };
 
   if (isLoading) {
@@ -330,29 +390,13 @@ export const SocialTab = () => {
               className={styles.selectContainer}
               label={__("Image Source", "beyondseo")}
               labelType="outer"
-              onChange={async (e: any) => {
-                const newValue = e.target.value;
-                setSelectedImageSource(newValue);
-                updateActiveImageUrl(newValue);
-                await dispatch(
-                  SocialStore.postApiSocialByPostIdThunk({
-                    postId: getPathId(),
-                    requestBody: {
-                      selectedImageSource: newValue,
-                    },
-                    queryParams: { noCache: true },
-                  }),
-                );
-
-                // Trigger immediate recalculation after image source change
-                triggerRecalculation(true);
-              }}
+              onChange={(e: any) => handleImageSourceChange(e.target.value)}
               value={selectedImageSource}
               options={imageSources
                 .filter((source) => source.source)
                 .map((source) => ({
-                  key: source.source as string,
-                  value: source.source as string,
+                  key: source.source,
+                  value: source.source,
                   title: source.label,
                 }))}
             />

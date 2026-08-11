@@ -30,10 +30,8 @@ import { Onboarding } from "@src/components/Onboarding/Onboarding";
 import { Registration } from "@src/components/Registration/Registration";
 import { SEOOptimiser } from "@components/SEO/SEOOptimiser/SEOOptimiser";
 import { fetchPost } from "@helpers/post-helpers";
-import { PluginInformationStore } from "@stores/swagger/api/PluginInformationStore";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { WPKeywordsAnalysis } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/ContentAnalysis/WPKeywordsAnalysis";
-import { WPWebPageKeywordsMetaTag } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/MetaTags/Tags/WPWebPageKeywordsMetaTag";
 import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
 import { ScoreButtonHeader } from "@components/ScoreButtonHeader/ScoreButtonHeader";
 import Settings from "@components/Settings/Settings";
@@ -43,6 +41,35 @@ const params = new URLSearchParams(window.location.search);
 const hasDebug = ["1", "true"].includes(params.get("debug") || "");
 
 const componentsToLoad = (rcWindow.rankingCoachReactData?.loadNextComponents || "").split(",");
+
+// Areas that are autonomous with respect to plugin information: they read everything
+// they need straight from the `rankingCoachReactData` window object and never consume
+// the `pluginInformation` payload from the store. For these we skip the API call and
+// never block rendering on it. Every other area keeps resolving plugin information from
+// the window when it has been seeded, and otherwise falls back to the API call below.
+const PLUGIN_INFO_OPTIONAL_COMPONENTS = ["upsell", "add_new"];
+
+/**
+ * Whether the area being rendered needs plugin information.
+ *
+ * The decision is made per rendered component (not from the global
+ * `loadNextComponents` list), because a single page can advertise several
+ * components in that list while only rendering one container. For example the
+ * connect/upsell page loads `activation,registration,upsell` but only renders
+ * `upsell`; keying off the global list there would incorrectly require plugin
+ * information and trigger the API call we are trying to avoid.
+ *
+ * When the rendered component is unknown (containers rendered outside
+ * `initializeApp`, e.g. post-list cells), we fall back to the global list and keep
+ * the historical "fetch unless every loaded component is autonomous" behavior.
+ */
+const componentRequiresPluginInfo = (componentKey?: string): boolean => {
+  if (componentKey) {
+    return !PLUGIN_INFO_OPTIONAL_COMPONENTS.includes(componentKey);
+  }
+  const loaded: string[] = componentsToLoad.filter(Boolean);
+  return loaded.length === 0 || loaded.some((c: string) => !PLUGIN_INFO_OPTIONAL_COMPONENTS.includes(c));
+};
 
 
 interface FactorSuggestion {
@@ -84,12 +111,14 @@ interface AnalysisResult {
   };
 }
 
-const MainComponent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const MainComponent: React.FC<{ children: React.ReactNode; componentKey?: string }> = ({ children, componentKey }) => {
   const isLocaleReady = useLocaleLoader();
   const dispatch = useAppDispatch();
   const { isPluginDataLoaded, isFetchingPluginData } = useSelector((state: RootState) => state.app);
   const { isCurrentPostLoaded, isFetchingPostData } = useSelector((state: RootState) => state.post);
   let { currentPostType, currentPostId, isEditingPost } = rcWindow?.rankingCoachReactData || {};
+
+  const isPluginInformationRequired = componentRequiresPluginInfo(componentKey);
 
   const postId = wp?.data?.select("core/editor")?.getCurrentPostId();
   const postStatus = wp?.data?.select("core/editor")?.getCurrentPost()?.status;
@@ -99,15 +128,16 @@ const MainComponent: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const [fetchPostExecuted, setFetchPostExecuted] = useState(false);
 
   useEffect(() => {
-    if (!isPluginDataLoaded && !isFetchingPluginData) {
+    if (isPluginInformationRequired && !isPluginDataLoaded && !isFetchingPluginData) {
       dispatch(
-        PluginInformationStore.postApiPluginInformationThunk({
-          requestBody: null,
-          queryParams: { debug: true, noCache: true },
+        AppSlice.setAll({
+          plugin: rcWindow?.rankingCoachReactData?.pluginInformation,
+          isPluginDataLoaded: true,
+          isFetchingPluginData: false,
         }),
       );
     }
-  }, [isPluginDataLoaded, isFetchingPluginData]);
+  }, [isPluginInformationRequired, isPluginDataLoaded, isFetchingPluginData]);
 
   useEffect(() => {
     if (fetchPostExecuted || isCurrentPostLoaded || isFetchingPostData) return;
@@ -141,7 +171,11 @@ const MainComponent: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     fetchPostExecuted,
   ]);
 
-  const isLoading = !(isPluginDataLoaded && isLocaleReady);
+  // Autonomous areas (e.g. the connect/upsell page) only wait for locale; they never
+  // block on plugin information since they don't consume it.
+  const isLoading = isPluginInformationRequired
+    ? !(isPluginDataLoaded && isLocaleReady)
+    : !isLocaleReady;
 
   return (
     <ComponentContainer testId={"rc-main-container"} style={{ width: "100%" }}>
@@ -156,12 +190,12 @@ const MainComponent: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   );
 };
 
-const renderWithProviders = (container: Container | null, Component: React.ComponentType) => {
+const renderWithProviders = (container: Container | null, Component: React.ComponentType, componentKey?: string) => {
   if (container) {
     createRoot(container).render(
       <Provider store={MainStore}>
         <PersistGate persistor={MainStorePersistor}>
-          <MainComponent>
+          <MainComponent componentKey={componentKey}>
             <Component />
           </MainComponent>
         </PersistGate>
@@ -207,7 +241,6 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
 
     const handleOnUseKeywordsFunction = (keywords: WPKeywordsAnalysis) => {
       let currentPostId = getPathId();
-      let oldKeywords = { ...metaTagsData?.keywords } as WPWebPageKeywordsMetaTag;
 
       const uniqueKeywordsSet = new Set<string>();
 
@@ -240,17 +273,27 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
       }
 
       const uniqueKeywords = Array.from(uniqueKeywordsSet);
-
-      if (uniqueKeywords.length > 0) {
-        oldKeywords.content = uniqueKeywords.join(",");
+      if (uniqueKeywords.length === 0) {
+        setShowFloating(false);
+        return;
       }
+
+      // The keywords API expects primaryKeyword/additionalKeywords directly;
+      // the backend serializes them into the template column itself. Keep an
+      // already-assigned primary keyword, everything else becomes additional.
+      const existingPrimary = metaTagsData?.keywords?.primaryKeyword || "";
+      const primaryKeyword = existingPrimary || uniqueKeywords[0];
+      const existingAdditional = metaTagsData?.keywords?.additionalKeywords ?? [];
+      const additionalKeywords = Array.from(
+        new Set([...existingAdditional, ...uniqueKeywords.filter((keyword) => keyword !== primaryKeyword)]),
+      );
 
       dispatch(
         MetatagsStore.postApiMetatagsByPostIdThunk({
           postId: currentPostId,
           requestBody: {
-            keywords: oldKeywords,
-          },
+            keywords: { primaryKeyword, additionalKeywords },
+          } as any,
           queryParams: {},
         }),
       ).then(() => {
@@ -426,7 +469,7 @@ export function initializeApp() {
 
   Object.entries(CONTAINERS).forEach(([key, container]) => {
     if (container && componentsToLoad.includes(key)) {
-      renderWithProviders(container, COMPONENTS_MAP[key]);
+      renderWithProviders(container, COMPONENTS_MAP[key], key);
     }
   });
 }

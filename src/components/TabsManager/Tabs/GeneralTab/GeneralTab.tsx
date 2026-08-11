@@ -7,6 +7,7 @@ import { getPathId } from "@helpers/get-path-id";
 import { rcWindow } from "@stores/window.store";
 import { SEOMetadataAndKeywords } from "@components/SEOMetadataAndKeywords/SEOMetadataAndKeywords";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
+import { WpVariablesStore } from "@stores/wp-variables.store";
 import { GeneralTabPlaceholder } from "./GeneralTabPlaceholder";
 import styles from "./GeneralTab.module.scss";
 import tabsStyles from "../Tabs.module.scss";
@@ -23,37 +24,60 @@ export const GeneralTab = (props: any) => {
   const { currentPostType, isEditingPost } = rcWindow?.rankingCoachReactData;
   // Add refresh state to trigger re-renders
   const [refreshKey, setRefreshKey] = useState(0);
-  const { optimiserResult } = useSelector((state: RootState) => state.app);
+  const { optimiserResult, isMetaTagsDataLoaded, isBreadcrumbsLoaded, wpVariables } = useSelector(
+    (state: RootState) => state.app,
+  );
   const { triggerRecalculation } = useScoreRecalculation();
 
   const { currentPost } = useSelector((state: RootState) => state.post);
 
   const recalculationAttempted = React.useRef(false);
 
+  // Only request what the redux store does not hold yet, so switching back to
+  // this tab (which re-mounts it) does not refetch already-loaded data. Save
+  // responses keep the store in sync, so cached data stays fresh.
   const loadMetaData = async (postId: number) => {
     try {
       setIsLoading(true);
       if (postId && postId > 0) {
-        const [metatags, breadcrumbs] = await Promise.all([
-          dispatch(
-            MetatagsStore.getApiMetatagsByPostIdThunk({
-              postId,
-              queryParams: {},
-            }),
-          ),
-          dispatch(
-            SeoStore.postRankingcoachSeoBreadcrumbsThunk({
-              requestBody: {
-                types: ["page", "post", "archive", "search", "404"],
-                context: [],
-                post_id: String(postId),
-              },
-            }),
-          ),
-        ]);
+        const requests: Promise<any>[] = [];
 
-        if (breadcrumbs?.payload?.response) {
-          dispatch(AppSlice.setBreadcrumbsData(breadcrumbs.payload.response));
+        if (!wpVariables) {
+          requests.push(dispatch(WpVariablesStore.getVariablesByPostIdThunk({ postId })));
+        }
+
+        if (!isMetaTagsDataLoaded) {
+          requests.push(
+            dispatch(
+              MetatagsStore.getApiMetatagsByPostIdThunk({
+                postId,
+                queryParams: {},
+              }),
+            ),
+          );
+        }
+
+        if (!isBreadcrumbsLoaded) {
+          requests.push(
+            dispatch(
+              SeoStore.postRankingcoachSeoBreadcrumbsThunk({
+                requestBody: {
+                  types: ["page", "post", "archive", "search", "404"],
+                  context: [],
+                  post_id: String(postId),
+                },
+              }),
+            ).then((breadcrumbs: any) => {
+              if (breadcrumbs?.payload?.response) {
+                dispatch(AppSlice.setBreadcrumbsData(breadcrumbs.payload.response));
+              }
+              return breadcrumbs;
+            }),
+          );
+        }
+
+        if (requests.length > 0) {
+          await Promise.all(requests);
         }
       }
     } catch (error) {

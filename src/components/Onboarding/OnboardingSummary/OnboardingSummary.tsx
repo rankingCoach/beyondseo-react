@@ -26,7 +26,6 @@ import {
   VanguardStyle,
   Icon,
   IconSize,
-  SearchableSelect
 } from "vanguard";
 import { useAppDispatch } from "@src/custom-hooks/use-app-dispatch";
 import { useSelector } from "react-redux";

@@ -17,8 +17,8 @@ export const KeywordManager = () => {
   const [inputValue, setInputValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [showError, setShowError] = useState(false);
-  const { primaryKeyword, additionalKeywords } = useSelector((state: RootState) => state.app);
-  const [keywordsSearchOptions, setKeywordsSearchOptions] = useState<Array<{ name: string }>>([]);
+  const { primaryKeyword, additionalKeywords, availableKeywords } = useSelector((state: RootState) => state.app);
+  const keywordsSearchOptions = availableKeywords ?? [];
   const dispatch = useAppDispatch();
   const { setAdditionalKeywords, setPrimaryKeyword } = AppSlice;
   const [resetKey, setResetKey] = useState(0);
@@ -48,29 +48,20 @@ export const KeywordManager = () => {
     setResetKey((prev) => prev + 1);
   };
 
+  // The fetched list is cached in the app slice (`availableKeywords`), so this
+  // only hits the API on demand; the mount effect below skips it entirely when
+  // the cache is already populated.
   const fetchKeywords = useCallback(async () => {
     if (!isMounted.current) return;
 
     try {
       setIsLoading(true);
-      const response = await dispatch(
+      await dispatch(
         MetatagsStore.getApiMetatagsKeywordsByPostIdThunk({
           postId: getPathId(),
           queryParams: { noCache: true, debug: true },
         }),
       ).unwrap();
-
-      if (!isMounted.current) return;
-
-      if (response?.keywords?.elements) {
-        const keywordArray = Array.isArray(response.keywords.elements) ? response.keywords.elements : [];
-        const mappedKeywords = keywordArray.map((keyword: any) => ({
-          name: keyword.keyword || keyword.name || keyword,
-        }));
-        setKeywordsSearchOptions(mappedKeywords);
-      } else {
-        setKeywordsSearchOptions([]);
-      }
     } catch (error) {
     } finally {
       if (isMounted.current) {
@@ -135,12 +126,12 @@ export const KeywordManager = () => {
         dispatch(setPrimaryKeyword(trimmedKeyword));
       }
 
-      await fetchKeywords();
-
       // Trigger immediate recalculation after keyword change
       triggerRecalculation(true);
 
-      // Dispatch event to notify other components about the keyword update
+      // Dispatch event to notify other components about the keyword update.
+      // The event listener above refetches the available-keywords list, so no
+      // direct refetch is needed here (it used to run twice per add).
       const event = new CustomEvent("rankingcoach-keywords-updated");
       document.dispatchEvent(event);
     } catch (error) {
@@ -163,7 +154,11 @@ export const KeywordManager = () => {
   }, [keywordsSearchOptions, primaryKeyword, additionalKeywords]);
 
   useEffect(() => {
-    fetchKeywords();
+    // Skip when the slice already holds the list (populated on a previous
+    // mount); the keywords-updated event still forces a refresh.
+    if (availableKeywords === null) {
+      fetchKeywords();
+    }
   }, [fetchKeywords]);
 
   const triggerKeywordGenerator = () => {

@@ -13,54 +13,54 @@ import type { SocialMetaTagsGetResponseDto } from '@models/swagger/BeyondSEO/Pre
     import type { BadRequestException } from '@models/swagger/BeyondSEODeps/DDD/Infrastructure/Exceptions/BadRequestException';
     import type { SocialMetaTagsPostRequestDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/SocialMetaTagsPostRequestDto';
     import type { SocialImageSourcesResponseDto } from '@models/swagger/BeyondSEO/Presentation/Api/Client/Integrations/WordPress/Dtos/SocialImageSourcesResponseDto';
-    
+
 
 
  export type GetApiSocialByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, debug mode will be activated 
+  /**
+* If set to true, debug mode will be activated
 */
   debug? : boolean,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type PostApiSocialByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
  export type GetApiSocialImageSourcesByPostIdOpts = {FE_UNIQUE_ID?: string
-  /** 
-* If set to true, debug mode will be activated 
+  /**
+* If set to true, debug mode will be activated
 */
   debug? : boolean,
-  /** 
-* If set to true, no EntityRegistry Argus Caching will be used 
+  /**
+* If set to true, no EntityRegistry Argus Caching will be used
 */
   noCache? : boolean,
 }
 
 export class SocialStore extends HttpStore {
- 
- 
+
+
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getApiSocialByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get MetaTags 
+/**
+* Get MetaTags
 */
 
 
-/** 
-* Get all Social MetaTags 
-* Get MetaTags 
+/**
+* Get all Social MetaTags
+* Get MetaTags
 */
 getApiSocialByPostId( postId: number,  queryParams: GetApiSocialByPostIdOpts, signal?: AbortSignal ): Observable<SocialMetaTagsGetResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/api/social/${postId}`), queryParams, signal) as Observable<SocialMetaTagsGetResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/social/${postId}`), queryParams, signal) as Observable<SocialMetaTagsGetResponseDto>;
 }
 
 static getApiSocialByPostIdThunk = createAsyncThunk<
@@ -71,9 +71,9 @@ static getApiSocialByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get all Social MetaTags 
-* Get MetaTags 
+/**
+* Get all Social MetaTags
+* Get MetaTags
 */
 ("getApiSocialByPostId", async ({postId,  queryParams } : {postId: number,  queryParams: GetApiSocialByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -102,25 +102,25 @@ static getApiSocialByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiSocialByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/social/{postId}');
-static getApiSocialByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/social/{postId}(.*)';
+static getApiSocialByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/social/{postId}');
+static getApiSocialByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/social/{postId}(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static postApiSocialByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Save MetaTag Keywords 
+/**
+* Save MetaTag Keywords
 */
 
 
-/** 
-* Update all Social MetaTags 
-* Save MetaTag Keywords 
+/**
+* Update all Social MetaTags
+* Save MetaTag Keywords
 */
 postApiSocialByPostId( postId: number,  requestBody: SocialMetaTagsPostRequestDto, queryParams: PostApiSocialByPostIdOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<SocialMetaTagsGetResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/api/social/${postId}`), requestBody, queryParams, signal, contentType) as Observable<SocialMetaTagsGetResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/social/${postId}`), requestBody, queryParams, signal, contentType) as Observable<SocialMetaTagsGetResponseDto>;
 }
 
 static postApiSocialByPostIdThunk = createAsyncThunk<
@@ -131,9 +131,9 @@ static postApiSocialByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Update all Social MetaTags 
-* Save MetaTag Keywords 
+/**
+* Update all Social MetaTags
+* Save MetaTag Keywords
 */
 ("postApiSocialByPostId", async ({postId,  requestBody, queryParams, contentType = 'application/json'} : {postId: number,  requestBody: SocialMetaTagsPostRequestDto, queryParams: PostApiSocialByPostIdOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -162,25 +162,25 @@ static postApiSocialByPostIdThunk = createAsyncThunk<
     }
 });
 
-static postApiSocialByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/social/{postId}');
-static postApiSocialByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/social/{postId}(.*)';
+static postApiSocialByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/social/{postId}');
+static postApiSocialByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/social/{postId}(.*)';
 
 
 /**
     * Manager of list of AbortControllers for the Request
     */
     static getApiSocialImageSourcesByPostIdAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Get Social Image Sources 
+/**
+* Get Social Image Sources
 */
 
 
-/** 
-* Get all Social Image Sources 
-* Get Social Image Sources 
+/**
+* Get all Social Image Sources
+* Get Social Image Sources
 */
 getApiSocialImageSourcesByPostId( postId: number,  queryParams: GetApiSocialImageSourcesByPostIdOpts, signal?: AbortSignal ): Observable<SocialImageSourcesResponseDto> {
-  return this.get(new EndPoint(`/wp-json/rankingcoach/api/social/${postId}/image_sources`), queryParams, signal) as Observable<SocialImageSourcesResponseDto>;
+  return this.get(new EndPoint(`/wp-json/rankingcoach/seo/social/${postId}/image_sources`), queryParams, signal) as Observable<SocialImageSourcesResponseDto>;
 }
 
 static getApiSocialImageSourcesByPostIdThunk = createAsyncThunk<
@@ -191,9 +191,9 @@ static getApiSocialImageSourcesByPostIdThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Get all Social Image Sources 
-* Get Social Image Sources 
+/**
+* Get all Social Image Sources
+* Get Social Image Sources
 */
 ("getApiSocialImageSourcesByPostId", async ({postId,  queryParams } : {postId: number,  queryParams: GetApiSocialImageSourcesByPostIdOpts}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -222,11 +222,10 @@ static getApiSocialImageSourcesByPostIdThunk = createAsyncThunk<
     }
 });
 
-static getApiSocialImageSourcesByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/api/social/{postId}/image_sources');
-static getApiSocialImageSourcesByPostIdUrlMockRequest = '/wp-json/rankingcoach/api/social/{postId}/image_sources(.*)';
+static getApiSocialImageSourcesByPostIdUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/social/{postId}/image_sources');
+static getApiSocialImageSourcesByPostIdUrlMockRequest = '/wp-json/rankingcoach/seo/social/{postId}/image_sources(.*)';
 
 
-  
+
  }
  export const socialStore = new SocialStore();
- 

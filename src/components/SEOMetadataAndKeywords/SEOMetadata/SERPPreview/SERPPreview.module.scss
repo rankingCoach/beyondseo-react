@@ -121,6 +121,7 @@
         text-align: left;
         text-decoration: none;
         visibility: visible;
+        white-space: pre-wrap;
         word-break: break-word;
 
         @media screen and (max-width: 600px) {
@@ -142,6 +143,7 @@
         text-align: left;
         visibility: visible;
         word-wrap: break-word;
+        white-space: pre-wrap;
 
         @media screen and (max-width: 600px) {
             font-size: 13px;

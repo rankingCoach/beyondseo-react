@@ -10,30 +10,30 @@ import { AbortControllersManager } from "../../store-helpers/abort-controllers-m
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ServiceSyncResponseDto } from '@models/swagger/BeyondSEO/Presentation/Api/Public/Integrations/WordPress/Dtos/ServiceSyncResponseDto';
-    
+
 
 
  export type PostApiSyncKeywordsOpts = {FE_UNIQUE_ID?: string
 }
 
 export class SyncStore extends HttpStore {
- 
- 
+
+
 /**
     * Manager of list of AbortControllers for the Request
     */
     static postApiSyncKeywordsAbortManager: AbortControllersManager = new AbortControllersManager();
-/** 
-* Retrieve 'ok' response for ping requests. 
+/**
+* Retrieve 'ok' response for ping requests.
 */
 
 
-/** 
-* Sync Keywords 
-* Retrieve 'ok' response for ping requests. 
+/**
+* Sync Keywords
+* Retrieve 'ok' response for ping requests.
 */
 postApiSyncKeywords(  requestBody: null, queryParams?: PostApiSyncKeywordsOpts, signal?: AbortSignal, contentType?: 'application/json' ): Observable<ServiceSyncResponseDto> {
-  return this.post(new EndPoint(`/wp-json/rankingcoach/api/sync/keywords`), requestBody, queryParams, signal, contentType) as Observable<ServiceSyncResponseDto>;
+  return this.post(new EndPoint(`/wp-json/rankingcoach/seo/sync/keywords`), requestBody, queryParams, signal, contentType) as Observable<ServiceSyncResponseDto>;
 }
 
 static postApiSyncKeywordsThunk = createAsyncThunk<
@@ -44,9 +44,9 @@ static postApiSyncKeywordsThunk = createAsyncThunk<
   }
 >
 
-/** 
-* Sync Keywords 
-* Retrieve 'ok' response for ping requests. 
+/**
+* Sync Keywords
+* Retrieve 'ok' response for ping requests.
 */
 ("postApiSyncKeywords", async ({ requestBody, queryParams, contentType = 'application/json'} : { requestBody: null, queryParams?: PostApiSyncKeywordsOpts, contentType?: 'application/json'}, { rejectWithValue } = {} as any,) => {
   // Generate a random request Id
@@ -75,11 +75,10 @@ static postApiSyncKeywordsThunk = createAsyncThunk<
     }
 });
 
-static postApiSyncKeywordsUrlRegEx = new RegExp('/wp-json/rankingcoach/api/sync/keywords');
-static postApiSyncKeywordsUrlMockRequest = '/wp-json/rankingcoach/api/sync/keywords(.*)';
+static postApiSyncKeywordsUrlRegEx = new RegExp('/wp-json/rankingcoach/seo/sync/keywords');
+static postApiSyncKeywordsUrlMockRequest = '/wp-json/rankingcoach/seo/sync/keywords(.*)';
 
 
-  
+
  }
  export const syncStore = new SyncStore();
- 

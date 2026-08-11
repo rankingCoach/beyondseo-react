@@ -273,8 +273,9 @@ export const buildCompleteAdornmentsArray = (
 ): Adornment[] => {
   const completeAdornments: Adornment[] = [];
 
-  // Handle first input text - ensure it's always included if it has content
-  if (firstInputValue && firstInputValue.trim()) {
+  // Handle first input text - keep it verbatim: whitespace is significant in
+  // structured templates (it provides the spacing around variables/separators)
+  if (firstInputValue) {
     // Check if there's already a text adornment at the beginning
     const existingFirstTextAdornment =
       addedAdornments.length > 0 && addedAdornments[0].type === "text" ? addedAdornments[0] : null;
@@ -283,11 +284,11 @@ export const buildCompleteAdornmentsArray = (
       // Update existing text adornment with new value
       completeAdornments.push({
         ...existingFirstTextAdornment,
-        value: firstInputValue.trim(),
+        value: firstInputValue,
       });
     } else {
       // Create new text adornment
-      const firstTextAdornment = createAdornment("text", firstInputValue.trim(), addedAdornments);
+      const firstTextAdornment = createAdornment("text", firstInputValue, addedAdornments);
       completeAdornments.push(firstTextAdornment);
     }
   }
@@ -299,16 +300,10 @@ export const buildCompleteAdornmentsArray = (
       ...nonTextAdornments[i],
     });
 
-    if (i < inlineInputValues.length && inlineInputValues[i] && inlineInputValues[i].trim()) {
-      const textAdornment = createAdornment("text", inlineInputValues[i].trim(), addedAdornments);
+    if (i < inlineInputValues.length && inlineInputValues[i]) {
+      const textAdornment = createAdornment("text", inlineInputValues[i], addedAdornments);
       completeAdornments.push(textAdornment);
     }
-  }
-
-  // If we have no adornments but have first input text, make sure we return at least that
-  if (completeAdornments.length === 0 && firstInputValue && firstInputValue.trim()) {
-    const firstTextAdornment = createAdornment("text", firstInputValue.trim(), []);
-    completeAdornments.push(firstTextAdornment);
   }
 
   return completeAdornments;

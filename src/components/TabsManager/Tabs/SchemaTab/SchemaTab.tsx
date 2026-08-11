@@ -101,7 +101,9 @@ export const SchemaTab = () => {
       }
     };
 
-    if (currentPostId > 0) {
+    // The slice caches the schema payload (and updates it on every save), so
+    // re-mounting this tab only fetches when nothing is loaded yet.
+    if (currentPostId > 0 && !schemaMarkup) {
       fetchSchemaData();
     }
   }, [currentPostId]);

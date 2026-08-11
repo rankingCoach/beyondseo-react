@@ -99,8 +99,17 @@ export const KeywordsTable = (props: KeywordsTableProps) => {
       return [];
     }
 
-    return optimiserResult.categorizedSuggestions.primaryKeyword.elements.map(
+    const seenSuggestions = new Set<string>();
+    const tasks: KeywordTask[] = [];
+
+    optimiserResult.categorizedSuggestions.primaryKeyword.elements.forEach(
       (suggestion: FactorSuggestion, index: number) => {
+        const dedupeKey = suggestion.issueType || `${suggestion.title ?? ""}|${suggestion.description ?? ""}`;
+        if (seenSuggestions.has(dedupeKey)) {
+          return;
+        }
+        seenSuggestions.add(dedupeKey);
+
         let priorityString = "medium";
         if (suggestion.priority) {
           if (suggestion.priority <= 2) priorityString = "high";
@@ -112,15 +121,17 @@ export const KeywordsTable = (props: KeywordsTableProps) => {
           status = "completed";
         }
 
-        return {
-          id: suggestion.issueType || index.toString(),
+        tasks.push({
+          id: `${suggestion.issueType || "task"}-${index}`,
           title: suggestion.title || "Untitled suggestion",
           description: suggestion.description || "No description available",
           priority: priorityString,
           status: status,
-        };
+        });
       },
     );
+
+    return tasks;
   };
 
   const keywordTasks = isPrimaryKeywordTable ? getPrimaryKeywordTasks() : [];
@@ -183,20 +194,12 @@ export const KeywordsTable = (props: KeywordsTableProps) => {
         dispatch(setAdditionalKeywords(newAdditionalKeywords));
       }
 
-      const result = await dispatch(
+      await dispatch(
         MetatagsStore.deleteApiMetatagsKeywordByPostIdThunk({
           postId: getPathId(),
           requestBody: {
             keyword: keyword,
           },
-          queryParams: {},
-        }),
-      );
-
-
-      await dispatch(
-        MetatagsStore.getApiMetatagsByPostIdThunk({
-          postId: getPathId(),
           queryParams: {},
         }),
       );
