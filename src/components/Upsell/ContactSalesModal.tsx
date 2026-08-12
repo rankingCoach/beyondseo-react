@@ -10,7 +10,7 @@ import {
     CheckBox
 } from 'vanguard';
 import styles from './ContactSalesModal.module.scss';
-import { contactSalesModalConfig } from './upsellConfig';
+import { getContactSalesModalConfig } from './upsellConfig';
 
 interface ContactSalesModalProps {
     isOpen: boolean;
@@ -18,6 +18,8 @@ interface ContactSalesModalProps {
 }
 
 export const ContactSalesModal: React.FC<ContactSalesModalProps> = ({ isOpen, onClose }) => {
+    // Resolved per render so the labels pick up the loaded locale. See upsellConfig.ts.
+    const contactSalesModalConfig = getContactSalesModalConfig();
     const [formData, setFormData] = useState({
         companyName: '',
         name: '',

@@ -17,17 +17,17 @@ import { Connect } from '@components/Connect/Connect';
 import { LaunchOfferUpsell, LAUNCH_OFFER_SCROLL_ID } from './LaunchOfferUpsell';
 
 import {
-    agencyFeatures,
-    defaultExpandedCategoryIds,
-    featureCategories,
-    featureHighlights,
-    freePlanFeatures,
-    impactMetrics,
+    getAgencyFeatures,
+    getDefaultExpandedCategoryIds,
+    getFeatureCategories,
+    getFeatureHighlights,
+    getFreePlanFeatures,
+    getImpactMetrics,
     LAUNCH_OFFER_ENABLED,
-    proPlanFeatures,
-    professionalCards,
-    stats,
-    testimonials
+    getProPlanFeatures,
+    getProfessionalCards,
+    getStats,
+    getTestimonials
 } from './upsellConfig';
 import type {
     StatusValue,
@@ -99,6 +99,18 @@ export const Upsell = () => {
 };
 
 const UpsellContent = () => {
+    // Resolved per render so the strings pick up the loaded locale. See upsellConfig.ts.
+    const agencyFeatures = getAgencyFeatures();
+    const featureCategories = getFeatureCategories();
+    const defaultExpandedCategoryIds = getDefaultExpandedCategoryIds();
+    const featureHighlights = getFeatureHighlights();
+    const freePlanFeatures = getFreePlanFeatures();
+    const impactMetrics = getImpactMetrics();
+    const proPlanFeatures = getProPlanFeatures();
+    const professionalCards = getProfessionalCards();
+    const stats = getStats();
+    const testimonials = getTestimonials();
+
     const isOnboardingCompleted =
         rcWindow?.rankingCoachReactData?.isOnboardingCompleted === "1" ||
         rcWindow?.rankingCoachReactData?.isOnboardingCompleted === "true" ||
