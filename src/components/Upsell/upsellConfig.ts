@@ -1,3 +1,7 @@
+// The exports below are functions, not constants, on purpose: translations are loaded at
+// runtime by use-locale-loader, which cannot happen until after this module has been
+// evaluated. A `const` would call __() during module evaluation, before any locale data
+// exists, and freeze every string to English. Keep them lazy and call them during render.
 import { __, sprintf } from "@wordpress/i18n";
 import { IconNames } from "vanguard";
 import avatar1 from "@assets/upsell-page/avatar-1.svg";
@@ -42,7 +46,7 @@ export type FeatureHighlight = {
 };
 export type PlanFeature = { text: string; checked?: boolean };
 
-export const featureCategories: FeatureCategory[] = [
+export const getFeatureCategories = (): FeatureCategory[] => [
   {
     id: "general",
     title: __("General features", "beyondseo"),
@@ -214,22 +218,22 @@ export const featureCategories: FeatureCategory[] = [
   },
 ];
 
-export const defaultExpandedCategoryIds = featureCategories.map((c) => c.id);
+export const getDefaultExpandedCategoryIds = (): string[] => getFeatureCategories().map((c) => c.id);
 
-export const stats: Stat[] = [
+export const getStats = (): Stat[] => [
   { label: __("Google ads clicks", "beyondseo"), value: "854", change: "+24%" },
   { label: __("Boosted posts engagement", "beyondseo"), value: "5076", change: "+28%" },
   { label: __("AI auto-replies", "beyondseo"), value: "50", change: "+125%" },
   { label: __("Reach", "beyondseo"), value: "42.8k", change: "+14%" },
 ];
 
-export const impactMetrics: ImpactMetric[] = [
+export const getImpactMetrics = (): ImpactMetric[] => [
   { value: "10", label: __("Hours saved weekly", "beyondseo") },
   { value: "90%", label: __("Avg. visibility increase", "beyondseo") },
   { value: "45+", label: __("Directory integrations", "beyondseo") },
 ];
 
-export const testimonials: Testimonial[] = [
+export const getTestimonials = (): Testimonial[] => [
   {
     id: "milano",
     quote: __("They improved my website's ranking. Simple, intuitive actions and fair pricing.", "beyondseo"),
@@ -277,9 +281,9 @@ export const testimonials: Testimonial[] = [
   },
 ];
 
-export const reviewPartners = [__("Google Partner", "beyondseo"), __("REVIEWS.io", "beyondseo")];
+export const getReviewPartners = (): string[] => [__("Google Partner", "beyondseo"), __("REVIEWS.io", "beyondseo")];
 
-export const professionalCards: ProfessionalCard[] = [
+export const getProfessionalCards = (): ProfessionalCard[] => [
   {
     title: __("Web Agency", "beyondseo"),
     description: __("Manage multiple client websites and campaigns from one dashboard.", "beyondseo"),
@@ -297,7 +301,7 @@ export const professionalCards: ProfessionalCard[] = [
   },
 ];
 
-export const agencyFeatures: string[] = [
+export const getAgencyFeatures = (): string[] => [
   __("Manage all client projects in one place", "beyondseo"),
   __("Advanced analytics and performance insights", "beyondseo"),
   __("Comprehensive white-label reporting", "beyondseo"),
@@ -306,7 +310,7 @@ export const agencyFeatures: string[] = [
   __("Give your clients bespoke account access to their white-label reports", "beyondseo"),
 ];
 
-export const featureHighlights: FeatureHighlight[] = [
+export const getFeatureHighlights = (): FeatureHighlight[] => [
   {
     id: "seo",
     title: __("SEO", "beyondseo"),
@@ -388,7 +392,7 @@ export const featureHighlights: FeatureHighlight[] = [
   },
 ];
 
-export const freePlanFeatures: PlanFeature[] = [
+export const getFreePlanFeatures = (): PlanFeature[] => [
   { text: __("BeyondSEO WordPress plugin (limited)", "beyondseo"), checked: true },
   { text: __("Limited SEO features", "beyondseo"), checked: false },
   { text: __("Track 3 keywords", "beyondseo"), checked: false },
@@ -399,7 +403,7 @@ export const freePlanFeatures: PlanFeature[] = [
   { text: __("No post boosting", "beyondseo"), checked: false },
 ];
 
-export const proPlanFeatures: string[] = [
+export const getProPlanFeatures = (): string[] => [
   __("BeyondSEO WordPress plugin", "beyondseo"),
   __("Full AI-powered SEO", "beyondseo"),
   __("Track 50 keywords", "beyondseo"),
@@ -530,7 +534,7 @@ export const applyUpgradablePlansToLaunchOfferConfig = (
   };
 };
 
-export const launchOfferConfig: LaunchOfferConfig = {
+export const getLaunchOfferConfig = (): LaunchOfferConfig => ({
   title: __("Your WordPress Launch Offer", "beyondseo"),
   subtitle: __("For a limited time only. Exclusively for WordPress users.", "beyondseo"),
   spotsBadge: __("launch spots — almost gone", "beyondseo"),
@@ -571,7 +575,7 @@ export const launchOfferConfig: LaunchOfferConfig = {
   ],
   ctaLabel: __("Start for $99 — Get Full Access", "beyondseo"),
   ctaFootnote: __("Annual billing · Instant access · Cancel anytime", "beyondseo"),
-};
+});
 
 // Contact Sales Modal Configuration
 export interface ContactSalesModalField {
@@ -596,7 +600,7 @@ export interface ContactSalesModalConfig {
   submitButtonText: string;
 }
 
-export const contactSalesModalConfig: ContactSalesModalConfig = {
+export const getContactSalesModalConfig = (): ContactSalesModalConfig => ({
   fields: {
     companyName: {
       label: __("Company name", "beyondseo"),
@@ -658,4 +662,4 @@ export const contactSalesModalConfig: ContactSalesModalConfig = {
   },
   checkboxText: __("I agree to receive other communications from RankingCoach 360.", "beyondseo"),
   submitButtonText: __("Contact us", "beyondseo"),
-};
+});

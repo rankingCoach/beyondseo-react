@@ -24,7 +24,7 @@ import alwaysKnowWhats from "@assets/connect-page/always-know-whats.svg";
 import spotWhatsHolding from "@assets/connect-page/spot-whats-holding.svg";
 import stayOnTopOf from "@assets/connect-page/stay-on-top-of.svg";
 import trackYourProgress from "@assets/connect-page/track-your-progress.svg";
-import { testimonials } from "@components/Upsell/upsellConfig";
+import { getTestimonials } from "@components/Upsell/upsellConfig";
 import type { Testimonial } from "@components/Upsell/upsellConfig";
 
 type FeatureCard = {
@@ -34,7 +34,8 @@ type FeatureCard = {
   className: string;
 };
 
-const featureCards: FeatureCard[] = [
+// Functions, not constants: __() must run during render, once translations are loaded.
+const getFeatureCards = (): FeatureCard[] => [
   {
     id: "performance",
     title: __("See your performance instantly", "beyondseo"),
@@ -73,7 +74,7 @@ const featureCards: FeatureCard[] = [
   },
 ];
 
-const rightNowItems: string[] = [
+const getRightNowItems = (): string[] => [
   __("Basic SEO checks only", "beyondseo"),
   __("No keyword or ranking tracking", "beyondseo"),
   __("No competitor data", "beyondseo"),
@@ -81,7 +82,7 @@ const rightNowItems: string[] = [
   __("Limited visibility into your results", "beyondseo"),
 ];
 
-const withRcFreeItems: string[] = [
+const getWithRcFreeItems = (): string[] => [
   __("Start tracking your own rankings, keywords & competitors", "beyondseo"),
   __("Finally see how visible you are on Google", "beyondseo"),
   __("Track how your performance improves over time", "beyondseo"),
@@ -90,6 +91,11 @@ const withRcFreeItems: string[] = [
 ];
 
 export const Connect = () => {
+  const featureCards = getFeatureCards();
+  const rightNowItems = getRightNowItems();
+  const withRcFreeItems = getWithRcFreeItems();
+  const testimonials = getTestimonials();
+
   const handleActivateForFree = () => {
     const adminUrl = rcWindow?.rankingCoachReactData?.adminurl;
     window.location.href = `${adminUrl}?page=rankingcoach-registration`;

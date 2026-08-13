@@ -15,7 +15,7 @@ import styles from './LaunchOfferUpsell.module.scss';
 import flameSvg from './img/Flame.svg';
 import {
     applyUpgradablePlansToLaunchOfferConfig,
-    launchOfferConfig,
+    getLaunchOfferConfig,
     type LaunchOfferConfig,
     type LaunchOfferPlan,
     type LaunchOfferFeature,
@@ -42,7 +42,7 @@ type LaunchOfferUpsellProps = {
 export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
     onUpgrade,
     isLoading = false,
-    config = launchOfferConfig,
+    config = getLaunchOfferConfig(),
     scrollId = LAUNCH_OFFER_SCROLL_ID,
     stackPricingCards = false,
 }) => {
