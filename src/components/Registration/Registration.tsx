@@ -579,18 +579,17 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       {/* Bottom Horizontal Divider */}
       <div className={styles.bottomDivider} />
 
-      {/* Footer Section with Register Button */}
+      {/* Footer Section with Back and Register Buttons */}
       <div className={styles.footerSection}>
-        {isVerificationPhase && (
-          <Button
-            type={ButtonTypes.secondary}
-            size={ButtonSizes.medium}
-            onClick={handleRegistrationReset}
-            className={styles.registrationResetButton}
-          >
-            {__("Change Email address", "beyondseo")}
-          </Button>
-        )}
+        <Button
+          type={ButtonTypes.secondary}
+          size={ButtonSizes.medium}
+          iconLeft={IconNames.arrowLeft}
+          onClick={isVerificationPhase ? handleRegistrationReset : () => setShowWelcome(true)}
+          className={styles.registrationResetButton}
+        >
+          {__("Back", "beyondseo")}
+        </Button>
         <Button
           type={ButtonTypes.primary}
           size={ButtonSizes.medium}
