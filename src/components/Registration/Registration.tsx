@@ -21,6 +21,8 @@ const STORAGE_KEYS = {
 } as const;
 
 const ONBOARDING_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
+const ACTIVATION_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`;
+const IS_PARTNER_INTEGRATION = (window as any).rankingCoachReactData?.partnerIntegration === 'true';
 const POLLING_INTERVAL = 5000;
 const VERIFICATION_TIME_WINDOW = 60;
 
@@ -182,7 +184,13 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
   }, [isPluginLoading]);
 
   useEffect(() => {
-    if (!isPluginLoading) {
+    if (IS_PARTNER_INTEGRATION) {
+      window.location.replace(ACTIVATION_URL);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isPluginLoading && !IS_PARTNER_INTEGRATION) {
       loadInitialState();
     }
   }, [isPluginLoading, loadInitialState]);
@@ -432,6 +440,10 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
     }
     return [];
   }, [allowedCountries]);
+
+  if (IS_PARTNER_INTEGRATION) {
+    return null;
+  }
 
   if (showWelcome) {
     const rcData = (window as any).rankingCoachReactData;
