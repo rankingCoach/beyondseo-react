@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import styles from "./Activation.module.scss";
-import { Button, ButtonSizes, ButtonTypes, ComponentContainer, Input, CheckBox, Text, TextTypes, FontWeights, Link } from "vanguard";
+import { Button, ButtonSizes, ButtonTypes, ComponentContainer, IconNames, Input, CheckBox, Text, TextTypes, FontWeights, Link } from "vanguard";
 import { __ } from "@wordpress/i18n";
 import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
 
@@ -15,6 +15,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
     const rcData = (window as any).rankingCoachReactData || {};
     const ACTIVATE_URL = `${rcData.endpoint || ''}/account/activate`;
     const ONBOARDING_URL = `${rcData.adminurl || 'admin.php'}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
+    const REGISTRATION_URL = `${rcData.adminurl || 'admin.php'}?page=rankingcoach-registration`;
     const locale: string = rcData.locale || '';
     const SUPPORT_URL = locale.startsWith('de')
         ? 'https://mein.ionos.de/support/contact'
@@ -161,16 +162,28 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
 
             <div className={styles.footerSection}>
                 {view === 'form' && (
-                    <Button
-                        type={ButtonTypes.primary}
-                        size={ButtonSizes.medium}
-                        onClick={handleSubmit}
-                        disabled={!commOptIn || isLoading}
-                        isLoading={isLoading}
-                        aria-busy={isLoading}
-                    >
-                        {__('Activate', 'beyondseo')}
-                    </Button>
+                    <>
+                        <Button
+                            type={ButtonTypes.secondary}
+                            size={ButtonSizes.medium}
+                            iconLeft={IconNames.arrowLeft}
+                            onClick={() => { window.location.href = REGISTRATION_URL; }}
+                            className={styles.backButton}
+                            disabled={isLoading}
+                        >
+                            {__('Back', 'beyondseo')}
+                        </Button>
+                        <Button
+                            type={ButtonTypes.primary}
+                            size={ButtonSizes.medium}
+                            onClick={handleSubmit}
+                            disabled={!commOptIn || isLoading}
+                            isLoading={isLoading}
+                            aria-busy={isLoading}
+                        >
+                            {__('Activate', 'beyondseo')}
+                        </Button>
+                    </>
                 )}
 
                 {view === 'error' && (

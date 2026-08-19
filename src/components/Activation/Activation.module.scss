@@ -163,6 +163,10 @@
     min-height: 80px;
     transition: padding 0.3s ease-in-out;
 
+    &:has(.backButton) {
+        justify-content: space-between;
+    }
+
     :global(body.folded) & {
         padding: 20px 80px 20px 100px;
     }
@@ -172,3 +176,4 @@
         justify-content: center;
     }
 }
+

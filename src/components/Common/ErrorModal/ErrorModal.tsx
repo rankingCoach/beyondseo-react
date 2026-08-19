@@ -32,11 +32,9 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
   const [hasCopied, setHasCopied] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Fallback nicely if contactSupportUrl is not provided
-  const resolvedSupportUrl = contactSupportUrl ||
-    (rcWindow?.rankingCoachReactData?.locale?.startsWith("de")
-      ? "https://mein.ionos.de/support/contact"
-      : "https://my.ionos.com/support/contact");
+  // Fallback nicely if contactSupportUrl is not provided: the plugin resolves the
+  // channel/locale-aware support URL server-side (Assets::getSupportUrl).
+  const resolvedSupportUrl = contactSupportUrl || rcWindow?.rankingCoachReactData?.supportUrl || "";
 
   if (!isOpen) return null;
 

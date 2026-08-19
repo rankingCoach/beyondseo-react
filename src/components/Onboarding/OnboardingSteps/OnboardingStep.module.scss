@@ -45,10 +45,10 @@
 .textareaWrapper {
     position: fixed;
     bottom: 40px;
-    left: 50%;
+    left: calc(50vw + var(--rc-wp-menu-width, 0px) / 2);
     transform: translateX(-50%);
-    width: 90%;
-    max-width: 50%;
+    width: calc((100vw - var(--rc-wp-menu-width, 0px)) * 0.9);
+    max-width: calc((100vw - var(--rc-wp-menu-width, 0px)) * 0.5);
     display: flex;
     justify-content: center;
     background-color: transparent !important;
@@ -123,10 +123,10 @@
 .loadingBadgeWrapper {
     position: fixed;
     bottom: 164px;
-    left: 50%;
+    left: calc(50vw + var(--rc-wp-menu-width, 0px) / 2);
     transform: translateX(-50%);
-    width: 90%;
-    max-width: 50%;
+    width: calc((100vw - var(--rc-wp-menu-width, 0px)) * 0.9);
+    max-width: calc((100vw - var(--rc-wp-menu-width, 0px)) * 0.5);
     display: flex;
     justify-content: center;
     z-index: 1;
