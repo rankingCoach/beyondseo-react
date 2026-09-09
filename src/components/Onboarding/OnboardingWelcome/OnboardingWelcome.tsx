@@ -197,6 +197,11 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
   };
 
   const processOnboardingSteps = (steps: any) => {
+    if (isCompleted) {
+      setStep(8);
+      setShowOnboardingStep(true);
+      return;
+    }
     if (steps?.steps?.elements) {
       const finalStep = steps.steps.elements.find(
         (element: any) => element.isFinalStep === true && element.completed === true,
