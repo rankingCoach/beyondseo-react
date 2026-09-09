@@ -20,10 +20,9 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
     const RECOVER_URL = `${rcData.endpoint || ''}/account/recoverActivationCode`;
     const ONBOARDING_URL = `${rcData.adminurl || 'admin.php'}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
     const REGISTRATION_URL = `${rcData.adminurl || 'admin.php'}?page=rankingcoach-registration`;
-    const locale: string = rcData.locale || '';
-    const SUPPORT_URL = locale.startsWith('de')
-        ? 'https://mein.ionos.de/support/contact'
-        : 'https://my.ionos.com/support/contact';
+    // Channel- and locale-aware support link resolved server-side (Assets::getSupportUrl): IONOS support only for
+    // the ionos channel, rankingCoach support for everything else — the same default the fallback keeps.
+    const SUPPORT_URL: string = rcData.supportUrl || 'https://grow.rankingcoach.com/wordpress/contact';
 
     const [view, setView] = useState<ActivationView>('form');
     const [activationCode, setActivationCode] = useState('');
