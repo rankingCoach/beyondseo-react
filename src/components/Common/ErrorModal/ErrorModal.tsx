@@ -2,7 +2,7 @@ import { __ } from "@wordpress/i18n";
 import React, { useState } from "react";
 import { Button, ButtonSizes, ButtonTypes, ComponentContainer, EditModal, Icon, IconNames, Text, TextTypes } from "vanguard";
 import styles from "./ErrorModal.module.scss";
-import { rcWindow } from "@stores/window.store";
+import { getSupportUrl } from "@helpers/external-links";
 
 interface ErrorModalProps {
   isOpen: boolean;
@@ -32,9 +32,9 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
   const [hasCopied, setHasCopied] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Fallback nicely if contactSupportUrl is not provided: the plugin resolves the
-  // channel/locale-aware support URL server-side (Assets::getSupportUrl).
-  const resolvedSupportUrl = contactSupportUrl || rcWindow?.rankingCoachReactData?.supportUrl || "";
+  // Without an explicit contactSupportUrl, use the partner-aware support link resolved
+  // server-side (ExternalLinks) and exposed through rankingCoachReactData.
+  const resolvedSupportUrl = contactSupportUrl || getSupportUrl();
 
   if (!isOpen) return null;
 

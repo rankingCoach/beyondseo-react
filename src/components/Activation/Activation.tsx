@@ -7,6 +7,7 @@ import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { isValidEmail } from "@helpers/string-helpers";
+import { getPrivacyPolicyUrl, getSupportUrl, getTermsUrl } from "@helpers/external-links";
 
 interface ActivationProps {
     isPluginLoading?: boolean;
@@ -20,9 +21,9 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
     const RECOVER_URL = `${rcData.endpoint || ''}/account/recoverActivationCode`;
     const ONBOARDING_URL = `${rcData.adminurl || 'admin.php'}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
     const REGISTRATION_URL = `${rcData.adminurl || 'admin.php'}?page=rankingcoach-registration`;
-    // Channel- and locale-aware support link resolved server-side (Assets::getSupportUrl): IONOS support only for
-    // the ionos channel, rankingCoach support for everything else — the same default the fallback keeps.
-    const SUPPORT_URL: string = rcData.supportUrl || 'https://grow.rankingcoach.com/wordpress/contact';
+    // Partner-aware support link (IONOS desk for IONOS installs, rankingCoach otherwise), resolved server-side
+    // and read through the central external-links helper (falls back to rankingCoach support).
+    const SUPPORT_URL: string = getSupportUrl();
 
     const [view, setView] = useState<ActivationView>('form');
     const [activationCode, setActivationCode] = useState('');
@@ -171,11 +172,11 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
                                 label={
                                     <span>
                                         {__('I agree that the BeyondSEO plugin may create/authenticate my account and communicate with rankingCoach servers to provide its services. I have read and accept the ', 'beyondseo')}
-                                        <Link href="https://www.rankingcoach.com/en-us/privacy-policy" target="_blank" rel="noopener noreferrer">
+                                        <Link href={getPrivacyPolicyUrl()} target="_blank" rel="noopener noreferrer">
                                             {__('Privacy Policy', 'beyondseo')}
                                         </Link>
                                         {__(' and the ', 'beyondseo')}
-                                        <Link href="https://www.rankingcoach.com/en-us/terms-and-conditions" target="_blank" rel="noopener noreferrer">
+                                        <Link href={getTermsUrl()} target="_blank" rel="noopener noreferrer">
                                             {__('Terms and Conditions', 'beyondseo')}
                                         </Link>.
                                     </span>

@@ -4,6 +4,7 @@ import styles from "./Registration.module.scss";
 import { Button, ButtonSizes, ButtonTypes, ComponentContainer, IconNames, Input, Text, TextTypes, FontWeights, TextIcon, Select, Link, PageSectionLoading, CheckBox } from "vanguard";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { ErrorModal } from "@components/Common/ErrorModal/ErrorModal";
+import { getPrivacyPolicyUrl, getTermsUrl } from "@helpers/external-links";
 import { __ } from "@wordpress/i18n";
 import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
 import emailVerifySvg from "@assets/validate-email-illustration.svg";
@@ -529,11 +530,11 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
                 label={
                   <span className={styles.termsText}>
                     {__("I agree that the BeyondSEO plugin may create/authenticate my account and communicate with rankingCoach servers to provide its services. I have read and accept the ", "beyondseo")}
-                    <Link href="https://www.rankingcoach.com/en-us/privacy-policy" target="_blank" rel="noopener noreferrer">
+                    <Link href={getPrivacyPolicyUrl()} target="_blank" rel="noopener noreferrer">
                       {__("Privacy Policy", "beyondseo")}
                     </Link>
                     {__(" and the ", "beyondseo")}
-                    <Link href="https://www.rankingcoach.com/en-us/terms-and-conditions" target="_blank" rel="noopener noreferrer">
+                    <Link href={getTermsUrl()} target="_blank" rel="noopener noreferrer">
                       {__("Terms and Conditions", "beyondseo")}
                     </Link>.
                   </span>
