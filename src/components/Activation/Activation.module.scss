@@ -145,19 +145,21 @@
     width: 100%;
     max-width: 480px;
     margin-top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px;
     color: var(--fn-fg-light);
+    font-size: 14px;
+    line-height: 1.6;
 
-    > * {
+    // vanguard's Link puts `display: flex` on the <a> and wraps its label in a block-level
+    // Text, so the anchor would claim a full-width line of its own — "here" dropped to the
+    // next line and the whole empty line stayed clickable. The link's inner Text is a
+    // grandchild, so the override has to reach descendants, not just direct children.
+    > *,
+    a,
+    a * {
+        display: inline !important;
         font-size: 14px !important;
         line-height: 1.6;
-    }
-
-    a {
-        font-size: 14px !important;
+        vertical-align: baseline !important;
     }
 }
 

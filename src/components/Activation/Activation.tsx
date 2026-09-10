@@ -155,11 +155,12 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
                             </Text>
                         )}
                         <div className={styles.recoverHint}>
-                            <Text type={TextTypes.textHelp}>
-                                {__("Can't find your activation code?", 'beyondseo')}
-                            </Text>
-                            <Link onClick={() => { setRecoverEmailError(''); setView('recover'); }}>
-                                {__('Recover it here', 'beyondseo')}
+                            {/* Split so only the trailing word is the link; Text stringifies nested components, so Link must stay a sibling. */}
+                            <Text type={TextTypes.textHelp} display="inline">
+                                {__('Check your email for your activation code. Didn’t receive it? Recover it', 'beyondseo')}
+                            </Text>{' '}
+                            <Link display="inline" onClick={() => { setRecoverEmailError(''); setView('recover'); }}>
+                                {__('here', 'beyondseo')}
                             </Link>
                         </div>
 
