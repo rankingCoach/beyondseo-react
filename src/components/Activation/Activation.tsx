@@ -154,9 +154,14 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
                                 {codeError}
                             </Text>
                         )}
-                        <Link className={styles.recoverLink} onClick={() => { setRecoverEmailError(''); setView('recover'); }}>
-                            {__('Lost your activation code? Recover it here', 'beyondseo')}
-                        </Link>
+                        <div className={styles.recoverHint}>
+                            <Text type={TextTypes.textHelp}>
+                                {__("Can't find your activation code?", 'beyondseo')}
+                            </Text>
+                            <Link onClick={() => { setRecoverEmailError(''); setView('recover'); }}>
+                                {__('Recover it here', 'beyondseo')}
+                            </Link>
+                        </div>
 
                         <div className={styles.termsContainer}>
                             <CheckBox
