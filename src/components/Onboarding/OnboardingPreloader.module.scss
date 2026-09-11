@@ -1,9 +1,12 @@
 .container {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100vw;
+  left: var(--rc-wp-menu-width, 0px);
+  width: calc(100vw - var(--rc-wp-menu-width, 0px));
   height: 100vh;
+  transition:
+    left 0.3s ease,
+    width 0.3s ease;
   z-index: 9999;
   background: linear-gradient(to bottom, #F8FAFC, #FFFFFF);
   display: flex;

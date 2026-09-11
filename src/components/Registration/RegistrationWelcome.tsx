@@ -1,10 +1,11 @@
 import * as React from "react";
 import styles from "./RegistrationWelcome.module.scss";
-import { ComponentContainer, Text, TextTypes, FontWeights } from "vanguard";
+import { Button, ButtonSizes, ButtonTypes, ComponentContainer, IconNames, Text, TextTypes, FontWeights } from "vanguard";
 import { __ } from "@wordpress/i18n";
 import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
 
 const ACTIVATION_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`;
+const CONNECT_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-connect`;
 
 interface RegistrationWelcomeProps {
   onContinueWithEmail: () => void;
@@ -67,8 +68,18 @@ export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onCont
       {/* Bottom Horizontal Divider */}
       <div className={styles.bottomDivider} />
 
-      {/* Footer spacer */}
-      <div className={styles.footerSection} />
+      {/* Footer Section with Back Button */}
+      <div className={styles.footerSection}>
+        <Button
+          type={ButtonTypes.secondary}
+          size={ButtonSizes.medium}
+          iconLeft={IconNames.arrowLeft}
+          onClick={() => { window.location.href = CONNECT_URL; }}
+          className={styles.backButton}
+        >
+          {__("Back", "beyondseo")}
+        </Button>
+      </div>
     </ComponentContainer>
   );
 };

@@ -1,3 +1,32 @@
+:global(#onboarding-rankingcoach-page) {
+    --rc-wp-menu-width: 160px;
+    left: var(--rc-wp-menu-width) !important;
+    width: calc(100vw - var(--rc-wp-menu-width)) !important;
+    transition:
+        left 0.3s ease,
+        width 0.3s ease;
+}
+
+:global(body.folded #onboarding-rankingcoach-page) {
+    --rc-wp-menu-width: 36px;
+}
+
+@media screen and (max-width: 960px) {
+
+    :global(#onboarding-rankingcoach-page),
+    :global(body.folded #onboarding-rankingcoach-page) {
+        --rc-wp-menu-width: 36px;
+    }
+}
+
+@media screen and (max-width: 782px) {
+
+    :global(#onboarding-rankingcoach-page),
+    :global(body.folded #onboarding-rankingcoach-page) {
+        --rc-wp-menu-width: 0px;
+    }
+}
+
 .onboarding-container {
     display: flex;
     flex-direction: column;

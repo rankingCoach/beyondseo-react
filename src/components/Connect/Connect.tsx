@@ -16,6 +16,7 @@ import {
 import { __ } from "@wordpress/i18n";
 import styles from "./Connect.module.scss";
 import { rcWindow } from "@stores/window.store";
+import { getCustomerReviewsUrl } from "@helpers/external-links";
 import simpleQuoteCharacter from "@assets/upsell-page/simple-quote-character.svg";
 import reviewsioLogo from "@assets/upsell-page/reviewsio-logo.svg";
 import seeYourPerformance from "@assets/connect-page/see-your-performance.svg";
@@ -278,7 +279,7 @@ export const Connect = () => {
               {__("Google Partner", "beyondseo")}
             </Text>
             <a
-              href="https://www.reviews.io/company-reviews/store/www.rankingcoach.com#page:Qr"
+              href={getCustomerReviewsUrl()}
               target="_blank"
               rel="noopener noreferrer"
             >
