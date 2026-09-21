@@ -1,0 +1,32 @@
+.title {
+    margin-bottom: 1rem;
+}
+
+.description {
+    color: #646970;
+    line-height: 1.5;
+    max-width: 800px;
+}
+
+.separator {
+    border-bottom: 1px solid #e9ecef;
+    margin: 2rem 0;
+}
+
+.sectionTitle {
+    margin-bottom: 1rem;
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.copiedText {
+    color: #2bb673;
+}
+
+.errorText {
+    color: #d63638;
+}
