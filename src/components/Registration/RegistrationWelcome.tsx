@@ -3,9 +3,7 @@ import styles from "./RegistrationWelcome.module.scss";
 import { Button, ButtonSizes, ButtonTypes, ComponentContainer, IconNames, Text, TextTypes, FontWeights } from "vanguard";
 import { __ } from "@wordpress/i18n";
 import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
-
-const ACTIVATION_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`;
-const CONNECT_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-connect`;
+import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
 
 interface RegistrationWelcomeProps {
   onContinueWithEmail: () => void;
@@ -15,7 +13,7 @@ interface RegistrationWelcomeProps {
 
 export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onContinueWithEmail, showEmail, showActivation }) => {
   const handleActivationCode = () => {
-    window.location.href = ACTIVATION_URL;
+    window.location.href = getAdminPageUrl(AdminPage.Activation);
   };
 
   return (
@@ -74,7 +72,7 @@ export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onCont
           type={ButtonTypes.secondary}
           size={ButtonSizes.medium}
           iconLeft={IconNames.arrowLeft}
-          onClick={() => { window.location.href = CONNECT_URL; }}
+          onClick={() => { window.location.href = getAdminPageUrl(AdminPage.Connect); }}
           className={styles.backButton}
         >
           {__("Back", "beyondseo")}

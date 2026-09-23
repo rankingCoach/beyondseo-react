@@ -41,6 +41,7 @@ import type {
     FeatureHighlight,
     PlanFeature
 } from './upsellConfig';
+import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
 
 // Type declaration for the global BSEORegistration object
 declare global {
@@ -164,8 +165,7 @@ const UpsellContent = () => {
      * Handle redirect to registration page when onboarding is not completed
      */
     const handleActivateForFree = () => {
-        const adminUrl = rcWindow?.rankingCoachReactData?.adminurl;
-        window.location.href = `${adminUrl}?page=rankingcoach-registration`;
+        window.location.href = getAdminPageUrl(AdminPage.Registration);
     };
 
     /**

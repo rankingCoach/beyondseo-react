@@ -2,6 +2,7 @@ import * as React from "react";
 import styles from "./UpsellTriggerBanner.module.scss";
 import { classNames, Text } from "vanguard";
 import { __ } from "@wordpress/i18n";
+import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
 
 interface UpsellTriggerBannerProps {
   title: string;
@@ -25,7 +26,7 @@ export const UpsellTriggerBanner: React.FC<UpsellTriggerBannerProps> = ({
   className,
 }) => {
   const handleClick = () => {
-    window.location.href = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-connect`;
+    window.location.href = getAdminPageUrl(AdminPage.Connect);
   };
 
   return (

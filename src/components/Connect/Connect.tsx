@@ -15,7 +15,6 @@ import {
 } from "vanguard";
 import { __ } from "@wordpress/i18n";
 import styles from "./Connect.module.scss";
-import { rcWindow } from "@stores/window.store";
 import { getCustomerReviewsUrl } from "@helpers/external-links";
 import simpleQuoteCharacter from "@assets/upsell-page/simple-quote-character.svg";
 import reviewsioLogo from "@assets/upsell-page/reviewsio-logo.svg";
@@ -27,6 +26,7 @@ import stayOnTopOf from "@assets/connect-page/stay-on-top-of.svg";
 import trackYourProgress from "@assets/connect-page/track-your-progress.svg";
 import { getTestimonials } from "@components/Upsell/upsellConfig";
 import type { Testimonial } from "@components/Upsell/upsellConfig";
+import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
 
 type FeatureCard = {
   id: string;
@@ -98,8 +98,7 @@ export const Connect = () => {
   const testimonials = getTestimonials();
 
   const handleActivateForFree = () => {
-    const adminUrl = rcWindow?.rankingCoachReactData?.adminurl;
-    window.location.href = `${adminUrl}?page=rankingcoach-registration`;
+    window.location.href = getAdminPageUrl(AdminPage.Registration);
   };
 
   return (

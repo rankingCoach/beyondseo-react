@@ -2,10 +2,9 @@ import React, { SyntheticEvent, useState, useEffect } from "react";
 import styles from "./SitemapPage.module.scss";
 import { ComponentContainer, Switch, Text, TextTypes, FontWeights, Button, ButtonTypes } from "vanguard";
 import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
-import { useSelector } from "react-redux";
-import { RootState } from "@src/main.store";
 import { SitemapPagePlaceholder } from "./SitemapPagePlaceholder";
 import { __ } from "@wordpress/i18n";
+import { getSitemapUrl } from "@helpers/internal-links";
 
 interface SitemapSettings {
   enabled: boolean;
@@ -27,8 +26,7 @@ const SitemapPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [sitemapSettings, setSitemapSettings] = useState<SitemapSettings>(defaultSitemapSettings);
-  const { plugin } = useSelector((state: RootState) => state.app);
-  const homeUrl = plugin?.pluginData?.website?.settings?.homeUrl;
+  const sitemapUrl = getSitemapUrl();
 
   useEffect(() => {
     loadSettings();
@@ -98,7 +96,7 @@ const SitemapPage: React.FC = () => {
   };
 
   const handleViewSitemap = () => {
-    window.open(`${homeUrl}/sitemap.xml`, "_blank");
+    window.open(sitemapUrl, "_blank");
   };
 
   return (
@@ -146,7 +144,7 @@ const SitemapPage: React.FC = () => {
               <div className={styles.urlContainer}>
                 <Text type={TextTypes.text}>{__("Your sitemap URL:", "beyondseo")}</Text>
                 <Text type={TextTypes.text} className={styles.urlValue}>
-                  {homeUrl}/sitemap.xml
+                  {sitemapUrl}
                 </Text>
                 <Button type={ButtonTypes.secondary} onClick={handleViewSitemap}>
                   {__("View Sitemap", "beyondseo")}

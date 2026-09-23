@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { isValidEmail } from "@helpers/string-helpers";
 import { getPrivacyPolicyUrl, getSupportUrl, getTermsUrl } from "@helpers/external-links";
+import { AdminPage, getAdminPageUrl, getPluginRestUrl, getRestNonce } from "@helpers/internal-links";
 
 interface ActivationProps {
   isPluginLoading?: boolean;
@@ -28,11 +29,12 @@ interface ActivationProps {
 type ActivationView = "form" | "error" | "success" | "recover" | "recoverSuccess";
 
 export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
-  const rcData = (window as any).rankingCoachReactData || {};
-  const ACTIVATE_URL = `${rcData.endpoint || ""}/account/activate`;
-  const RECOVER_URL = `${rcData.endpoint || ""}/account/recoverActivationCode`;
-  const ONBOARDING_URL = `${rcData.adminurl || "admin.php"}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
-  const REGISTRATION_URL = `${rcData.adminurl || "admin.php"}?page=rankingcoach-registration`;
+  // REST routes and admin pages come from the central internal-links helper (PHP-localized,
+  // plain WordPress defaults as fallback), so no URL is built in this component.
+  const ACTIVATE_URL = getPluginRestUrl("account/activate");
+  const RECOVER_URL = getPluginRestUrl("account/recoverActivationCode");
+  const ONBOARDING_URL = getAdminPageUrl(AdminPage.Onboarding, { skipWelcomeScreen: 1 });
+  const REGISTRATION_URL = getAdminPageUrl(AdminPage.Registration);
   // Partner-aware support link (IONOS desk for IONOS installs, rankingCoach otherwise), resolved server-side
   // and read through the central external-links helper (falls back to rankingCoach support).
   const SUPPORT_URL: string = getSupportUrl();
@@ -72,7 +74,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-WP-Nonce": rcData.restNonce || "",
+          "X-WP-Nonce": getRestNonce(),
         },
         body: JSON.stringify({ activationCode: activationCode.trim(), commOptIn }),
       });
@@ -109,7 +111,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-WP-Nonce": rcData.restNonce || "",
+          "X-WP-Nonce": getRestNonce(),
         },
         body: JSON.stringify({ email }),
       });

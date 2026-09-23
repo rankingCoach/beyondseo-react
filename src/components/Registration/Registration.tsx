@@ -12,6 +12,7 @@ import { seoStore, SeoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { RegistrationWelcome } from "./RegistrationWelcome";
+import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
 
 const STORAGE_KEYS = {
   EMAIL: "registrationEmail",
@@ -21,8 +22,6 @@ const STORAGE_KEYS = {
   REGISTRATION_STATUS: "registrationRegistrationStatus",
 } as const;
 
-const ONBOARDING_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
-const ACTIVATION_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`;
 const IS_PARTNER_INTEGRATION = (window as any).rankingCoachReactData?.partnerIntegration === 'true';
 const POLLING_INTERVAL = 5000;
 const VERIFICATION_TIME_WINDOW = 60;
@@ -167,7 +166,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       }
 
       clearLocalStorageVerification();
-      window.location.href = ONBOARDING_URL;
+      window.location.href = getAdminPageUrl(AdminPage.Onboarding, { skipWelcomeScreen: 1 });
       return true;
     } catch (error) {
       console.error("[REGISTRATION] Finalize registration error:", error);
@@ -186,7 +185,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
 
   useEffect(() => {
     if (IS_PARTNER_INTEGRATION) {
-      window.location.replace(ACTIVATION_URL);
+      window.location.replace(getAdminPageUrl(AdminPage.Activation));
     }
   }, []);
 
@@ -544,7 +543,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
 
             {/* <div className={styles.activationCodeHint}>
               {__("Have an activation code instead? ", "beyondseo")}
-              <Link href={`${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`}>
+              <Link href={getAdminPageUrl(AdminPage.Activation)}>
                 {__("Enter it here", "beyondseo")}
               </Link>
             </div> */}
