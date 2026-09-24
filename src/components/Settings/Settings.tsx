@@ -12,6 +12,7 @@ import { __ } from "@wordpress/i18n";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@src/main.store";
 import { SeoStore } from "@stores/swagger/rankingcoach/SeoStore";
+import { isOnboardingCompleted, redirectToConnectPage } from "@helpers/onboarding-helpers";
 
 type MenuItem = {
   id: string;
@@ -39,6 +40,11 @@ const Settings: React.FC = () => {
   const dispatch = useDispatch<any>();
 
   const handleCheckAccount = async () => {
+    if (!isOnboardingCompleted()) {
+      redirectToConnectPage();
+      return;
+    }
+
     try {
       setIsAccountChecking(true);
 

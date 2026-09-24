@@ -2,10 +2,9 @@ import React, { SyntheticEvent, useState, useEffect } from "react";
 import styles from "./RSSPage.module.scss";
 import { ComponentContainer, Switch, Text, TextTypes, FontWeights, Input, Button, ButtonTypes } from "vanguard";
 import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
-import { useSelector } from "react-redux";
-import { RootState } from "@src/main.store";
 import { RSSPagePlaceholder } from "./RSSPagePlaceholder";
 import { __ } from "@wordpress/i18n";
+import { getFeedUrl } from "@helpers/internal-links";
 
 interface RSSSettings {
   feeds: {
@@ -64,7 +63,6 @@ const RSSPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [rssSettings, setRssSettings] = useState<RSSSettings>({ ...defaultRSSSettings });
-  const { plugin } = useSelector((state: RootState) => state.app);
 
 
   useEffect(() => {
@@ -140,8 +138,7 @@ const RSSPage: React.FC = () => {
   };
 
   const handleOpenRSS = () => {
-    const homeUrl = plugin?.pluginData?.website?.settings?.homeUrl;
-    window.open(`${homeUrl}/feed/`, "_blank");
+    window.open(getFeedUrl(), "_blank");
   };
 
   const handleSave = async () => {
@@ -247,7 +244,7 @@ const RSSPage: React.FC = () => {
                 <div className={styles.urlContainer}>
                   <Text type={TextTypes.text}>{__("Your RSS feed URL:", "beyondseo")}</Text>
                   <Text type={TextTypes.text} className={styles.urlValue}>
-                    {plugin?.pluginData?.website?.settings?.homeUrl}/feed/
+                    {getFeedUrl()}
                   </Text>
                   <Button type={ButtonTypes.secondary} onClick={handleOpenRSS} className={styles.openRssButton}>
                     {__("View RSS Feed", "beyondseo")}

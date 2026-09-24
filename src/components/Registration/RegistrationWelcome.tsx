@@ -1,10 +1,9 @@
 import * as React from "react";
 import styles from "./RegistrationWelcome.module.scss";
-import { ComponentContainer, Text, TextTypes, FontWeights } from "vanguard";
+import { Button, ButtonSizes, ButtonTypes, ComponentContainer, IconNames, Text, TextTypes, FontWeights } from "vanguard";
 import { __ } from "@wordpress/i18n";
 import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
-
-const ACTIVATION_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`;
+import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
 
 interface RegistrationWelcomeProps {
   onContinueWithEmail: () => void;
@@ -14,7 +13,7 @@ interface RegistrationWelcomeProps {
 
 export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onContinueWithEmail, showEmail, showActivation }) => {
   const handleActivationCode = () => {
-    window.location.href = ACTIVATION_URL;
+    window.location.href = getAdminPageUrl(AdminPage.Activation);
   };
 
   return (
@@ -67,8 +66,18 @@ export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onCont
       {/* Bottom Horizontal Divider */}
       <div className={styles.bottomDivider} />
 
-      {/* Footer spacer */}
-      <div className={styles.footerSection} />
+      {/* Footer Section with Back Button */}
+      <div className={styles.footerSection}>
+        <Button
+          type={ButtonTypes.secondary}
+          size={ButtonSizes.medium}
+          iconLeft={IconNames.arrowLeft}
+          onClick={() => { window.location.href = getAdminPageUrl(AdminPage.Connect); }}
+          className={styles.backButton}
+        >
+          {__("Back", "beyondseo")}
+        </Button>
+      </div>
     </ComponentContainer>
   );
 };

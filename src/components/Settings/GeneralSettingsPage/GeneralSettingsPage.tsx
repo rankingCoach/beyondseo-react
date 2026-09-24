@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "./GeneralSettingsPage.module.scss";
-import { Text, TextTypes } from "vanguard";
+import { Button, ButtonTypes, Text, TextTypes, FontWeights } from "vanguard";
 import { __ } from "@wordpress/i18n";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
+import { isOnboardingCompleted, redirectToConnectPage } from "@helpers/onboarding-helpers";
 import SettingsRow from "./SettingsRow";
 
 type SettingsKeys =
@@ -113,6 +114,19 @@ const GeneralSettingsPage: React.FC = () => {
         {__("General Settings", "beyondseo")}
       </Text>
       <div className={styles.separator}></div>
+      {!isOnboardingCompleted() && (
+        <div className={styles.connectSection}>
+          <Button type={ButtonTypes.primary} onClick={redirectToConnectPage} testId="create-free-account-button">
+            {__("Create a Free Account", "beyondseo")}
+          </Button>
+          <Text type={TextTypes.text} fontWeight={FontWeights.bold} className={styles.connectSectionDivider}>
+            {__("OR", "beyondseo")}
+          </Text>
+          <Button type={ButtonTypes.secondary} onClick={redirectToConnectPage} testId="connect-existing-account-button">
+            {__("Connect to an Existing Account", "beyondseo")}
+          </Button>
+        </div>
+      )}
       <div className={styles.settingsList}>
         {settingsConfig.map(({ key, title, description }) => (
           <SettingsRow

@@ -10,3 +10,16 @@
 .settingsList {
     margin-top: 1rem;
 }
+
+.connectSection {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.connectSectionDivider {
+    text-transform: uppercase;
+    color: #6c757d;
+}

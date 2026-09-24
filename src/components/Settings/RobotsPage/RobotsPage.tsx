@@ -2,18 +2,16 @@ import React, { SyntheticEvent, useState, useEffect } from "react";
 import styles from "./RobotsPage.module.scss";
 import { ComponentContainer, Switch, Text, TextTypes, FontWeights, Button, ButtonTypes, CheckBox } from "vanguard";
 import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
-import { useSelector } from "react-redux";
-import { RootState } from "@src/main.store";
 import { RobotsPagePlaceholder } from "./RobotsPagePlaceholder";
 import { __ } from "@wordpress/i18n";
+import { getRobotsTxtUrl } from "@helpers/internal-links";
 
 const RobotsPage: React.FC = () => {
   const [robotsEnabled, setRobotsEnabled] = useState(true);
   const [includeSitemap, setIncludeSitemap] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const { plugin } = useSelector((state: RootState) => state.app);
-  const homeUrl = plugin?.pluginData?.website?.settings?.homeUrl;
+  const robotsUrl = getRobotsTxtUrl();
 
   useEffect(() => {
     loadSettings();
@@ -77,7 +75,7 @@ const RobotsPage: React.FC = () => {
   };
 
   const handleViewRobots = () => {
-    window.open(`${homeUrl}/robots.txt`, "_blank");
+    window.open(robotsUrl, "_blank");
   };
 
   return (
@@ -135,7 +133,7 @@ const RobotsPage: React.FC = () => {
               <div className={styles.urlContainer}>
                 <Text type={TextTypes.text}>{__("Your robots.txt URL:", "beyondseo")}</Text>
                 <Text type={TextTypes.text} className={styles.urlValue}>
-                  {homeUrl}/robots.txt
+                  {robotsUrl}
                 </Text>
                 <Button type={ButtonTypes.secondary} onClick={handleViewRobots} className={styles.viewButton}>
                   {__("View Robots.txt", "beyondseo")}

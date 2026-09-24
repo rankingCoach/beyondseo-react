@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { rcWindow } from '@stores/window.store';
+import { getRestNonce, getWpRestUrl } from '@helpers/internal-links';
 
 export interface Post {
   id: number;
@@ -35,10 +35,10 @@ export const fetchPost = createAsyncThunk<
   'post/fetchPost',
   async ({ postId, postType }, thunkAPI) => {
     try {
-      const response = await fetch(`/wp-json/wp/v2/${postType}s/${postId}/?_ref=rc`, {
+      const response = await fetch(getWpRestUrl(`wp/v2/${postType}s/${postId}`, { _ref: 'rc' }), {
         method: 'GET',
         headers: {
-          'X-WP-Nonce': rcWindow.rankingCoachRestData?.nonce
+          'X-WP-Nonce': getRestNonce()
         },
       });
       if (!response.ok) {

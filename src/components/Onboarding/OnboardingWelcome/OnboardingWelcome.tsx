@@ -31,6 +31,7 @@ import whiteLoadingAnimation from "@assets/white-loading-animation.gif";
 import { LoadingStatusBadge } from "@components/Common/LoadingStatusBadge/LoadingStatusBadge";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
+import { AdminPage, getAdminPageUrl, getAdminRootUrl } from "@helpers/internal-links";
 
 interface OnboardingWelcomeProps {
   isCompleted?: boolean;
@@ -197,6 +198,11 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
   };
 
   const processOnboardingSteps = (steps: any) => {
+    if (isCompleted) {
+      setStep(8);
+      setShowOnboardingStep(true);
+      return;
+    }
     if (steps?.steps?.elements) {
       const finalStep = steps.steps.elements.find(
         (element: any) => element.isFinalStep === true && element.completed === true,
@@ -330,9 +336,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
         await new Promise((resolve) => setTimeout(resolve, remainingTime));
       }
 
-      window.location.href = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-main`;
-      //window.location.href = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-main&firstTime=1`;
-      //window.location.href = "/wp-admin/index.php";
+      window.location.href = getAdminPageUrl(AdminPage.Main);
     } catch (error: any) {
       setShowThankYouScreen(false);
       setShowOnboardingStep(true);
@@ -345,7 +349,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
   };
 
   const handleCancel = () => {
-    window.location.href = (window as any).rankingCoachReactData?.adminurl?.replace('admin.php', '') || "index.php";
+    window.location.href = getAdminRootUrl();
   };
 
   const containerClass = classNames(
@@ -484,7 +488,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
 
       <ComponentContainer className={classNames(styles.cancelComponent)}>
         {step === 1 && !showThankYouScreen && (
-          <Link color="black" className={styles.cancelLink} onClick={() => (window.location.href = "/wp-admin")}>
+          <Link color="black" className={styles.cancelLink} onClick={() => (window.location.href = getAdminRootUrl())}>
             {__("Cancel", "beyondseo")}
           </Link>
         )}

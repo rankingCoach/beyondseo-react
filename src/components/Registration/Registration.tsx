@@ -4,6 +4,7 @@ import styles from "./Registration.module.scss";
 import { Button, ButtonSizes, ButtonTypes, ComponentContainer, IconNames, Input, Text, TextTypes, FontWeights, TextIcon, Select, Link, PageSectionLoading, CheckBox } from "vanguard";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { ErrorModal } from "@components/Common/ErrorModal/ErrorModal";
+import { getPrivacyPolicyUrl, getTermsUrl } from "@helpers/external-links";
 import { __ } from "@wordpress/i18n";
 import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
 import emailVerifySvg from "@assets/validate-email-illustration.svg";
@@ -11,6 +12,7 @@ import { seoStore, SeoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { RegistrationWelcome } from "./RegistrationWelcome";
+import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
 
 const STORAGE_KEYS = {
   EMAIL: "registrationEmail",
@@ -20,7 +22,7 @@ const STORAGE_KEYS = {
   REGISTRATION_STATUS: "registrationRegistrationStatus",
 } as const;
 
-const ONBOARDING_URL = `${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-onboarding&skipWelcomeScreen=1`;
+const IS_PARTNER_INTEGRATION = (window as any).rankingCoachReactData?.partnerIntegration === 'true';
 const POLLING_INTERVAL = 5000;
 const VERIFICATION_TIME_WINDOW = 60;
 
@@ -164,7 +166,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       }
 
       clearLocalStorageVerification();
-      window.location.href = ONBOARDING_URL;
+      window.location.href = getAdminPageUrl(AdminPage.Onboarding, { skipWelcomeScreen: 1 });
       return true;
     } catch (error) {
       console.error("[REGISTRATION] Finalize registration error:", error);
@@ -182,7 +184,13 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
   }, [isPluginLoading]);
 
   useEffect(() => {
-    if (!isPluginLoading) {
+    if (IS_PARTNER_INTEGRATION) {
+      window.location.replace(getAdminPageUrl(AdminPage.Activation));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isPluginLoading && !IS_PARTNER_INTEGRATION) {
       loadInitialState();
     }
   }, [isPluginLoading, loadInitialState]);
@@ -433,6 +441,10 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
     return [];
   }, [allowedCountries]);
 
+  if (IS_PARTNER_INTEGRATION) {
+    return null;
+  }
+
   if (showWelcome) {
     const rcData = (window as any).rankingCoachReactData;
     return (
@@ -517,11 +529,11 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
                 label={
                   <span className={styles.termsText}>
                     {__("I agree that the BeyondSEO plugin may create/authenticate my account and communicate with rankingCoach servers to provide its services. I have read and accept the ", "beyondseo")}
-                    <Link href="https://www.rankingcoach.com/en-us/privacy-policy" target="_blank" rel="noopener noreferrer">
+                    <Link href={getPrivacyPolicyUrl()} target="_blank" rel="noopener noreferrer">
                       {__("Privacy Policy", "beyondseo")}
                     </Link>
                     {__(" and the ", "beyondseo")}
-                    <Link href="https://www.rankingcoach.com/en-us/terms-and-conditions" target="_blank" rel="noopener noreferrer">
+                    <Link href={getTermsUrl()} target="_blank" rel="noopener noreferrer">
                       {__("Terms and Conditions", "beyondseo")}
                     </Link>.
                   </span>
@@ -531,7 +543,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
 
             {/* <div className={styles.activationCodeHint}>
               {__("Have an activation code instead? ", "beyondseo")}
-              <Link href={`${(window as any).rankingCoachReactData?.adminurl || 'admin.php'}?page=rankingcoach-activation`}>
+              <Link href={getAdminPageUrl(AdminPage.Activation)}>
                 {__("Enter it here", "beyondseo")}
               </Link>
             </div> */}
@@ -579,18 +591,17 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       {/* Bottom Horizontal Divider */}
       <div className={styles.bottomDivider} />
 
-      {/* Footer Section with Register Button */}
+      {/* Footer Section with Back and Register Buttons */}
       <div className={styles.footerSection}>
-        {isVerificationPhase && (
-          <Button
-            type={ButtonTypes.secondary}
-            size={ButtonSizes.medium}
-            onClick={handleRegistrationReset}
-            className={styles.registrationResetButton}
-          >
-            {__("Change Email address", "beyondseo")}
-          </Button>
-        )}
+        <Button
+          type={ButtonTypes.secondary}
+          size={ButtonSizes.medium}
+          iconLeft={IconNames.arrowLeft}
+          onClick={isVerificationPhase ? handleRegistrationReset : () => setShowWelcome(true)}
+          className={styles.registrationResetButton}
+        >
+          {__("Back", "beyondseo")}
+        </Button>
         <Button
           type={ButtonTypes.primary}
           size={ButtonSizes.medium}

@@ -3,6 +3,7 @@ import { Button, ButtonTypes, ButtonSizes, Text, TextTypes, FontWeights, Switch,
 import { __ } from '@wordpress/i18n';
 import styles from './Upsell.module.scss';
 import { rcWindow } from "@stores/window.store";
+import { getCustomerReviewsUrl } from "@helpers/external-links";
 import gradientBackground from "@assets/upsell-page/gradient-background.svg";
 import aiBadges from "@assets/upsell-page/ai-badges.svg";
 import aiSparksBackgroundHorizontal from "@assets/upsell-page/ai-sparks-background-horizontal.svg";
@@ -40,6 +41,7 @@ import type {
     FeatureHighlight,
     PlanFeature
 } from './upsellConfig';
+import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
 
 // Type declaration for the global BSEORegistration object
 declare global {
@@ -163,8 +165,7 @@ const UpsellContent = () => {
      * Handle redirect to registration page when onboarding is not completed
      */
     const handleActivateForFree = () => {
-        const adminUrl = rcWindow?.rankingCoachReactData?.adminurl;
-        window.location.href = `${adminUrl}?page=rankingcoach-registration`;
+        window.location.href = getAdminPageUrl(AdminPage.Registration);
     };
 
     /**
@@ -784,7 +785,7 @@ const UpsellContent = () => {
                         <Text type={TextTypes.text} className={styles.partnerText}>
                             {__('Google Partner', 'beyondseo')}
                         </Text>
-                        <a href="https://www.reviews.io/company-reviews/store/www.rankingcoach.com#page:Qr" target="_blank" rel="noopener noreferrer">
+                        <a href={getCustomerReviewsUrl()} target="_blank" rel="noopener noreferrer">
                             <img src={reviewsioLogo} alt="REVIEWS.io" className={styles.reviewsioLogo} />
                         </a>
                     </div>

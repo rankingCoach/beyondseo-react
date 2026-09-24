@@ -42,6 +42,29 @@ export const Onboarding: React.FC<OnboardingProps> = ({ isPluginLoading }) => {
     }
   }, [isPluginLoading]);
 
+  const checkHasExistingData = (elements?: Array<{ setupRequirement?: string; value?: any }>) => {
+    if (!elements || !Array.isArray(elements)) return false;
+
+    const keywordsReq = elements.find((req) => req.setupRequirement === "businessKeywords");
+    const categoriesReq = elements.find((req) => req.setupRequirement === "businessCategories");
+
+    const parseOrCheck = (val: any) => {
+      if (!val || val === "[]" || val === "{}" || val === '""') return false;
+      if (Array.isArray(val)) return val.length > 0;
+      try {
+        const parsed = typeof val === "string" ? JSON.parse(val) : val;
+        return Array.isArray(parsed) ? parsed.length > 0 : Boolean(parsed);
+      } catch {
+        return Boolean(typeof val === "string" && val.trim() !== "");
+      }
+    };
+
+    const hasKeywords = parseOrCheck(keywordsReq?.value);
+    const hasCategories = parseOrCheck(categoriesReq?.value);
+
+    return hasKeywords || hasCategories;
+  };
+
   const loadInitialState = async () => {
     setIsStepsLoading(true);
     try {
@@ -54,16 +77,24 @@ export const Onboarding: React.FC<OnboardingProps> = ({ isPluginLoading }) => {
         queryParams.skipWelcomeScreen = 1;
       }
 
-      // CRITICAL: Call extractAuto FIRST and wait for it to complete
-      // This ensures auto-extraction data is available before generating steps
-      await dispatch(
-        OnboardingStore.postApiOnboardingExtractAutoThunk({
-          requestBody: null,
-          queryParams: { noCache: true, debug: true },
-        }),
-      );
+      let hasData = false;
+      try {
+        const reqResponse = await dispatch(
+          OnboardingStore.getApiOnboardingRequirementsThunk({})
+        ).unwrap();
+        hasData = checkHasExistingData(reqResponse?.requirements?.elements);
+      } catch {
+      }
 
-      // THEN call generateSteps after extractAuto completes
+      if (!hasData) {
+        await dispatch(
+          OnboardingStore.postApiOnboardingExtractAutoThunk({
+            requestBody: null,
+            queryParams: { noCache: true, debug: true },
+          }),
+        );
+      }
+
       const response = await dispatch(
         OnboardingStore.postApiOnboardingGenerateStepsThunk({
           requestBody: null,
@@ -71,7 +102,9 @@ export const Onboarding: React.FC<OnboardingProps> = ({ isPluginLoading }) => {
         }),
       ).unwrap();
 
-      if (response?.steps?.elements) {
+      if (hasData) {
+        setIsCompleted(true);
+      } else if (response?.steps?.elements) {
         const finalStep = response.steps.elements.find(
           (element) => element.isFinalStep === true && element.completed === true,
         );
