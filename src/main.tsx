@@ -21,6 +21,7 @@ import "@components/TabsManager/Tabs/GeneralTab/GeneralTab.module.scss";
 import "@components/TabsManager/Tabs/OptimisationTab/OptimisationTab.css";
 import "@components/TabsManager/Tabs/SchemaTab/SchemaTab.css";
 import "@components/SeoScoreCell/SeoScoreCell.module.scss";
+import "@components/SeoScoreCell/QuickEdit/SeoQuickEdit.module.scss";
 import "@components/Common/DonutChart/DonutChart.module.scss";
 
 import { rcWindow } from "@stores/window.store";
@@ -33,6 +34,7 @@ import { fetchPost } from "@helpers/post-helpers";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { WPKeywordsAnalysis } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/ContentAnalysis/WPKeywordsAnalysis";
 import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
+import { readSnippetFromElement } from "@components/SeoScoreCell/snippet-data";
 import { ScoreButtonHeader } from "@components/ScoreButtonHeader/ScoreButtonHeader";
 import Settings from "@components/Settings/Settings";
 import { Upsell } from "@components/Upsell/Upsell";
@@ -495,7 +497,9 @@ export function initializePostCells() {
     for (const div of elementsToRender) {
       await new Promise<void>((resolve) => {
         const postId = parseInt(div.getAttribute("data-id") || "0");
-        const SeoScoreCellWrapper = () => <SeoScoreCell postId={postId} onDataLoaded={resolve} />;
+        // SEO title / description snippet rendered by PHP into the mount point's data attributes
+        const snippet = readSnippetFromElement(div as HTMLElement);
+        const SeoScoreCellWrapper = () => <SeoScoreCell postId={postId} snippet={snippet} onDataLoaded={resolve} />;
         renderWithProviders(div, SeoScoreCellWrapper);
       });
     }
