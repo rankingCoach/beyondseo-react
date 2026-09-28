@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getRestNonce, getWpRestUrl } from '@helpers/internal-links';
+import { rcWindow } from '@stores/window.store';
 
 export interface Post {
   id: number;
@@ -44,7 +45,14 @@ export const fetchPost = createAsyncThunk<
       if (!response.ok) {
         throw new Error('Failed to fetch post');
       }
-      return await response.json();
+      const post = await response.json();
+      // WordPress stores the not-yet-saved "Add New" post as an `auto-draft` titled "Auto Draft"
+      // and blanks that placeholder before rendering the editor; mirror it so the placeholder
+      // never seeds the SEO title or the SERP preview.
+      if (post?.status === 'auto-draft' && post.title) {
+        post.title = { ...post.title, rendered: '' };
+      }
+      return post;
     } catch (error) {
       if (error instanceof Error) {
         return thunkAPI.rejectWithValue(error.message);
@@ -53,5 +61,20 @@ export const fetchPost = createAsyncThunk<
     }
   }
 );
+
+/**
+ * True while the post being edited is still the empty `auto-draft` WordPress inserts for the
+ * "Add New" screen. The block editor store reports the live status (it becomes `draft` on the
+ * first save, without a reload); the classic editor reloads on save, so the flag PHP localized
+ * for the page is enough there.
+ */
+export const isUnsavedNewPost = (): boolean => {
+  const editorStatus =
+    typeof wp !== 'undefined' ? wp?.data?.select?.('core/editor')?.getCurrentPost?.()?.status : undefined;
+  if (typeof editorStatus === 'string' && editorStatus !== '') {
+    return editorStatus === 'auto-draft';
+  }
+  return !!rcWindow?.rankingCoachReactData?.isAddingPost;
+};
 
 

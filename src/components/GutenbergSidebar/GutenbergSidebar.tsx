@@ -10,17 +10,24 @@ import {
 } from "./GutenbergSidebarHelpers";
 import { GutenbergSidebarStateProvider, useGutenbergSidebarState } from "./GutenbergSidebarContext";
 import { ContentCategoryComponent } from "./GutenbergSidebarComponents";
+import { __ } from "@wordpress/i18n";
 
 export type GutenbergSidebarProps = {
   headerText?: string;
   overallScore?: number;
   analysisResult?: AnalysisResult;
   isLoading?: boolean;
+  /** Shown instead of the loading skeleton while there is no analysis and none is being loaded. */
+  emptyMessage?: string;
 };
+
+/** Explanation shown on the "Add New" screen, where the unsaved post cannot be analyzed yet. */
+export const unsavedPostAnalysisMessage = (): string =>
+  __("The SEO analysis starts after the first save of this post.", "beyondseo");
 
 // Main component implementation
 const GutenbergSidebarContent = (props: GutenbergSidebarProps) => {
-  const { headerText, overallScore, analysisResult, isLoading } = props;
+  const { headerText, overallScore, analysisResult, isLoading, emptyMessage } = props;
 
   // UI state
   const [uiState, setUiState] = useState({
@@ -65,6 +72,25 @@ const GutenbergSidebarContent = (props: GutenbergSidebarProps) => {
   const handleAccordionClick = (e: MouseEvent) => {
     e.stopPropagation();
   };
+
+  // A post without any analysis (and none loading) gets the explanation instead of a skeleton
+  // that would look like an endless load, or a misleading 0% score.
+  if (emptyMessage && !isLoading && !analysisResult) {
+    return (
+      <ComponentContainer className={classNames(styles.gutenbergSidebarContainer)}>
+        <div className={styles.orbSection}>
+          <div className={classNames(styles.orbContainer, styles.expanded)}>
+            <div className={styles.aiOrbWrapper}>
+              <AIOrb state={AIOrbStatus.Waiting} size={AIOrbSize.Medium} />
+            </div>
+          </div>
+          <Text type={TextTypes.text} color="--n600" className={styles.optimisationTitle}>
+            {emptyMessage}
+          </Text>
+        </div>
+      </ComponentContainer>
+    );
+  }
 
   // If no score is available, show placeholder
   if (typeof overallScore !== "number") {

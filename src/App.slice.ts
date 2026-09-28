@@ -369,11 +369,16 @@ const appSlice = createSlice({
     });
 
     // OptimiserStore - Optimiser Result
+    // Both optimiser endpoints answer with an empty result (no `analyzedAt`) for a post that
+    // was never analyzed, e.g. the unsaved "Add New" post the backend refuses to analyze; keep
+    // the store at `null` for it so the UI shows its empty state rather than a 0% score.
+    const analyzedResultOrNull = (result: OptimiserResult | null | undefined): OptimiserResult | null =>
+      result && result.analyzedAt ? result : null;
     builder.addCase(OptimiserStore.getApiOptimiserByPostIdThunk.fulfilled, (state, action) => {
-      state.optimiserResult = action.payload.analyseResult;
+      state.optimiserResult = analyzedResultOrNull(action.payload.analyseResult);
     });
     builder.addCase(OptimiserStore.postApiOptimiserByPostIdThunk.fulfilled, (state, action) => {
-      state.optimiserResult = action.payload.analyseResult;
+      state.optimiserResult = analyzedResultOrNull(action.payload.analyseResult);
     });
 
     // Onboarding Generate Steps
@@ -414,7 +419,7 @@ const postSlice = createSlice({
         state.currentPostStatus = action.payload.status;
       })
       .addCase(fetchPost.rejected, (state, action) => {
-        state.isFetchingPostData = true;
+        state.isFetchingPostData = false;
         state.isCurrentPostLoaded = false;
         state.error = true;
       });
