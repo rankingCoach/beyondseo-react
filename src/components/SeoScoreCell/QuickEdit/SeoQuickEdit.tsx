@@ -49,6 +49,9 @@ export const DESCRIPTION_MAX_LENGTH = 300;
 const PANEL_WIDTH = 440;
 const DEFAULT_ARROW_OFFSET = 28;
 
+/** Set on `body` while the card is open; the stylesheet lifts portalled menus above the card with it. */
+const OPEN_BODY_CLASS = "rc-seo-quick-edit-open";
+
 /**
  * Containers Vanguard / MUI render outside the card (select menus, tooltips).
  * A click in one of them belongs to the card and must not trigger the
@@ -194,6 +197,17 @@ export const SeoQuickEdit = forwardRef<SeoQuickEditHandle, SeoQuickEditProps>(
         cancelled = true;
       };
     }, [postId]);
+
+    // Vanguard's Select menus (Add Variable / Add Separator, chip selectors) are MUI popovers
+    // portalled onto `body` at MUI's modal layer, below this card's own layer, so they opened
+    // behind the card and its focus trap then locked the card until the hidden menu closed.
+    // While the card is open, a body class lifts those layers above it (see the stylesheet).
+    useEffect(() => {
+      document.body.classList.add(OPEN_BODY_CLASS);
+      return () => {
+        document.body.classList.remove(OPEN_BODY_CLASS);
+      };
+    }, []);
 
     // Focus the title once the card is positioned (a hidden element cannot take focus).
     useEffect(() => {
