@@ -9,7 +9,7 @@ import { MainStore, MainStorePersistor, RootState } from "./main.store";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import "@vanguard-style";
 import { useLocaleLoader } from "@hooks/use-locale-loader";
-import { GutenbergSidebar } from "@components/GutenbergSidebar/GutenbergSidebar";
+import { GutenbergSidebar, unsavedPostAnalysisMessage } from "@components/GutenbergSidebar/GutenbergSidebar";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
 import { OptimiserStore } from "@stores/swagger/api/OptimiserStore";
@@ -21,6 +21,7 @@ import "@components/TabsManager/Tabs/GeneralTab/GeneralTab.module.scss";
 import "@components/TabsManager/Tabs/OptimisationTab/OptimisationTab.css";
 import "@components/TabsManager/Tabs/SchemaTab/SchemaTab.css";
 import "@components/SeoScoreCell/SeoScoreCell.module.scss";
+import "@components/SeoScoreCell/QuickEdit/SeoQuickEdit.module.scss";
 import "@components/Common/DonutChart/DonutChart.module.scss";
 
 import { rcWindow } from "@stores/window.store";
@@ -29,10 +30,11 @@ import { Activation } from "@src/components/Activation/Activation";
 import { Onboarding } from "@src/components/Onboarding/Onboarding";
 import { Registration } from "@src/components/Registration/Registration";
 import { SEOOptimiser } from "@components/SEO/SEOOptimiser/SEOOptimiser";
-import { fetchPost } from "@helpers/post-helpers";
+import { fetchPost, isUnsavedNewPost } from "@helpers/post-helpers";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { WPKeywordsAnalysis } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/ContentAnalysis/WPKeywordsAnalysis";
 import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
+import { readSnippetFromElement } from "@components/SeoScoreCell/snippet-data";
 import { ScoreButtonHeader } from "@components/ScoreButtonHeader/ScoreButtonHeader";
 import Settings from "@components/Settings/Settings";
 import { Upsell } from "@components/Upsell/Upsell";
@@ -116,13 +118,18 @@ const MainComponent: React.FC<{ children: React.ReactNode; componentKey?: string
   const dispatch = useAppDispatch();
   const { isPluginDataLoaded, isFetchingPluginData } = useSelector((state: RootState) => state.app);
   const { isCurrentPostLoaded, isFetchingPostData } = useSelector((state: RootState) => state.post);
-  let { currentPostType, currentPostId, isEditingPost } = rcWindow?.rankingCoachReactData || {};
+  const { currentPostType, currentPostId, isEditingPost } = rcWindow?.rankingCoachReactData || {};
 
   const isPluginInformationRequired = componentRequiresPluginInfo(componentKey);
 
-  const postId = wp?.data?.select("core/editor")?.getCurrentPostId();
-  const postStatus = wp?.data?.select("core/editor")?.getCurrentPost()?.status;
-  const isAddingPost = postStatus === "auto-draft" && postId !== 0;
+  // PHP localizes the id/type of the post being edited; on post-new.php that is the auto-draft
+  // WordPress inserts before rendering the editor (Assets::front()). The block editor store only
+  // backs those values up, e.g. while a stale PHP layer still localizes nothing on "Add New".
+  const editorStore = typeof wp !== "undefined" ? wp?.data?.select?.("core/editor") : null;
+  const localizedPostId = parseInt(currentPostId, 10);
+  const resolvedPostId: number | null =
+    localizedPostId > 0 ? localizedPostId : editorStore?.getCurrentPostId?.() || null;
+  const resolvedPostType: string | null = currentPostType || editorStore?.getCurrentPostType?.() || null;
 
   // Cache mechanism to prevent duplicate fetchPost calls
   const [fetchPostExecuted, setFetchPostExecuted] = useState(false);
@@ -142,34 +149,17 @@ const MainComponent: React.FC<{ children: React.ReactNode; componentKey?: string
   useEffect(() => {
     if (fetchPostExecuted || isCurrentPostLoaded || isFetchingPostData) return;
 
-    const shouldFetchForEditing = isEditingPost && ["post", "page"].includes(currentPostType);
-    const shouldFetchForAdding = isAddingPost;
+    if (!isEditingPost || !resolvedPostType || !["post", "page"].includes(resolvedPostType)) return;
+    if (!resolvedPostId || resolvedPostId <= 0) return;
 
-    if (shouldFetchForEditing || shouldFetchForAdding) {
-      const targetPostId = shouldFetchForAdding ? postId : currentPostId;
+    // Every tab reads the post through getPathId() / the window object; keep them in sync with
+    // the resolved values (they only differ when the editor-store fallback above was needed).
+    rcWindow.rankingCoachReactData.currentPostId = resolvedPostId;
+    rcWindow.rankingCoachReactData.currentPostType = resolvedPostType;
 
-      // Validate targetPostId before executing fetchPost
-      if (!targetPostId || isNaN(targetPostId) || targetPostId <= 0) {
-        return;
-      }
-
-      if (postId) {
-        rcWindow.rankingCoachReactData.currentPostId = postId;
-      }
-
-      setFetchPostExecuted(true);
-      dispatch(fetchPost({ postId: targetPostId, postType: currentPostType }));
-    }
-  }, [
-    isEditingPost,
-    currentPostType,
-    currentPostId,
-    isAddingPost,
-    postId,
-    isCurrentPostLoaded,
-    isFetchingPostData,
-    fetchPostExecuted,
-  ]);
+    setFetchPostExecuted(true);
+    dispatch(fetchPost({ postId: resolvedPostId, postType: resolvedPostType }));
+  }, [isEditingPost, resolvedPostType, resolvedPostId, isCurrentPostLoaded, isFetchingPostData, fetchPostExecuted]);
 
   // Autonomous areas (e.g. the connect/upsell page) only wait for locale; they never
   // block on plugin information since they don't consume it.
@@ -414,6 +404,7 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
     const SEOOptimiserProps = {
       headerText: __("BeyondSEO", "beyondseo"),
       overallScore: overallScore,
+      emptyMessage: isUnsavedNewPost() ? unsavedPostAnalysisMessage() : undefined,
       analysisResult: optimiserResult
         ? {
           contexts: {
@@ -495,7 +486,9 @@ export function initializePostCells() {
     for (const div of elementsToRender) {
       await new Promise<void>((resolve) => {
         const postId = parseInt(div.getAttribute("data-id") || "0");
-        const SeoScoreCellWrapper = () => <SeoScoreCell postId={postId} onDataLoaded={resolve} />;
+        // SEO title / description snippet rendered by PHP into the mount point's data attributes
+        const snippet = readSnippetFromElement(div as HTMLElement);
+        const SeoScoreCellWrapper = () => <SeoScoreCell postId={postId} snippet={snippet} onDataLoaded={resolve} />;
         renderWithProviders(div, SeoScoreCellWrapper);
       });
     }

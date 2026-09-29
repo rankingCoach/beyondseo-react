@@ -1,12 +1,13 @@
 import * as React from "react";
 import styles from "./OptimisationTab.module.scss";
 import { __ } from "@wordpress/i18n";
-import { GutenbergSidebar } from "@components/GutenbergSidebar/GutenbergSidebar";
+import { GutenbergSidebar, unsavedPostAnalysisMessage } from "@components/GutenbergSidebar/GutenbergSidebar";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { OptimiserStore } from "@src/stores/swagger/api/OptimiserStore";
 import { getPathId } from "@helpers/get-path-id";
+import { isUnsavedNewPost } from "@helpers/post-helpers";
 
 interface OptimisationTabProps {
   recalculationStart?: boolean;
@@ -87,6 +88,7 @@ export const OptimisationTab: React.FC<OptimisationTabProps> = ({ recalculationS
           overallScore={overallScore}
           analysisResult={optimiserResult as any}
           isLoading={isLoading}
+          emptyMessage={isUnsavedNewPost() ? unsavedPostAnalysisMessage() : undefined}
         />
       </div>
     </div>
