@@ -5,9 +5,11 @@
 $card-font-size: 13px;
 $card-line-height: 1.5;
 
+$card-z-index: 99;
+
 .panel {
     position: absolute;
-    z-index: 9999;
+    z-index: $card-z-index;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -246,4 +248,19 @@ $card-line-height: 1.5;
     background: transparent !important;
     min-height: 0 !important;
     padding: 0 !important;
+}
+
+// Vanguard's Select menus (Add Variable / Add Separator, the chip selectors) and tooltips are
+// MUI layers portalled onto `body` at MUI's modal z-index (1300), i.e. behind the card. The
+// card adds this body class while it is open so those layers stack above it; the selectors
+// mirror PORTAL_SELECTORS in SeoQuickEdit.tsx, which already treats clicks in them as inside
+// the card.
+:global(body.rc-seo-quick-edit-open) {
+    :global(.MuiPopover-root),
+    :global(.MuiMenu-root),
+    :global(.MuiPopper-root),
+    :global(.MuiModal-root),
+    :global(.vanguard-popover) {
+        z-index: $card-z-index + 1;
+    }
 }
