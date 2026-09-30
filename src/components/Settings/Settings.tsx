@@ -8,6 +8,7 @@ import ImportSettingsPage from "./ImportSettingsPage/ImportSettingsPage";
 import SitemapPage from "./SitemapPage/SitemapPage";
 import RobotsPage from "./RobotsPage/RobotsPage";
 import GeneralSettingsPage from "./GeneralSettingsPage/GeneralSettingsPage";
+import SupportPage from "./SupportPage/SupportPage";
 import { __ } from "@wordpress/i18n";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@src/main.store";
@@ -29,7 +30,8 @@ const menuItems: MenuItem[] = [
   { id: "breadcrumbs", label: __("Breadcrumbs", "beyondseo"), icon: "link", component: BreadcrumbsPage },
   { id: "rss", label: __("RSS", "beyondseo"), icon: "rss", component: RSSPage, className: styles.rssItem, subtext: __("Really Simple Syndication", "beyondseo") },
   { id: "sitemap", label: __("Sitemap", "beyondseo"), icon: "sitemap", component: SitemapPage },
-  { id: "robots", label: __("Robots.txt", "beyondseo"), icon: "robot", component: RobotsPage }
+  { id: "robots", label: __("Robots.txt", "beyondseo"), icon: "robot", component: RobotsPage },
+  { id: "support", label: __("Support", "beyondseo"), icon: "help", component: SupportPage },
 ];
 
 const Settings: React.FC = () => {
