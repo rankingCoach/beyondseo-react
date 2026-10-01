@@ -1,6 +1,22 @@
 .seoScoreCellWrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    max-width: 100%;
+    min-width: 0;
+
+    .scoreRow {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .scoreHover {
+        position: relative;
+    }
 
     .assistantCell {
         cursor: pointer;
@@ -93,6 +109,107 @@
             }
         }
     }
+
+    // "Updating score…" / "Saved" feedback next to the score badge
+    .scoreStatus,
+    .savedPill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .savedPill {
+        padding: 2px 8px 2px 6px;
+        border-radius: 999px;
+        background: var(--s100, #e9fbed);
+        animation: rcCellFadeIn 0.2s ease-out;
+    }
+
+    .statusText {
+        margin: 0 !important;
+        white-space: nowrap;
+    }
+
+    // SEO title / meta description summary; the whole block opens the quick editor
+    .snippetSummary {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 4px 6px;
+        margin-left: -6px;
+        border-radius: 8px;
+        transition: background-color 0.15s ease;
+
+        // WordPress stripes every other row in #f6f7f7, so a neutral grey tint vanishes
+        // there. The light brand tint of the score badge shows on both row colours.
+        &.snippetEditable {
+            cursor: pointer;
+
+            &:hover,
+            &.snippetActive {
+                background: var(--p100, #e6efff);
+
+                .snippetEditButton {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    .snippetLines {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        column-gap: 8px;
+        row-gap: 2px;
+        align-items: baseline;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .snippetLabel {
+        margin: 0 !important;
+        font-size: 10px !important;
+        line-height: 18px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--n400, #8698b6) !important;
+        white-space: nowrap;
+    }
+
+    .snippetCell {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .snippetValue {
+        margin: 0 !important;
+        font-size: 13px !important;
+        line-height: 18px !important;
+        color: var(--n700, #2a3546) !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .snippetMissing {
+        color: var(--p500, #0062ff) !important;
+        font-weight: 500 !important;
+    }
+
+    .snippetEditTrigger {
+        display: inline-flex;
+        flex-shrink: 0;
+    }
+
+    .snippetEditButton {
+        flex-shrink: 0;
+        opacity: 0.75;
+        transition: opacity 0.15s ease;
+    }
 }
 
 .success {
@@ -101,4 +218,15 @@
 
 .warning {
     background: #fde5c9;
+}
+
+@keyframes rcCellFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(2px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

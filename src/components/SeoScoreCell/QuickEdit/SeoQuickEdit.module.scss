@@ -1,0 +1,266 @@
+@import "@src/styles/spacings";
+
+// Compact type scale for the card: it floats over the 13px list table, so the
+// General tab's 16px editors are scaled down here.
+$card-font-size: 13px;
+$card-line-height: 1.5;
+
+$card-z-index: 99;
+
+.panel {
+    position: absolute;
+    z-index: $card-z-index;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: $bit;
+    padding: $bytex $mega $bytex;
+    background: var(--n000, #fff);
+    border: 1px solid var(--n200, #e6e9f0);
+    border-radius: 10px;
+    box-shadow: var(
+        --shadow-large,
+        0 12px 40px rgba(4, 5, 6, 0.06),
+        0 8px 14px rgba(4, 5, 6, 0.05),
+        0 4px 4px rgba(4, 5, 6, 0.08)
+    );
+    font-size: $card-font-size;
+    line-height: $card-line-height;
+    text-align: left;
+    animation: rcQuickEditIn 0.16s ease-out;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+}
+
+.arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    background: var(--n000, #fff);
+    border: 1px solid var(--n200, #e6e9f0);
+    transform: rotate(45deg);
+}
+
+.panelBelow .arrow {
+    top: -7px;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+}
+
+.panelAbove .arrow {
+    bottom: -7px;
+    border-left-color: transparent;
+    border-top-color: transparent;
+}
+
+// ---------------------------------------------------------------------------
+// Title: the General tab chip editor, compacted. Its classes are CSS-module
+// hashed, so they are matched by their local name.
+// ---------------------------------------------------------------------------
+.titleEditor {
+    width: 100%;
+
+    :global([class*="multiSelectorAdornmentInput"]) {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    :global([class*="headerControlsContainer"]) {
+        padding: 0 0 $bit;
+    }
+
+    :global([class*="leftAlignControls"]) {
+        flex-wrap: wrap;
+        gap: $bit;
+    }
+
+    :global([class*="titleText"]) {
+        margin: 0 $bit 0 0 !important;
+        font-size: $card-font-size !important;
+        font-weight: 500 !important;
+    }
+
+    :global([class*="variablesContainer"]) {
+        padding: $bit $byte;
+        margin-bottom: 2px;
+        gap: $bit;
+        row-gap: $bit;
+        border-radius: 6px;
+    }
+
+    :global([class*="inlineInput"]) {
+        font-size: $card-font-size !important;
+        line-height: $card-line-height !important;
+    }
+
+    // Variable / separator chips
+    :global([class*="adornmentItem"]) {
+        div[class*="vanguard-input "],
+        div[class*="MuiInputBase-root "] {
+            width: 128px;
+            min-width: 128px;
+            font-size: $card-font-size;
+        }
+    }
+
+    :global(.MuiSelect-select) {
+        min-height: 0 !important;
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+        font-size: $card-font-size !important;
+        line-height: $card-line-height !important;
+    }
+
+    :global([class*="feedbackContainer"]) {
+        margin-top: 2px;
+        padding: 0 2px;
+    }
+
+    :global([class*="characterCounter"]),
+    :global([class*="errorMessage"]) {
+        font-size: 11px;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Description
+// ---------------------------------------------------------------------------
+.field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.fieldHeader {
+    display: flex;
+    align-items: center;
+    padding: $bit 0;
+}
+
+.fieldTitle {
+    margin: 0 !important;
+    font-size: $card-font-size !important;
+    font-weight: 500 !important;
+}
+
+.textarea {
+    width: 100%;
+
+    :global(.MuiInputBase-root) {
+        font-size: $card-font-size;
+        line-height: $card-line-height;
+    }
+
+    :global(.MuiInputBase-multiline) {
+        padding: $byte $bytex !important;
+    }
+
+    :global(.vanguard-input .MuiOutlinedInput-root .MuiOutlinedInput-input) {
+        padding: 0 !important;
+    }
+}
+
+// Same counter as the chip editor ("14 / 300 recommended")
+.counterRow {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2px;
+    padding: 0 2px;
+}
+
+.counter {
+    font-size: 11px;
+    color: #666;
+}
+
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $byte;
+    margin-top: $bit;
+    padding-top: $byte;
+    border-top: 1px solid var(--n200, #e6e9f0);
+
+    a,
+    a p {
+        font-size: $card-font-size !important;
+    }
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: $bit;
+}
+
+@keyframes rcQuickEditIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .actions {
+        justify-content: flex-end;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// wp-admin's forms.css styles every text input / textarea element (border, shadow,
+// min-height, font). Inside the card the Vanguard field and the chip container draw
+// their own outline, so neutralise the WordPress rules on the inner elements.
+// ---------------------------------------------------------------------------
+.panel :global(.vanguard-input) input,
+.panel :global(.vanguard-input) textarea {
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    min-height: 0 !important;
+    font: inherit !important;
+    line-height: inherit !important;
+    color: currentColor !important;
+}
+
+.panel :global([class*="inlineInput"]) {
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+}
+
+// Vanguard's Select menus (Add Variable / Add Separator, the chip selectors) and tooltips are
+// MUI layers portalled onto `body` at MUI's modal z-index (1300), i.e. behind the card. The
+// card adds this body class while it is open so those layers stack above it; the selectors
+// mirror PORTAL_SELECTORS in SeoQuickEdit.tsx, which already treats clicks in them as inside
+// the card.
+:global(body.rc-seo-quick-edit-open) {
+    :global(.MuiPopover-root),
+    :global(.MuiMenu-root),
+    :global(.MuiPopper-root),
+    :global(.MuiModal-root),
+    :global(.vanguard-popover) {
+        z-index: $card-z-index + 1;
+    }
+}

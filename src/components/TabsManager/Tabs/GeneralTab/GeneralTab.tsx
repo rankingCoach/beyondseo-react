@@ -16,6 +16,7 @@ import { RootState } from "@src/main.store";
 import { __ } from "@wordpress/i18n";
 import { SeoStore } from "@src/stores/swagger/rankingcoach/SeoStore";
 import { AppSlice } from "@src/App.slice";
+import { isUnsavedNewPost } from "@helpers/post-helpers";
 
 export const GeneralTab = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -104,9 +105,17 @@ export const GeneralTab = (props: any) => {
     };
   }, [dispatch, currentPostId, isEditingPost, currentPostType, refreshKey]);
 
-  // Trigger recalculation only if optimiserResult is null and not already attempted
+  // Trigger recalculation only if optimiserResult is null and not already attempted. Not on the
+  // "Add New" screen: the post is still WordPress' empty auto-draft, which the backend refuses
+  // to analyze; the first save (observed by ScoreRecalculationProvider) runs the first analysis.
   useEffect(() => {
-    if (optimiserResult === null && !isLoading && currentPostId > 0 && !recalculationAttempted.current) {
+    if (
+      optimiserResult === null &&
+      !isLoading &&
+      currentPostId > 0 &&
+      !isUnsavedNewPost() &&
+      !recalculationAttempted.current
+    ) {
       recalculationAttempted.current = true;
       triggerRecalculation(true);
     }
