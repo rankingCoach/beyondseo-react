@@ -15,7 +15,7 @@
         "> 1%"
     ],
     "dependencies": {
-        "@rankingcoach/vanguard": "^1.12.3",
+        "@rankingcoach/vanguard": "^2.0.0",
         "@reduxjs/toolkit": "2.4.0",
         "@types/lodash.debounce": "4.0.9",
         "@wordpress/element": "6.46.0",
