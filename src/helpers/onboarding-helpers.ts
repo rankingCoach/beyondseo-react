@@ -8,6 +8,11 @@ export const isOnboardingCompleted = (): boolean => {
   return flag === "1" || flag === "true" || flag === true;
 };
 
+export const isActivationCompleted = (): boolean => {
+  const flag = rcWindow?.rankingCoachReactData?.isActivationCompleted;
+  return flag === "1" || flag === "true" || flag === true;
+};
+
 export const getConnectPageUrl = (): string => getAdminPageUrl(AdminPage.Connect);
 
 export const redirectToConnectPage = (): void => {
