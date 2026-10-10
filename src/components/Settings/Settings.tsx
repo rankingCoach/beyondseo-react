@@ -64,8 +64,8 @@ const Settings: React.FC = () => {
   const [isProjectLoading, setIsProjectLoading] = useState(true);
   const [projectLoadError, setProjectLoadError] = useState<string | null>(null);
   const [deletionOutcome, setDeletionOutcome] = useState<AccountProjectDeletionOutcome | null>(null);
-  const [isDeletionPending, setIsDeletionPending] = useState(false);
-  const deletionPendingRef = useRef(false);
+  const [isMutationPending, setIsMutationPending] = useState(false);
+  const mutationPendingRef = useRef(false);
   const projectRequestRef = useRef<AbortController | null>(null);
   const projectRequestVersion = useRef(0);
 
@@ -82,7 +82,7 @@ const Settings: React.FC = () => {
   }, []);
 
   const refreshProject = useCallback(async () => {
-    if (deletionPendingRef.current) return;
+    if (mutationPendingRef.current) return;
     projectRequestRef.current?.abort();
     const controller = new AbortController();
     projectRequestRef.current = controller;
@@ -107,9 +107,9 @@ const Settings: React.FC = () => {
     }
   }, [handleProjectChange]);
 
-  const handleDeletionPendingChange = useCallback((pending: boolean) => {
-    deletionPendingRef.current = pending;
-    setIsDeletionPending(pending);
+  const handleMutationPendingChange = useCallback((pending: boolean) => {
+    mutationPendingRef.current = pending;
+    setIsMutationPending(pending);
     if (pending) {
       projectRequestVersion.current += 1;
       projectRequestRef.current?.abort();
@@ -123,18 +123,19 @@ const Settings: React.FC = () => {
       setActiveItem(getSelectedSection());
       void refreshProject();
     };
-    const handleFocus = () => void refreshProject();
     window.addEventListener("popstate", handlePopState);
-    window.addEventListener("focus", handleFocus);
     return () => {
       projectRequestVersion.current += 1;
       projectRequestRef.current?.abort();
       window.removeEventListener("popstate", handlePopState);
-      window.removeEventListener("focus", handleFocus);
     };
   }, [refreshProject]);
 
   const handleCheckAccount = async () => {
+    if (project?.accountAuthenticated && !connected) {
+      await refreshProject();
+      return;
+    }
     if (!connected || !isOnboardingCompleted()) {
       redirectToConnectPage();
       return;
@@ -152,7 +153,7 @@ const Settings: React.FC = () => {
   };
 
   const handleMenuClick = (id: string) => {
-    if (deletionPendingRef.current) return;
+    if (mutationPendingRef.current) return;
     const url = new URL(window.location.href);
     url.searchParams.set("section", id);
     if (url.href !== window.location.href) {
@@ -276,7 +277,7 @@ const Settings: React.FC = () => {
     };
   }, [checkWpMenuState, debouncedCheckWpMenuState]);
 
-  const menuItems = sections.filter((item) => item.id !== "account" || connected);
+  const menuItems = sections.filter((item) => item.id !== "account" || project?.accountAuthenticated || connected);
   const ActiveComponent = sections.find((item) => item.id === activeItem)?.component;
   const isActiveItemComingSoon = sections.find((item) => item.id === activeItem)?.comingSoon;
 
@@ -288,8 +289,8 @@ const Settings: React.FC = () => {
         <aside className={styles.sidebar}>
           <div
             role="button"
-            tabIndex={isDeletionPending ? -1 : 0}
-            aria-disabled={isDeletionPending}
+            tabIndex={isMutationPending ? -1 : 0}
+            aria-disabled={isMutationPending}
             aria-current={activeItem === "general" ? "page" : undefined}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
@@ -316,8 +317,8 @@ const Settings: React.FC = () => {
                   <li
                     key={item.id}
                     role="button"
-                    tabIndex={isDeletionPending ? -1 : 0}
-                    aria-disabled={isDeletionPending}
+                    tabIndex={isMutationPending ? -1 : 0}
+                    aria-disabled={isMutationPending}
                     aria-current={activeItem === item.id ? "page" : undefined}
                     onKeyDown={(event) => {
                       if (event.key === "Enter" || event.key === " ") {
@@ -362,7 +363,7 @@ const Settings: React.FC = () => {
               onProjectChange={handleProjectChange}
               deletionOutcome={deletionOutcome}
               onDeletionOutcomeChange={setDeletionOutcome}
-              onDeletionPendingChange={handleDeletionPendingChange}
+              onMutationPendingChange={handleMutationPendingChange}
             />
           </div>
           {activeItem !== "account" && ActiveComponent && <ActiveComponent comingSoon={isActiveItemComingSoon} />}
@@ -372,8 +373,8 @@ const Settings: React.FC = () => {
       <footer className={styles.footer}>
         <div className={styles.footerInfoContainer}>
           <button
-            onClick={() => !isAccountChecking && !isDeletionPending && handleCheckAccount()}
-            disabled={isAccountChecking || isDeletionPending || isProjectLoading || !!projectLoadError}
+            onClick={() => !isAccountChecking && !isMutationPending && handleCheckAccount()}
+            disabled={isAccountChecking || isMutationPending || isProjectLoading || !!projectLoadError}
             className={styles.checkUpdateButton}
           >
             {isAccountChecking ? __("Checking…", "beyondseo") : __("Check my account", "beyondseo")}

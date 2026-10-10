@@ -1,12 +1,17 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { Button, ButtonTypes, ComponentContainer, EditModal, FontWeights, Skeleton, Text, TextTypes } from "vanguard";
 import { __ } from "@wordpress/i18n";
-import { getPluginRestUrl, getRestNonce } from "@helpers/internal-links";
+import { AdminPage, getAdminPageUrl, getPluginRestUrl, getRestNonce } from "@helpers/internal-links";
 import { redirectToConnectPage } from "@helpers/onboarding-helpers";
 import styles from "./AccountPage.module.scss";
 
 export interface AccountProjectState {
   connected: boolean;
+  accountAuthenticated: boolean;
+  accountId: number | null;
+  connectionMethod: "email" | "activation" | null;
+  email: string | null;
+  maskedActivationCode: string | null;
   projectId: number | null;
   locationId: number | null;
   website: string;
@@ -27,7 +32,7 @@ export interface AccountPageProps {
   onProjectChange: (project: AccountProjectState) => void;
   deletionOutcome: AccountProjectDeletionOutcome | null;
   onDeletionOutcomeChange: (outcome: AccountProjectDeletionOutcome | null) => void;
-  onDeletionPendingChange: (pending: boolean) => void;
+  onMutationPendingChange: (pending: boolean) => void;
 }
 
 export class AccountProjectRequestError extends Error {
@@ -52,7 +57,16 @@ const parseProject = (value: unknown): AccountProjectState => {
   if (
     !isRecord(value) ||
     typeof value.connected !== "boolean" ||
+    typeof value.accountAuthenticated !== "boolean" ||
     typeof value.website !== "string" ||
+    (value.accountAuthenticated
+      ? !isIdentifier(value.accountId) || !["email", "activation"].includes(value.connectionMethod as string)
+      : value.accountId !== null || value.connectionMethod !== null || value.connected) ||
+    (value.email !== null && (value.connectionMethod !== "email" || typeof value.email !== "string")) ||
+    (value.maskedActivationCode !== null &&
+      (value.connectionMethod !== "activation" ||
+        typeof value.maskedActivationCode !== "string" ||
+        !/^\*{8}(.{4})?$/.test(value.maskedActivationCode))) ||
     (value.connected
       ? !isIdentifier(value.projectId) || !isIdentifier(value.locationId)
       : value.projectId !== null || value.locationId !== null)
@@ -77,17 +91,27 @@ const parseProject = (value: unknown): AccountProjectState => {
 
   return {
     connected: value.connected,
+    accountAuthenticated: value.accountAuthenticated,
+    accountId: value.accountId as number | null,
+    connectionMethod: value.connectionMethod as AccountProjectState["connectionMethod"],
+    email: value.email as string | null,
+    maskedActivationCode: value.maskedActivationCode as string | null,
     projectId: value.projectId as number | null,
     locationId: value.locationId as number | null,
     website: value.website,
   };
 };
 
-const requestError = (code: string, status: number): AccountProjectRequestError => {
-  let message = __(
-    "The service could not confirm project deletion. Your local connection has not been removed. Try again or contact support.",
-    "beyondseo",
-  );
+const requestError = (code: string, status: number, isCreation = false): AccountProjectRequestError => {
+  let message = isCreation
+    ? __(
+        "Unable to confirm project creation. Your account and local data have been retained. Refresh Account and try again or contact support.",
+        "beyondseo",
+      )
+    : __(
+        "The service could not confirm project deletion. Your local connection has not been removed. Try again or contact support.",
+        "beyondseo",
+      );
   switch (code) {
     case "account_project_invalid_response":
       message = __(
@@ -108,22 +132,45 @@ const requestError = (code: string, status: number): AccountProjectRequestError 
       );
       break;
     case "account_project_deletion_in_progress":
+    case "account_project_operation_in_progress":
       message = __(
-        "Project deletion is already in progress. Wait for it to finish and refresh Account. If this persists, contact support.",
+        "A project operation is already in progress. Wait for it to finish and refresh Account. If this persists, contact support.",
+        "beyondseo",
+      );
+      break;
+    case "account_project_lock_failed":
+      message = __("Unable to safely start the project operation. Please try again or contact support.", "beyondseo");
+      break;
+    case "account_project_not_authenticated":
+      message = __(
+        "Connect your account before creating a project. Refresh Account to check your connection.",
+        "beyondseo",
+      );
+      break;
+    case "account_project_save_failed":
+      message = __(
+        "The service returned a project, but its local connection could not be fully saved. Refresh Account and try again or contact support. Your account and local data have been retained.",
         "beyondseo",
       );
       break;
     case "account_project_communication_disabled":
-      message = __(
-        "Enable communication with rankingCoach in Settings before deleting the project. Your local connection has not been removed.",
-        "beyondseo",
-      );
+      message = isCreation
+        ? __("Enable communication with rankingCoach in Settings before creating a project.", "beyondseo")
+        : __(
+            "Enable communication with rankingCoach in Settings before deleting the project. Your local connection has not been removed.",
+            "beyondseo",
+          );
       break;
     case "account_project_authentication_failed":
-      message = __(
-        "The service could not authenticate project deletion. Your local connection has not been removed. Contact support to restore access before retrying.",
-        "beyondseo",
-      );
+      message = isCreation
+        ? __(
+            "The service could not authenticate project creation. Your account data has been retained. Contact support to restore access before retrying.",
+            "beyondseo",
+          )
+        : __(
+            "The service could not authenticate project deletion. Your local connection has not been removed. Contact support to restore access before retrying.",
+            "beyondseo",
+          );
       break;
     case "account_project_read_failed":
       message = __("Unable to load the local project connection. Please try again.", "beyondseo");
@@ -139,7 +186,11 @@ const requestError = (code: string, status: number): AccountProjectRequestError 
   return new AccountProjectRequestError(message, code, status);
 };
 
-const requestProject = async (route: string, method: "GET" | "DELETE", signal?: AbortSignal): Promise<unknown> => {
+const requestProject = async (
+  route: string,
+  method: "GET" | "DELETE" | "POST",
+  signal?: AbortSignal,
+): Promise<unknown> => {
   let response: Response;
   try {
     response = await fetch(getPluginRestUrl(route), {
@@ -154,10 +205,15 @@ const requestProject = async (route: string, method: "GET" | "DELETE", signal?: 
     throw new AccountProjectRequestError(
       method === "GET"
         ? __("Unable to load the local project connection. Check your connection and try again.", "beyondseo")
-        : __(
-            "The deletion result could not be verified. Refresh Account before trying again. If the connection is incomplete, contact support before reconnecting.",
-            "beyondseo",
-          ),
+        : method === "POST"
+          ? __(
+              "The creation result could not be verified. Refresh Account before trying again. Your account and local data have been retained.",
+              "beyondseo",
+            )
+          : __(
+              "The deletion result could not be verified. Refresh Account before trying again. If the connection is incomplete, contact support before reconnecting.",
+              "beyondseo",
+            ),
       "account_project_network_error",
     );
   }
@@ -177,7 +233,7 @@ const requestProject = async (route: string, method: "GET" | "DELETE", signal?: 
       isRecord(data) && typeof data.code === "string" && /^[a-z0-9_]{1,100}$/.test(data.code)
         ? data.code
         : "account_project_invalid_response";
-    throw requestError(code, response.status);
+    throw requestError(code, response.status, method === "POST");
   }
   return data;
 };
@@ -206,6 +262,14 @@ const deleteAccountProject = async (locationId: number): Promise<AccountProjectD
   return { deletionResult: { outcome: data.deletionResult.outcome as AccountProjectDeletionOutcome }, project };
 };
 
+const createAccountProject = async (): Promise<AccountProjectState> => {
+  const data = await requestProject("account/project", "POST");
+  if (!isRecord(data)) throw requestError("account_project_invalid_response", 0, true);
+  const project = parseProject(data.project);
+  if (!project.connected) throw requestError("account_project_invalid_response", 0, true);
+  return project;
+};
+
 const focusableSelector =
   'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
 
@@ -217,10 +281,12 @@ const AccountPage: React.FC<AccountPageProps> = ({
   onProjectChange,
   deletionOutcome,
   onDeletionOutcomeChange,
-  onDeletionPendingChange,
+  onMutationPendingChange,
 }) => {
   const [confirmation, setConfirmation] = useState<AccountProjectState | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [createdProjectId, setCreatedProjectId] = useState<number | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [cleanupBlocked, setCleanupBlocked] = useState(false);
   const [needsRefresh, setNeedsRefresh] = useState(false);
@@ -228,10 +294,10 @@ const AccountPage: React.FC<AccountPageProps> = ({
   const modalContentRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
-  const focusConnectRef = useRef(false);
+  const focusActionRef = useRef(false);
   const mountedRef = useRef(true);
-  const pendingCallbackRef = useRef(onDeletionPendingChange);
-  pendingCallbackRef.current = onDeletionPendingChange;
+  const pendingCallbackRef = useRef(onMutationPendingChange);
+  pendingCallbackRef.current = onMutationPendingChange;
   const headingId = useId();
   const descriptionId = useId();
 
@@ -315,12 +381,14 @@ const AccountPage: React.FC<AccountPageProps> = ({
   }, [confirmation, isDeleting]);
 
   useEffect(() => {
-    if (confirmation || isLoading || isDeleting || !focusConnectRef.current) return;
+    if (confirmation || isLoading || isDeleting || isCreating || !focusActionRef.current) return;
     const target =
-      pageRef.current?.querySelector<HTMLElement>('[data-testid="account-connect-button"]') || pageRef.current;
+      pageRef.current?.querySelector<HTMLElement>(
+        '[data-testid="account-onboarding-button"], [data-testid="account-create-button"], [data-testid="account-connect-button"]',
+      ) || pageRef.current;
     if (!target?.getClientRects().length || target.matches(":disabled")) return;
     target.focus();
-    focusConnectRef.current = false;
+    focusActionRef.current = false;
   });
 
   const refresh = async () => {
@@ -349,12 +417,13 @@ const AccountPage: React.FC<AccountPageProps> = ({
     pendingRef.current = true;
     setIsDeleting(true);
     setActionError(null);
-    onDeletionPendingChange(true);
+    onMutationPendingChange(true);
     try {
       const result = await deleteAccountProject(confirmation.locationId!);
       if (!mountedRef.current) return;
-      focusConnectRef.current = true;
+      focusActionRef.current = true;
       onProjectChange(result.project);
+      setCreatedProjectId(null);
       onDeletionOutcomeChange(result.deletionResult.outcome);
       setConfirmation(null);
     } catch (error) {
@@ -371,7 +440,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
         ["account_project_invalid_response", "account_project_network_error"].includes(failure.code)
       ) {
         setNeedsRefresh(true);
-        onDeletionPendingChange(false);
+        onMutationPendingChange(false);
         try {
           await onRefresh();
           if (mountedRef.current) setNeedsRefresh(false);
@@ -383,21 +452,71 @@ const AccountPage: React.FC<AccountPageProps> = ({
       pendingRef.current = false;
       if (mountedRef.current) {
         setIsDeleting(false);
-        onDeletionPendingChange(false);
+        onMutationPendingChange(false);
       }
     }
   };
 
-  const disabled = isLoading || isDeleting || !!loadError || cleanupBlocked || needsRefresh;
-  const status =
-    deletionOutcome === "deferred"
+  const handleCreate = async () => {
+    if (
+      pendingRef.current ||
+      cleanupBlocked ||
+      needsRefresh ||
+      isLoading ||
+      loadError ||
+      !project?.accountAuthenticated ||
+      project.connected
+    )
+      return;
+    pendingRef.current = true;
+    setIsCreating(true);
+    setActionError(null);
+    onMutationPendingChange(true);
+    try {
+      const snapshot = await createAccountProject();
+      if (!mountedRef.current) return;
+      if (snapshot.accountId !== project.accountId) throw requestError("account_project_changed", 409, true);
+      onProjectChange(snapshot);
+      onDeletionOutcomeChange(null);
+      setCreatedProjectId(snapshot.projectId);
+      focusActionRef.current = true;
+    } catch (error) {
+      if (!mountedRef.current) return;
+      const failure =
+        error instanceof AccountProjectRequestError ? error : requestError("account_project_invalid_response", 0, true);
+      setActionError(failure.message);
+      setNeedsRefresh(true);
+      onMutationPendingChange(false);
+      try {
+        await onRefresh();
+        if (mountedRef.current) setNeedsRefresh(false);
+      } catch {
+        if (mountedRef.current) setNeedsRefresh(true);
+      }
+    } finally {
+      pendingRef.current = false;
+      if (mountedRef.current) {
+        setIsCreating(false);
+        onMutationPendingChange(false);
+      }
+    }
+  };
+
+  const disabled = isLoading || isDeleting || isCreating || !!loadError || cleanupBlocked || needsRefresh;
+  const projectCreated = project?.connected && createdProjectId !== null && project.projectId === createdProjectId;
+  const status = projectCreated
+    ? __(
+        "Your project is connected. You can open onboarding when you are ready. Your existing onboarding data and status have been preserved.",
+        "beyondseo",
+      )
+    : deletionOutcome === "deferred"
       ? __(
-          "Project deletion was accepted and deferred. The local connection has been removed. Your settings and SEO data are preserved, and the plugin remains active.",
+          "Project deletion was accepted and deferred. The local project connection has been removed. Your account, settings, and SEO data are preserved, and the plugin remains active.",
           "beyondseo",
         )
       : deletionOutcome
         ? __(
-            "The remote project is deleted and the local connection has been removed. Your settings and SEO data are preserved, and the plugin remains active.",
+            "The remote project is deleted and the local project connection has been removed. Your account, settings, and SEO data are preserved, and the plugin remains active.",
             "beyondseo",
           )
         : null;
@@ -436,7 +555,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
           <div className={styles.actions}>
             <Button
               type={ButtonTypes.secondary}
-              disabled={isLoading || isDeleting}
+              disabled={isLoading || isDeleting || isCreating}
               onClick={refresh}
               testId="account-refresh-button"
             >
@@ -446,6 +565,27 @@ const AccountPage: React.FC<AccountPageProps> = ({
         )}
         {project && (
           <>
+            {project.accountAuthenticated && (
+              <>
+                <div className={styles.separator} />
+                <Text type={TextTypes.textIntro} fontWeight={FontWeights.medium} className={styles.sectionTitle}>
+                  {__("Account details", "beyondseo")}
+                </Text>
+                <dl className={styles.details}>
+                  <div>
+                    <dt>
+                      {project.connectionMethod === "email"
+                        ? __("Email", "beyondseo")
+                        : __("Activation code", "beyondseo")}
+                    </dt>
+                    <dd>
+                      {(project.connectionMethod === "email" ? project.email : project.maskedActivationCode) ??
+                        __("Not available", "beyondseo")}
+                    </dd>
+                  </div>
+                </dl>
+              </>
+            )}
             <div className={styles.separator} />
             <Text type={TextTypes.textIntro} fontWeight={FontWeights.medium} className={styles.sectionTitle}>
               {__("Project details", "beyondseo")}
@@ -464,6 +604,20 @@ const AccountPage: React.FC<AccountPageProps> = ({
                 <dd>{project.website}</dd>
               </div>
             </dl>
+            {projectCreated && (
+              <div className={styles.actions}>
+                <Button
+                  type={ButtonTypes.primary}
+                  disabled={disabled}
+                  onClick={() => {
+                    window.location.href = getAdminPageUrl(AdminPage.Onboarding, { revisitOnboarding: 1 });
+                  }}
+                  testId="account-onboarding-button"
+                >
+                  {__("Open onboarding", "beyondseo")}
+                </Button>
+              </div>
+            )}
             <div className={styles.separator} />
             {project.connected ? (
               <section className={styles.destructiveSection}>
@@ -493,6 +647,33 @@ const AccountPage: React.FC<AccountPageProps> = ({
                     {isDeleting ? __("Deleting project…", "beyondseo") : __("Delete project", "beyondseo")}
                   </Button>
                 </div>
+              </section>
+            ) : project.accountAuthenticated ? (
+              <section>
+                <Text type={TextTypes.textIntro} fontWeight={FontWeights.medium} className={styles.sectionTitle}>
+                  {__("Create project", "beyondseo")}
+                </Text>
+                <Text type={TextTypes.text} className={styles.description}>
+                  {__(
+                    "Your account is connected, but this website has no project. Create a project using your existing account. Your local settings, SEO data, and onboarding progress will be kept.",
+                    "beyondseo",
+                  )}
+                </Text>
+                <div className={styles.actions}>
+                  <Button
+                    type={ButtonTypes.primary}
+                    disabled={disabled}
+                    onClick={handleCreate}
+                    testId="account-create-button"
+                  >
+                    {isCreating ? __("Creating project…", "beyondseo") : __("Create Project", "beyondseo")}
+                  </Button>
+                </div>
+                {isCreating && (
+                  <div role="status" className={styles.pending}>
+                    {__("Creating project… Please wait for confirmation.", "beyondseo")}
+                  </div>
+                )}
               </section>
             ) : (
               <section>
