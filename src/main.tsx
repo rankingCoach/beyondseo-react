@@ -37,6 +37,7 @@ import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
 import { readSnippetFromElement } from "@components/SeoScoreCell/snippet-data";
 import { ScoreButtonHeader } from "@components/ScoreButtonHeader/ScoreButtonHeader";
 import Settings from "@components/Settings/Settings";
+import SupportPage from "@components/Settings/SupportPage/SupportPage";
 import { Upsell } from "@components/Upsell/Upsell";
 import { __ } from "@wordpress/i18n";
 const params = new URLSearchParams(window.location.search);
@@ -328,6 +329,7 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
       </Render>
     );
   },
+  support: () => <SupportPage />,
   elementor: () => <App hideTabs={false} context={"elementor"} />,
   postlist: () => {
     // This component will be rendered for each post cell in the list
@@ -452,6 +454,7 @@ export function initializeApp() {
     registration: document.getElementById("registration-rankingcoach-page"),
     upsell: document.getElementById("upsell-rankingcoach-page"),
     generalSettings: document.getElementById("generalSettings-rankingcoach-page"),
+    support: document.getElementById("support-rankingcoach-page"),
     gutenbergSidebar: document.getElementById("rankingcoach-sidebar-content"),
     elementor: document.getElementById("rankingcoach-elementor-content"),
     postlist: document.getElementById("rc-postlist-container"),
