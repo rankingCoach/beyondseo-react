@@ -6,6 +6,7 @@ import RSSPage from "./RSSPage/RSSPage";
 import SitemapPage from "./SitemapPage/SitemapPage";
 import RobotsPage from "./RobotsPage/RobotsPage";
 import GeneralSettingsPage from "./GeneralSettingsPage/GeneralSettingsPage";
+import AdoAiPage from "./AdoAiPage/AdoAiPage";
 import { __ } from "@wordpress/i18n";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@src/main.store";
@@ -44,6 +45,7 @@ const sections: MenuItem[] = [
   { id: "sitemap", label: __("Sitemap", "beyondseo"), icon: "sitemap", component: SitemapPage },
   { id: "robots", label: __("Robots.txt", "beyondseo"), icon: "robot", component: RobotsPage },
   { id: "account", label: __("Account", "beyondseo"), icon: "user", component: AccountPage },
+  { id: "ado-ai", label: __("Ado AI", "beyondseo"), icon: "robot", component: AdoAiPage },
 ];
 
 const getSelectedSection = (): string => {
