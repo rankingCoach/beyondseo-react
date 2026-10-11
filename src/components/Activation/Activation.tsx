@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Activation.module.scss";
 import {
   Button,
@@ -21,7 +21,6 @@ import { RootState } from "@src/main.store";
 import { isValidEmail } from "@helpers/string-helpers";
 import { getPrivacyPolicyUrl, getSupportUrl, getTermsUrl } from "@helpers/external-links";
 import { AdminPage, getAdminPageUrl, getPluginRestUrl, getRestNonce } from "@helpers/internal-links";
-import { completeActivation, requestStage, StageRequestError } from "@helpers/staged-request";
 
 interface ActivationProps {
   isPluginLoading?: boolean;
@@ -32,6 +31,7 @@ type ActivationView = "form" | "error" | "success" | "recover" | "recoverSuccess
 export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
   // REST routes and admin pages come from the central internal-links helper (PHP-localized,
   // plain WordPress defaults as fallback), so no URL is built in this component.
+  const ACTIVATE_URL = getPluginRestUrl("account/activate");
   const RECOVER_URL = getPluginRestUrl("account/recoverActivationCode");
   const ONBOARDING_URL = getAdminPageUrl(AdminPage.Onboarding, { skipWelcomeScreen: 1 });
   const REGISTRATION_URL = getAdminPageUrl(AdminPage.Registration);
@@ -44,9 +44,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
   const [commOptIn, setCommOptIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [errorDetails, setErrorDetails] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const activationRunning = useRef(false);
-  const resumeChecked = useRef(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [codeError, setCodeError] = useState("");
   const { plugin } = useSelector((state: RootState) => state.app);
   const adminEmail = plugin?.pluginData?.website?.settings?.adminEmail || "";
@@ -63,51 +61,44 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
     return () => clearTimeout(timer);
   }, [view]);
 
-  const runActivation = async (code?: string, consent?: boolean) => {
-    if (activationRunning.current) return;
-    activationRunning.current = true;
-    setIsLoading(true);
-    try {
-      await completeActivation(code, consent);
-      setView("success");
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : __("Activation failed.", "beyondseo"));
-      setErrorDetails(error instanceof StageRequestError ? error.details : "");
-      setPreviousView("form");
-      setView("error");
-    } finally {
-      activationRunning.current = false;
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (resumeChecked.current) return;
-    resumeChecked.current = true;
-    void requestStage("account/activationStatus", null, "GET")
-      .then(async (status) => {
-        if (status.pending) {
-          await runActivation();
-        } else {
-          if (status.complete) setView("success");
-          setIsLoading(false);
-        }
-      })
-      .catch(() => setIsLoading(false));
-  }, []);
-
   const handleSubmit = async () => {
-    if (!commOptIn || isLoading || activationRunning.current) return;
+    if (!commOptIn || isLoading) return;
     if (activationCode.trim() === "") {
       setCodeError(__("Activation code is required.", "beyondseo"));
       return;
     }
     setCodeError("");
-    await runActivation(activationCode.trim(), commOptIn);
+    setIsLoading(true);
+    try {
+      const res = await fetch(ACTIVATE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-WP-Nonce": getRestNonce(),
+        },
+        body: JSON.stringify({ activationCode: activationCode.trim(), commOptIn }),
+      });
+      const data = await res.json();
+      if (data.success === true) {
+        setView("success");
+      } else {
+        setErrorMessage(data.message || __("Activation failed.", "beyondseo"));
+        setErrorDetails(typeof data.details === "string" ? data.details : "");
+        setPreviousView("form");
+        setView("error");
+      }
+    } catch (e) {
+      setErrorMessage(__("An unexpected error occurred.", "beyondseo"));
+      setErrorDetails("");
+      setPreviousView("form");
+      setView("error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRecoverSubmit = async () => {
-    if (isRecovering || isLoading) return;
+    if (isRecovering) return;
     const email = recoverEmail.trim();
     if (!isValidEmail(email)) {
       setRecoverEmailError(__("Please enter a valid email address.", "beyondseo"));
@@ -188,7 +179,6 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
               <Link
                 display="inline"
                 onClick={() => {
-                  if (isLoading) return;
                   setRecoverEmailError("");
                   setView("recover");
                 }}
