@@ -32,6 +32,7 @@ import { LoadingStatusBadge } from "@components/Common/LoadingStatusBadge/Loadin
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { AdminPage, getAdminPageUrl, getAdminRootUrl } from "@helpers/internal-links";
+import { completeActivation, requestStage } from "@helpers/staged-request";
 
 interface OnboardingWelcomeProps {
   isCompleted?: boolean;
@@ -50,7 +51,9 @@ export const TEXT_WELCOME_ANIMATION_WAIT_BETWEEN_COMPONENTS = 4000 * ANIMATION_S
 export const TEXT_WELCOME_ANIMATION_ANIMATION_DURATION = 250 * ANIMATION_SPEED_MODIFIER;
 export const TEXT_THANK_YOU_ANIMATION_WAIT_BETWEEN_COMPONENTS = 500 * ANIMATION_SPEED_MODIFIER;
 export const TEXT_THANK_YOU_ANIMATION_DURATION = 250 * ANIMATION_SPEED_MODIFIER;
-export const THANK_YOU_TEXTS = [__("Please wait, I’m setting this up now. We’ll continue in just a few minutes.", "beyondseo")];
+export const THANK_YOU_TEXTS = [
+  __("Please wait, I’m setting this up now. We’ll continue in just a few minutes.", "beyondseo"),
+];
 export const THANK_YOU_TEXTS_SUBTITLE = [
   __("After I`ll open Wordpress, and we can continue on optimising your website and content from there.", "beyondseo"),
 ];
@@ -119,6 +122,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
   const [errorDetails, setErrorDetails] = useState<any>(null);
   const [thankYouTextRendered, setThankYouTextRendered] = useState(false);
   const thankYouStartTimeRef = useRef<number | null>(null);
+  const finishInProgressRef = useRef(false);
 
   const currentStepIndex = step - 2;
   const isFinalStep = step === 8;
@@ -154,11 +158,13 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
             requestBody: null,
             queryParams,
           }),
-        ).unwrap().catch((error) => {
-          setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
-          setErrorDetails(error);
-          setShowErrorModal(true);
-        });
+        )
+          .unwrap()
+          .catch((error) => {
+            setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
+            setErrorDetails(error);
+            setShowErrorModal(true);
+          });
       } else {
         processOnboardingSteps(onboardingSteps);
       }
@@ -169,11 +175,13 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
             requestBody: null,
             queryParams: { noCache: true, debug: true },
           }),
-        ).unwrap().catch((error) => {
-          setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
-          setErrorDetails(error);
-          setShowErrorModal(true);
-        });
+        )
+          .unwrap()
+          .catch((error) => {
+            setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
+            setErrorDetails(error);
+            setShowErrorModal(true);
+          });
       }
     }
   }, [dispatch, isCompleted, isOnboardingStarted, onboardingSteps, skipWelcomeScreen]);
@@ -186,12 +194,14 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
           requestBody: null,
           queryParams: { noCache: true, debug: true },
         }),
-      ).unwrap().catch((error) => {
-        setIsOnboardingStarted(false);
-        setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
-        setErrorDetails(error);
-        setShowErrorModal(true);
-      });
+      )
+        .unwrap()
+        .catch((error) => {
+          setIsOnboardingStarted(false);
+          setErrorMessage(error?.message || __("Something went wrong from our side, please try again!", "beyondseo"));
+          setErrorDetails(error);
+          setShowErrorModal(true);
+        });
     } else {
       processOnboardingSteps(onboardingSteps);
     }
@@ -217,8 +227,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
           setCurrentIncompleteStep(firstIncompleteStep);
           setCurrentStepContent({
             texts: [
-              firstIncompleteStep.questions?.elements?.[0]?.question ||
-                __("Provide details to continue", "beyondseo"),
+              firstIncompleteStep.questions?.elements?.[0]?.question || __("Provide details to continue", "beyondseo"),
               firstIncompleteStep.currentQuestion?.question || __("Provide details to continue", "beyondseo"),
             ],
             loadingTexts: stepLoadingTexts,
@@ -316,18 +325,32 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
   };
 
   const handleFinish = async (): Promise<void> => {
+    if (finishInProgressRef.current) {
+      return;
+    }
+    finishInProgressRef.current = true;
+    let activationRecovered = false;
+    const requestOnboardingStage = async (path: string): Promise<void> => {
+      try {
+        await requestStage(path);
+      } catch (error: any) {
+        if (error?.status !== 401 || activationRecovered) {
+          throw error;
+        }
+        activationRecovered = true;
+        await completeActivation(undefined, undefined, true);
+        await requestStage(path);
+      }
+    };
+
     try {
       setShowOnboardingStep(false);
       setShowThankYouScreen(true);
+      setThankYouTextRendered(false);
       thankYouStartTimeRef.current = Date.now();
 
-      const response = await dispatch(
-        OnboardingStore.postApiOnboardingSubmitOnboardingThunk({
-          requestBody: null,
-          // @ts-ignore
-          queryParams: { noCache: true, debug: 1 },
-        }),
-      ).unwrap();
+      await requestOnboardingStage("onboarding/submit");
+      await requestOnboardingStage("onboarding/sync").catch(() => undefined);
 
       const timeElapsed = Date.now() - (thankYouStartTimeRef.current || 0);
       const remainingTime = Math.max(0, MIN_THANK_YOU_DISPLAY_TIME - timeElapsed);
@@ -342,9 +365,11 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
       setShowOnboardingStep(true);
       setStep(8);
 
-      setErrorMessage(error?.message || __("An unexpected error occurred", "beyondseo"));
-      setErrorDetails(error?.content || error);
+      const message = error?.message || __("An unexpected error occurred", "beyondseo");
+      setErrorMessage(message);
+      setErrorDetails({ message, status: error?.status });
       setShowErrorModal(true);
+      finishInProgressRef.current = false;
     }
   };
 
