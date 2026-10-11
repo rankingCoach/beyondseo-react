@@ -8,7 +8,6 @@ import ImportSettingsPage from "./ImportSettingsPage/ImportSettingsPage";
 import SitemapPage from "./SitemapPage/SitemapPage";
 import RobotsPage from "./RobotsPage/RobotsPage";
 import GeneralSettingsPage from "./GeneralSettingsPage/GeneralSettingsPage";
-import SupportPage from "./SupportPage/SupportPage";
 import { __ } from "@wordpress/i18n";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@src/main.store";
