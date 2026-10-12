@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import styles from "./Settings.module.scss";
-import rankingCoachLogo from "../../assets/rC-logo-dark-blue.svg";
 import { IconNames, IconSize, TextIcon, Text, ComponentContainer, FontWeights, TextTypes } from "vanguard";
 import BreadcrumbsPage from "./BreadcrumbsPage/BreadcrumbsPage";
 import RSSPage from "./RSSPage/RSSPage";
@@ -8,7 +7,6 @@ import ImportSettingsPage from "./ImportSettingsPage/ImportSettingsPage";
 import SitemapPage from "./SitemapPage/SitemapPage";
 import RobotsPage from "./RobotsPage/RobotsPage";
 import GeneralSettingsPage from "./GeneralSettingsPage/GeneralSettingsPage";
-import SupportPage from "./SupportPage/SupportPage";
 import { __ } from "@wordpress/i18n";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@src/main.store";
@@ -45,7 +43,6 @@ const sections: MenuItem[] = [
   { id: "sitemap", label: __("Sitemap", "beyondseo"), icon: "sitemap", component: SitemapPage },
   { id: "robots", label: __("Robots.txt", "beyondseo"), icon: "robot", component: RobotsPage },
   { id: "account", label: __("Account", "beyondseo"), icon: "user", component: AccountPage },
-  { id: "support", label: __("Support", "beyondseo"), icon: "help", component: SupportPage },
 ];
 
 const getSelectedSection = (): string => {
