@@ -3,7 +3,6 @@ import styles from "./Settings.module.scss";
 import { IconNames, IconSize, TextIcon, Text, ComponentContainer, FontWeights, TextTypes } from "vanguard";
 import BreadcrumbsPage from "./BreadcrumbsPage/BreadcrumbsPage";
 import RSSPage from "./RSSPage/RSSPage";
-import ImportSettingsPage from "./ImportSettingsPage/ImportSettingsPage";
 import SitemapPage from "./SitemapPage/SitemapPage";
 import RobotsPage from "./RobotsPage/RobotsPage";
 import GeneralSettingsPage from "./GeneralSettingsPage/GeneralSettingsPage";
