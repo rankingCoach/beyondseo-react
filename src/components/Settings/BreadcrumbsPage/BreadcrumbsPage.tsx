@@ -6,6 +6,7 @@ import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { BreadcrumbPreview } from "./BreadcrumbPreview";
 import { BreadcrumbsPagePlaceholder } from "./BreadcrumbsPagePlaceholder";
 import { __ } from "@wordpress/i18n";
+import { useReviewSettingsSave } from "../../Review/Review";
 
 interface BreadcrumbSuffixes {
   archive: string;
@@ -85,7 +86,7 @@ const defaultBreadcrumbSettings: BreadcrumbSettings = {
   },
 };
 
-const BreadcrumbsPage: React.FC = () => {
+const BreadcrumbsPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotice }) => {
   const [breadcrumbsEnabled, setBreadcrumbsEnabled] = useState(false);
   const [homeAnchorText, setHomeAnchorText] = useState("");
   const [pathPrefix, setPathPrefix] = useState("");
@@ -95,6 +96,7 @@ const BreadcrumbsPage: React.FC = () => {
   const [separator, setSeparator] = useState(defaultBreadcrumbSettings.separator);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const { saveReviewSettings, reviewSave } = useReviewSettingsSave();
   const [breadcrumbSettings, setBreadcrumbSettings] = useState<BreadcrumbSettings>(defaultBreadcrumbSettings);
 
   useEffect(() => {
@@ -134,13 +136,7 @@ const BreadcrumbsPage: React.FC = () => {
     setIsSaving(true);
 
     try {
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            enable_breadcrumbs: checked,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({ enable_breadcrumbs: checked });
     } catch (error) {
       setBreadcrumbsEnabled(!checked);
     } finally {
@@ -189,14 +185,10 @@ const BreadcrumbsPage: React.FC = () => {
         },
       };
 
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            enable_breadcrumbs: breadcrumbsEnabled,
-            breadcrumb_settings: updatedSettings,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({
+        enable_breadcrumbs: breadcrumbsEnabled,
+        breadcrumb_settings: updatedSettings,
+      });
 
       setBreadcrumbSettings(updatedSettings);
     } catch (error) {
@@ -228,6 +220,7 @@ const BreadcrumbsPage: React.FC = () => {
             )}
           </Text>
           <div className={styles.separator}></div>
+          {reviewNotice}
 
           <Text type={TextTypes.textIntro} fontWeight={FontWeights.medium} className={styles.switchLabel}>
             {__("Enable breadcrumbs", "beyondseo")}
@@ -367,6 +360,7 @@ const BreadcrumbsPage: React.FC = () => {
               </div>
             </>
           )}
+          {reviewSave}
         </>
       )}
     </ComponentContainer>

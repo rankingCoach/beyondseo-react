@@ -12,6 +12,8 @@ import { RootState } from "@src/main.store";
 import { SeoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { isActivationCompleted, isOnboardingCompleted, redirectToConnectPage } from "@helpers/onboarding-helpers";
 import { rcWindow } from "@stores/window.store";
+import { Review, getReviewDestination } from "../Review/Review";
+import { stopReviewFromFooter } from "../Review/ReviewState";
 import AccountPage, {
   AccountProjectState,
   AccountProjectDeletionOutcome,
@@ -276,6 +278,8 @@ const Settings: React.FC = () => {
   const menuItems = sections.filter((item) => item.id !== "account" || project?.accountAuthenticated || connected);
   const ActiveComponent = sections.find((item) => item.id === activeItem)?.component;
   const isActiveItemComingSoon = sections.find((item) => item.id === activeItem)?.comingSoon;
+  const reviewUrl = getReviewDestination(rcWindow.rankingCoachReactData?.reviewUrl);
+  const reviewNotice = <Review placement="settings" />;
 
   return (
     <div className={`${styles.settingsContainer} ${isMenuCollapsed ? styles.wpMenuCollapsed : styles.wpMenuExpanded}`}>
@@ -360,9 +364,12 @@ const Settings: React.FC = () => {
               deletionOutcome={deletionOutcome}
               onDeletionOutcomeChange={setDeletionOutcome}
               onMutationPendingChange={handleMutationPendingChange}
+              reviewNotice={reviewNotice}
             />
           </div>
-          {activeItem !== "account" && ActiveComponent && <ActiveComponent comingSoon={isActiveItemComingSoon} />}
+          {activeItem !== "account" && ActiveComponent && (
+            <ActiveComponent comingSoon={isActiveItemComingSoon} reviewNotice={reviewNotice} />
+          )}
         </main>
       </div>
 
@@ -379,6 +386,23 @@ const Settings: React.FC = () => {
           <Text type={TextTypes.textHelp} className={styles.infoItem}>
             {__("Plugin version:", "beyondseo")} {plugin?.pluginData?.version || "1.1.15"}
           </Text>
+          {reviewUrl && (
+            <Text type={TextTypes.textHelp}>
+              <a
+                href={reviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={stopReviewFromFooter}
+                onAuxClick={(event) => {
+                  if (event.button === 1) {
+                    stopReviewFromFooter();
+                  }
+                }}
+              >
+                {__("Review BeyondSEO on WordPress.org", "beyondseo")}
+              </a>
+            </Text>
+          )}
         </div>
       </footer>
     </div>

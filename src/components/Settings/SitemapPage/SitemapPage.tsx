@@ -5,6 +5,7 @@ import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { SitemapPagePlaceholder } from "./SitemapPagePlaceholder";
 import { __ } from "@wordpress/i18n";
 import { getSitemapUrl } from "@helpers/internal-links";
+import { useReviewSettingsSave } from "../../Review/Review";
 
 interface SitemapSettings {
   enabled: boolean;
@@ -22,9 +23,10 @@ const defaultSitemapSettings: SitemapSettings = {
   pingBing: true,
 };
 
-const SitemapPage: React.FC = () => {
+const SitemapPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotice }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const { saveReviewSettings, reviewSave } = useReviewSettingsSave();
   const [sitemapSettings, setSitemapSettings] = useState<SitemapSettings>(defaultSitemapSettings);
   const sitemapUrl = getSitemapUrl();
 
@@ -61,13 +63,7 @@ const SitemapPage: React.FC = () => {
     setIsSaving(true);
 
     try {
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            sitemap: updatedSettings,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({ sitemap: updatedSettings });
     } catch (error) {
       // Revert on error
       setSitemapSettings({
@@ -82,13 +78,7 @@ const SitemapPage: React.FC = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            sitemap: sitemapSettings,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({ sitemap: sitemapSettings });
     } catch (error) {
     } finally {
       setIsSaving(false);
@@ -112,6 +102,7 @@ const SitemapPage: React.FC = () => {
             {__("Generate and manage your XML sitemap for better search engine indexing.", "beyondseo")}
           </Text>
           <div className={styles.separator}></div>
+          {reviewNotice}
 
           <Text type={TextTypes.textIntro} fontWeight={FontWeights.medium} className={styles.switchLabel}>
             {__("Enable sitemap", "beyondseo")}
@@ -164,6 +155,7 @@ const SitemapPage: React.FC = () => {
               </div>
             </>
           )}
+          {reviewSave}
         </>
       )}
     </ComponentContainer>
