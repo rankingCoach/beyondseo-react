@@ -33,6 +33,7 @@ export interface AccountPageProps {
   deletionOutcome: AccountProjectDeletionOutcome | null;
   onDeletionOutcomeChange: (outcome: AccountProjectDeletionOutcome | null) => void;
   onMutationPendingChange: (pending: boolean) => void;
+  reviewNotice?: React.ReactNode;
 }
 
 export class AccountProjectRequestError extends Error {
@@ -282,6 +283,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
   deletionOutcome,
   onDeletionOutcomeChange,
   onMutationPendingChange,
+  reviewNotice,
 }) => {
   const [confirmation, setConfirmation] = useState<AccountProjectState | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -700,6 +702,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
             )}
           </>
         )}
+        {reviewNotice}
       </div>
       {confirmation && (
         <div className={styles.modalScope}>

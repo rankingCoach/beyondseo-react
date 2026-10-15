@@ -7,10 +7,14 @@ import { BaseModel } from "@models/BaseModel";
 import { BaseStore } from "./base.store";
 import { parseParams } from "./store-helpers/parse-params";
 import { stores } from "./stores";
-import {rcWindow} from "./window.store";
-import {
-  MetaTagsGetResponseDto
-} from "@models/swagger/App/Presentation/Api/Client/Integrations/WordPress/Dtos/MetaTagsGetResponseDto";
+import { getPluginRestUrl, getRestNonce } from "../helpers/internal-links";
+import { MetaTagsGetResponseDto } from "@models/swagger/App/Presentation/Api/Client/Integrations/WordPress/Dtos/MetaTagsGetResponseDto";
+
+export type ReviewEvent = "display" | "later" | "close" | "review" | "support";
+
+export interface ReviewPersistenceResponse {
+  review: ReviewBootstrapData;
+}
 
 class AxiosClass {
   request(opts: AxiosRequestConfig): Observable<AxiosResponse<BaseModel>> {
@@ -67,11 +71,16 @@ export class HttpStore extends BaseStore {
       Headers["Authorization"] = `Bearer ${token}`;
     }
 
-    if(rcWindow.rankingCoachRestData.nonce) {
-      Headers["X-WP-Nonce"] = rcWindow.rankingCoachRestData.nonce;
+    const nonce = getRestNonce();
+    if (nonce) {
+      Headers["X-WP-Nonce"] = nonce;
     }
 
     return Headers;
+  }
+
+  persistReview(reviewEvent: ReviewEvent): Observable<ReviewPersistenceResponse> {
+    return this.post(new EndPoint(getPluginRestUrl("review")), { reviewEvent });
   }
 
   buildFormData(formData: any, data: any, parentKey: any) {
@@ -100,7 +109,7 @@ export class HttpStore extends BaseStore {
     signal?: AbortSignal,
   ): Observable<T | T[] | unknown | MetaTagsGetResponseDto> {
     // endPoint.endPoint = endPoint.endPoint.replace("-1", "1922195");
-      const token = '';
+    const token = "";
     const options: AxiosRequestConfig | any = {
       withCredentials: true,
       store: this,
@@ -224,7 +233,6 @@ export class HttpStore extends BaseStore {
     queryParams?: Record<string, string | number | boolean> | null,
     signal?: AbortSignal,
   ): Observable<any> {
-
     const options: AxiosRequestConfig = {
       method: "PATCH",
       headers: this.getHeaders(),
