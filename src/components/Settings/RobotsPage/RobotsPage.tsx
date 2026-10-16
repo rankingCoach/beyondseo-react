@@ -5,12 +5,14 @@ import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { RobotsPagePlaceholder } from "./RobotsPagePlaceholder";
 import { __ } from "@wordpress/i18n";
 import { getRobotsTxtUrl } from "@helpers/internal-links";
+import { useReviewSettingsSave } from "../../Review/Review";
 
-const RobotsPage: React.FC = () => {
+const RobotsPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotice }) => {
   const [robotsEnabled, setRobotsEnabled] = useState(true);
   const [includeSitemap, setIncludeSitemap] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const { saveReviewSettings, reviewSave } = useReviewSettingsSave();
   const robotsUrl = getRobotsTxtUrl();
 
   useEffect(() => {
@@ -25,7 +27,9 @@ const RobotsPage: React.FC = () => {
       if (apiResponse?.response?.settings) {
         const settings = apiResponse.response.settings;
         setRobotsEnabled(settings.enable_robots_txt !== undefined ? settings.enable_robots_txt : true);
-        setIncludeSitemap(settings.include_sitemap_in_robots !== undefined ? settings.include_sitemap_in_robots : false);
+        setIncludeSitemap(
+          settings.include_sitemap_in_robots !== undefined ? settings.include_sitemap_in_robots : false,
+        );
       }
     } catch (error) {
     } finally {
@@ -39,13 +43,7 @@ const RobotsPage: React.FC = () => {
     setIsSaving(true);
 
     try {
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            enable_robots_txt: checked,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({ enable_robots_txt: checked });
     } catch (error) {
       setRobotsEnabled(!checked);
     } finally {
@@ -60,14 +58,10 @@ const RobotsPage: React.FC = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            enable_robots_txt: robotsEnabled,
-            include_sitemap_in_robots: includeSitemap,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({
+        enable_robots_txt: robotsEnabled,
+        include_sitemap_in_robots: includeSitemap,
+      });
     } catch (error) {
     } finally {
       setIsSaving(false);
@@ -91,6 +85,7 @@ const RobotsPage: React.FC = () => {
             {__("View your robots.txt file to check search engine crawling instructions.", "beyondseo")}
           </Text>
           <div className={styles.separator}></div>
+          {reviewNotice}
 
           <Text type={TextTypes.textIntro} fontWeight={FontWeights.medium} className={styles.switchLabel}>
             {__("Enable robots.txt", "beyondseo")}
@@ -162,6 +157,7 @@ const RobotsPage: React.FC = () => {
               </div>
             </>
           )}
+          {reviewSave}
         </>
       )}
     </ComponentContainer>

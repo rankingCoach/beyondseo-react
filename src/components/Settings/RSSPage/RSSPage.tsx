@@ -5,6 +5,7 @@ import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { RSSPagePlaceholder } from "./RSSPagePlaceholder";
 import { __ } from "@wordpress/i18n";
 import { getFeedUrl } from "@helpers/internal-links";
+import { useReviewSettingsSave } from "../../Review/Review";
 
 interface RSSSettings {
   feeds: {
@@ -54,7 +55,7 @@ const defaultRSSSettings: RSSSettings = {
   },
 };
 
-const RSSPage: React.FC = () => {
+const RSSPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotice }) => {
   const [rssEnabled, setRssEnabled] = useState(true);
   const [beforeContent, setBeforeContent] = useState("");
   const [afterContent, setAfterContent] = useState("");
@@ -62,8 +63,8 @@ const RSSPage: React.FC = () => {
   const [afterContentError, setAfterContentError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const { saveReviewSettings, reviewSave } = useReviewSettingsSave();
   const [rssSettings, setRssSettings] = useState<RSSSettings>({ ...defaultRSSSettings });
-
 
   useEffect(() => {
     loadSettings();
@@ -123,13 +124,7 @@ const RSSPage: React.FC = () => {
     setIsSaving(true);
 
     try {
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            enable_rss: checked,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({ enable_rss: checked });
     } catch (error) {
       setRssEnabled(!checked);
     } finally {
@@ -157,14 +152,7 @@ const RSSPage: React.FC = () => {
         },
       };
 
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            enable_rss: rssEnabled,
-            rss: updatedSettings,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({ enable_rss: rssEnabled, rss: updatedSettings });
 
       setRssSettings(updatedSettings);
     } catch (error) {
@@ -189,6 +177,7 @@ const RSSPage: React.FC = () => {
             )}
           </Text>
           <div className={styles.separator}></div>
+          {reviewNotice}
 
           <Text type={TextTypes.textIntro} fontWeight={FontWeights.medium} className={styles.switchLabel}>
             {__("Enable RSS", "beyondseo")}
@@ -251,7 +240,6 @@ const RSSPage: React.FC = () => {
                   </Button>
                 </div>
 
-
                 <div className={styles.buttonContainer}>
                   <Button
                     type={ButtonTypes.primary}
@@ -265,6 +253,7 @@ const RSSPage: React.FC = () => {
               </div>
             </>
           )}
+          {reviewSave}
         </>
       )}
     </ComponentContainer>
