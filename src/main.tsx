@@ -39,6 +39,7 @@ import { ScoreButtonHeader } from "@components/ScoreButtonHeader/ScoreButtonHead
 import Settings from "@components/Settings/Settings";
 import SupportPage from "@components/Settings/SupportPage/SupportPage";
 import { Upsell } from "@components/Upsell/Upsell";
+import { SetupWizard } from "@components/SetupWizard/SetupWizard";
 import { __ } from "@wordpress/i18n";
 import { DashboardReview } from "@components/Review/DashboardReview";
 const params = new URLSearchParams(window.location.search);
@@ -331,6 +332,7 @@ const COMPONENTS_MAP: Record<string, React.ComponentType> = {
     );
   },
   support: () => <SupportPage />,
+  setupWizard: () => <SetupWizard />,
   dashboardReview: DashboardReview,
   elementor: () => <App hideTabs={false} context={"elementor"} />,
   postlist: () => {
@@ -457,6 +459,7 @@ export function initializeApp() {
     upsell: document.getElementById("upsell-rankingcoach-page"),
     generalSettings: document.getElementById("generalSettings-rankingcoach-page"),
     support: document.getElementById("support-rankingcoach-page"),
+    setupWizard: document.getElementById("setupWizard-rankingcoach-page"),
     dashboardReview: document.querySelector(".rankingcoach-dashboard-widget #dashboard-review-rankingcoach-react"),
     gutenbergSidebar: document.getElementById("rankingcoach-sidebar-content"),
     elementor: document.getElementById("rankingcoach-elementor-content"),
