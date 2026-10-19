@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { __ } from "@wordpress/i18n";
 import beyondSEOLogo from "@assets/beyondSEO-logo.svg";
-import { AdminPage, getAdminPageUrl } from "@helpers/internal-links";
+import { AdminPage, getAdminPageUrl, getAdminRootUrl } from "@helpers/internal-links";
 import styles from "./SetupWizard.module.scss";
 import { WizardStepDefinition, WizardStepper } from "./WizardStepper";
 import { SetupWizardPlaceholder } from "./SetupWizardPlaceholder";
@@ -162,7 +162,7 @@ export const SetupWizard: React.FC = () => {
 
   const settingsUrl = getAdminPageUrl(AdminPage.GeneralSettings);
   const exit = () => leave({ completed: false, dismissed: true }, settingsUrl);
-  const finish = () => leave({ completed: true, dismissed: false }, settingsUrl);
+  const finish = () => leave({ completed: true, dismissed: false }, getAdminRootUrl());
   const connect = (url: string) => leave({ completed: true, dismissed: false }, url);
 
   const renderStep = () => {
