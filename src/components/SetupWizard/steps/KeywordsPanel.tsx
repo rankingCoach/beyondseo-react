@@ -156,9 +156,12 @@ export const KeywordsPanel: React.FC<KeywordsPanelProps> = ({ post, onChanged, o
               key={resetKey}
               placeholder={__("Write words that you want to search", "beyondseo")}
               value={input}
-              onChange={(event: React.SyntheticEvent, newValue: { name: string } | null, reason: string) => {
-                if (reason === "selectOption" && newValue?.name) {
+              onChange={(event: React.SyntheticEvent, newValue: { name: string } | string | null, reason: string) => {
+                // MUI reports Enter as "createOption" for typed text and "selectOption" for a highlighted suggestion.
+                if (reason === "selectOption" && typeof newValue === "object" && newValue?.name) {
                   add(newValue.name);
+                } else if (reason === "createOption" && typeof newValue === "string") {
+                  add(newValue);
                 }
               }}
               options={options}
@@ -175,12 +178,7 @@ export const KeywordsPanel: React.FC<KeywordsPanelProps> = ({ post, onChanged, o
                 setError(null);
                 setInput(newValue);
               }}
-              onKeyDown={(event: React.KeyboardEvent) => {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  add(input);
-                }
-              }}
+              onKeyDown={() => {}}
               disabled={isBusy}
               multiple={false}
               onKeyUp={() => {}}
