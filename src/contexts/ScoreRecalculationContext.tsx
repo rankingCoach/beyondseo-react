@@ -2,7 +2,25 @@ import * as React from "react";
 import { createContext, useContext, useCallback, useRef, useEffect } from "react";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
-import { OptimiserStore } from "@stores/swagger/api/OptimiserStore";
+import { REVIEW_EDITOR_SCORE_THRESHOLD } from "@components/Review/ReviewState";
+import { OptimiserStore, type PostApiOptimiserByPostIdOpts } from "@stores/swagger/api/OptimiserStore";
+
+type ReviewEditorQueryParams = PostApiOptimiserByPostIdOpts & { reviewContext?: "editor" };
+
+type ReviewEditorResponse = {
+  review?: {
+    postId: number;
+    completed: boolean;
+    score: number | null;
+    milestone: boolean;
+  };
+};
+
+function getReviewEditorPostId() {
+  const editor = typeof wp !== "undefined" ? wp.data?.select("core/editor") : undefined;
+
+  return editor ? Number(editor.getCurrentPostId()) : getPathId();
+}
 
 interface ScoreRecalculationEventDetail {
   timestamp: number;
@@ -18,8 +36,9 @@ interface SlugChangeEventDetail {
 }
 
 interface ScoreRecalculationContextType {
-  triggerRecalculation: (immediate?: boolean) => void;
+  triggerRecalculation: (immediate?: boolean, reviewInteractive?: boolean) => void;
   isRecalculating: boolean;
+  editorReview: ReviewBootstrapData | null;
 }
 
 const ScoreRecalculationContext = createContext<ScoreRecalculationContextType | undefined>(undefined);
@@ -45,73 +64,173 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
 }) => {
   const dispatch = useAppDispatch();
   const [isRecalculating, setIsRecalculating] = React.useState(false);
+  const [editorReview, setEditorReview] = React.useState<ReviewBootstrapData | null>(null);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const immediateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reviewMountedRef = useRef(false);
+  const reviewRevisionRef = useRef(0);
+  const reviewRequestRef = useRef<string | null>(null);
+  const reviewPendingRecalculationRef = useRef<(() => void) | null>(null);
 
-  const performRecalculation = useCallback(async () => {
-    if (isRecalculating) return;
+  const performRecalculation = useCallback(
+    async (postId: number, href: string, revision: number, reviewInteractive: boolean): Promise<void> => {
+      if (
+        !reviewMountedRef.current ||
+        !Number.isInteger(postId) ||
+        postId <= 0 ||
+        revision !== reviewRevisionRef.current ||
+        postId !== getReviewEditorPostId() ||
+        href !== window.location.href
+      )
+        return;
+      if (reviewRequestRef.current) {
+        reviewPendingRecalculationRef.current = () => {
+          void performRecalculation(postId, href, revision, reviewInteractive);
+        };
+        return;
+      }
 
-    try {
-      setIsRecalculating(true);
-      onRecalculationStart?.();
+      const isCurrentReviewRequest = () =>
+        reviewMountedRef.current &&
+        revision === reviewRevisionRef.current &&
+        postId === getReviewEditorPostId() &&
+        href === window.location.href;
 
+      try {
+        setIsRecalculating(true);
+        onRecalculationStart?.();
 
-      const apiResponse = await dispatch(
-        OptimiserStore.postApiOptimiserByPostIdThunk({
-          postId: getPathId(),
-          requestBody: null,
-          queryParams: { noCache: true },
-        })
-      );
-
-      // Dispatch custom event with the API response for OptimisationTab
-      const event = new CustomEvent<ScoreRecalculationEventDetail>("rankingcoach-score-recalculated", {
-        detail: {
-          timestamp: Date.now(),
-          apiResponse: apiResponse
+        const queryParams: ReviewEditorQueryParams = { noCache: true };
+        if (reviewInteractive) {
+          queryParams.reviewContext = "editor";
         }
-      });
-      document.dispatchEvent(event);
-
-      onRecalculationComplete?.();
-    } catch (error) {
-
-      // Dispatch error event
-      const errorEvent = new CustomEvent<ScoreRecalculationEventDetail>("rankingcoach-score-recalculated", {
-        detail: {
-          timestamp: Date.now(),
-          error: error
+        const request = dispatch(
+          OptimiserStore.postApiOptimiserByPostIdThunk({
+            postId,
+            requestBody: null,
+            queryParams,
+          }),
+        );
+        reviewRequestRef.current = request.requestId;
+        const apiResponse = await request;
+        if (
+          !isCurrentReviewRequest() ||
+          apiResponse.meta.requestId !== request.requestId ||
+          reviewRequestRef.current !== request.requestId
+        )
+          return;
+        if (OptimiserStore.postApiOptimiserByPostIdThunk.rejected.match(apiResponse)) {
+          throw apiResponse.payload ?? apiResponse.error;
         }
-      });
-      document.dispatchEvent(errorEvent);
-    } finally {
-      setIsRecalculating(false);
-    }
-  }, [dispatch, isRecalculating, onRecalculationStart, onRecalculationComplete]);
+        if (!OptimiserStore.postApiOptimiserByPostIdThunk.fulfilled.match(apiResponse)) return;
 
-  const triggerRecalculation = useCallback((immediate = false) => {
-    // Clear existing timeouts
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-      debounceTimeoutRef.current = null;
-    }
-    if (immediateTimeoutRef.current) {
-      clearTimeout(immediateTimeoutRef.current);
-      immediateTimeoutRef.current = null;
-    }
+        const review = (apiResponse.payload as unknown as ReviewEditorResponse)?.review;
+        const reviewData = window.rankingCoachReactData?.review;
+        if (
+          reviewInteractive &&
+          review?.completed === true &&
+          review.milestone === true &&
+          review.postId === postId &&
+          typeof review.score === "number" &&
+          Number.isFinite(review.score) &&
+          review.score > REVIEW_EDITOR_SCORE_THRESHOLD &&
+          review.score <= 100 &&
+          reviewData
+        ) {
+          setEditorReview({ ...reviewData, eligible: true });
+        }
 
-    if (immediate) {
-      // For immediate actions (save, keyword add/remove), short delay to ensure data is persisted
-      immediateTimeoutRef.current = setTimeout(() => {
-        performRecalculation().then(r => r);
-      }, 500);
-    } else {
-      // For real-time changes (typing), longer debounce
-      debounceTimeoutRef.current = setTimeout(() => {
-        performRecalculation().then(r => r);
-      }, 2000);
-    }
-  }, [performRecalculation]);
+        const event = new CustomEvent<ScoreRecalculationEventDetail>("rankingcoach-score-recalculated", {
+          detail: {
+            timestamp: Date.now(),
+            apiResponse,
+          },
+        });
+        document.dispatchEvent(event);
+      } catch (error) {
+        if (isCurrentReviewRequest()) {
+          const errorEvent = new CustomEvent<ScoreRecalculationEventDetail>("rankingcoach-score-recalculated", {
+            detail: {
+              timestamp: Date.now(),
+              error,
+            },
+          });
+          document.dispatchEvent(errorEvent);
+        }
+      } finally {
+        reviewRequestRef.current = null;
+        if (reviewMountedRef.current) {
+          setIsRecalculating(false);
+          onRecalculationComplete?.();
+        }
+        const pendingRecalculation = reviewPendingRecalculationRef.current;
+        reviewPendingRecalculationRef.current = null;
+        pendingRecalculation?.();
+      }
+    },
+    [dispatch, onRecalculationStart, onRecalculationComplete],
+  );
+
+  const triggerRecalculation = useCallback(
+    (immediate = false, reviewInteractive = true) => {
+      const postId = getReviewEditorPostId();
+      const href = window.location.href;
+      const revision = ++reviewRevisionRef.current;
+      reviewPendingRecalculationRef.current = null;
+      // Clear existing timeouts
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+        debounceTimeoutRef.current = null;
+      }
+      if (immediateTimeoutRef.current) {
+        clearTimeout(immediateTimeoutRef.current);
+        immediateTimeoutRef.current = null;
+      }
+
+      if (immediate) {
+        // For immediate actions (save, keyword add/remove), short delay to ensure data is persisted
+        immediateTimeoutRef.current = setTimeout(() => {
+          performRecalculation(postId, href, revision, reviewInteractive).then((r) => r);
+        }, 500);
+      } else {
+        // For real-time changes (typing), longer debounce
+        debounceTimeoutRef.current = setTimeout(() => {
+          performRecalculation(postId, href, revision, reviewInteractive).then((r) => r);
+        }, 2000);
+      }
+    },
+    [performRecalculation],
+  );
+
+  useEffect(() => {
+    reviewMountedRef.current = true;
+    let postId = getReviewEditorPostId();
+    let href = window.location.href;
+    const invalidateReview = () => {
+      ++reviewRevisionRef.current;
+      reviewPendingRecalculationRef.current = null;
+      setEditorReview(null);
+      postId = getReviewEditorPostId();
+      href = window.location.href;
+    };
+    const checkReviewNavigation = () => {
+      if (postId !== getReviewEditorPostId() || href !== window.location.href) {
+        invalidateReview();
+      }
+    };
+    const unsubscribe = typeof wp !== "undefined" ? wp.data?.subscribe(checkReviewNavigation) : undefined;
+    window.addEventListener("popstate", invalidateReview);
+    window.addEventListener("pagehide", invalidateReview);
+
+    return () => {
+      reviewMountedRef.current = false;
+      ++reviewRevisionRef.current;
+      reviewPendingRecalculationRef.current = null;
+      unsubscribe?.();
+      window.removeEventListener("popstate", invalidateReview);
+      window.removeEventListener("pagehide", invalidateReview);
+    };
+  }, []);
 
   // Global Gutenberg monitoring - works regardless of active tab
   useEffect(() => {
@@ -151,15 +270,11 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
 
         // Handle slug changes with immediate recalculation and event dispatch
         if (currentSlug !== previousSlug && previousSlug !== "") {
-
           // Calculate new URL
           let newUrl = "";
           if (currentPost?.link) {
             const savedSlug = currentPost.slug;
-            newUrl = currentPost.link.replace(
-              new RegExp(`/${savedSlug}(/|\\?|$)`),
-              `/${currentSlug}$1`
-            );
+            newUrl = currentPost.link.replace(new RegExp(`/${savedSlug}(/|\\?|$)`), `/${currentSlug}$1`);
           }
 
           // Dispatch slug change event for SERPPreview and other components
@@ -168,8 +283,8 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
               timestamp: Date.now(),
               oldSlug: previousSlug,
               newSlug: currentSlug,
-              newUrl: newUrl
-            }
+              newUrl: newUrl,
+            },
           });
           document.dispatchEvent(slugChangeEvent);
 
@@ -186,9 +301,11 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
           currentTitle !== previousTitle
           //|| currentContent !== previousContent
         ) {
-          if (previousTitle !== ""
+          if (
+            previousTitle !== ""
             //|| previousContent !== ""
-          ) { // Skip initial load
+          ) {
+            // Skip initial load
             triggerRecalculation(false);
           }
           previousTitle = currentTitle;
@@ -212,7 +329,6 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
           const newPermalink = permalinkEl.textContent || permalinkEl.innerText || "";
 
           if (newSlug !== previousSlug && previousSlug !== "") {
-
             // Extract and build new URL
             const oldSlugMatch = newPermalink.match(/\/([^\/?#]+)(\/|\?|$)/);
             const oldSlug = oldSlugMatch ? oldSlugMatch[1] : null;
@@ -228,8 +344,8 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
                 timestamp: Date.now(),
                 oldSlug: previousSlug,
                 newSlug: newSlug,
-                newUrl: newUrl
-              }
+                newUrl: newUrl,
+              },
             });
             document.dispatchEvent(slugChangeEvent);
 
@@ -252,17 +368,20 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
   // Elementor save monitoring - trigger score recalculation after save
   useEffect(() => {
     const handleElementorSave = (
-      event: CustomEvent<{ timestamp: number; documentId?: number | null; saveSuccess: boolean }>
+      event: CustomEvent<{ timestamp: number; documentId?: number | null; saveSuccess: boolean }>,
     ) => {
-      console.log('[RankingCoach] Elementor save detected, triggering score recalculation');
+      console.log("[RankingCoach] Elementor save detected, triggering score recalculation");
       // Use immediate recalculation (500ms delay) for save actions
-      triggerRecalculation(true);
+      triggerRecalculation(
+        true,
+        event.detail.saveSuccess === true && event.detail.documentId === getReviewEditorPostId(),
+      );
     };
 
-    document.addEventListener('rankingcoach-elementor-saved', handleElementorSave as EventListener);
+    document.addEventListener("rankingcoach-elementor-saved", handleElementorSave as EventListener);
 
     return () => {
-      document.removeEventListener('rankingcoach-elementor-saved', handleElementorSave as EventListener);
+      document.removeEventListener("rankingcoach-elementor-saved", handleElementorSave as EventListener);
     };
   }, [triggerRecalculation]);
 
@@ -278,14 +397,14 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
     };
   }, []);
 
-  const value = React.useMemo(() => ({
-    triggerRecalculation,
-    isRecalculating,
-  }), [triggerRecalculation, isRecalculating]);
-
-  return (
-    <ScoreRecalculationContext.Provider value={value}>
-      {children}
-    </ScoreRecalculationContext.Provider>
+  const value = React.useMemo(
+    () => ({
+      triggerRecalculation,
+      isRecalculating,
+      editorReview,
+    }),
+    [triggerRecalculation, isRecalculating, editorReview],
   );
+
+  return <ScoreRecalculationContext.Provider value={value}>{children}</ScoreRecalculationContext.Provider>;
 };

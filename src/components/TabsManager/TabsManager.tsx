@@ -6,14 +6,20 @@ import { SchemaTab } from "@components/TabsManager/Tabs/SchemaTab/SchemaTab";
 import { SocialTab } from "./Tabs/SocialTab/SocialTab";
 import { RedirectsTab } from "./Tabs/RedirectsTab/RedirectsTab";
 import { AdvancedTab } from "./Tabs/AdvancedTab/AdvancedTab";
-import { ScoreRecalculationProvider } from "@contexts/ScoreRecalculationContext";
+import { ScoreRecalculationProvider, useScoreRecalculation } from "@contexts/ScoreRecalculationContext";
+import { Review } from "@components/Review/Review";
 // import {LinkAssistantTab} from './Tabs/LinkAssistantTab/LinkAssistantTab';
 import { LinkAssistantTab } from "@components/TabsManager/Tabs/LinkAssistantTab/LinkAssistantTab";
 import { __ } from "@wordpress/i18n";
 import styles from "./TabsManager.module.scss";
 
-export const TabsManager = (props: any) => {
+const EditorReview = () => {
+  const { editorReview } = useScoreRecalculation();
 
+  return editorReview ? <Review placement="editor" review={editorReview} /> : null;
+};
+
+export const TabsManager = (props: any) => {
   const [recalculationStart, setRecalculationStart] = React.useState(false);
 
   const handleRecalculationStart = React.useCallback(() => {
@@ -35,7 +41,7 @@ export const TabsManager = (props: any) => {
       >
         <Tabs
           mode={"small"}
-          tabConfig={{ theme: 'underline' }}
+          tabConfig={{ theme: "underline" }}
           tabs={[
             {
               label: __("General", "beyondseo"),
@@ -95,6 +101,7 @@ export const TabsManager = (props: any) => {
             },
           ]}
         />
+        <EditorReview />
       </ComponentContainer>
     </ScoreRecalculationProvider>
   );

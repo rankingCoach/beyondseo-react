@@ -117,7 +117,7 @@ export const GeneralTab = (props: any) => {
       !recalculationAttempted.current
     ) {
       recalculationAttempted.current = true;
-      triggerRecalculation(true);
+      triggerRecalculation(true, false);
     }
     // Reset the flag when we get a successful result so future recalculations work
     if (optimiserResult !== null) {
