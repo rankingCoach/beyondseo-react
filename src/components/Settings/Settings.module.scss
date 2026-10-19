@@ -42,7 +42,6 @@
 
 /* Responsive adjustments for smaller screens */
 @media screen and (max-width: 960px) {
-
     .wpMenuExpanded,
     .wpMenuCollapsed {
         width: calc(100% - 20px);
@@ -61,7 +60,6 @@
 }
 
 @media screen and (max-width: 782px) {
-
     .wpMenuExpanded,
     .wpMenuCollapsed {
         width: 100% !important;
@@ -150,7 +148,6 @@
 }
 
 @media screen and (max-width: 480px) {
-
     .wpMenuExpanded,
     .wpMenuCollapsed {
         width: 100% !important;
@@ -361,13 +358,15 @@
     padding: 1rem 2rem;
     color: #50575e;
     font-size: 12px;
-    height: 40px;
+    min-height: 40px;
     align-items: center;
 }
 
 .footerInfoContainer {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
     gap: 12px;
 }
 
