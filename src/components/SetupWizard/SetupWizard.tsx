@@ -12,9 +12,10 @@ import { ScanSnapshot, ScanStep } from "./steps/ScanStep";
 import { EmailStep } from "./steps/EmailStep";
 import { AccountStep } from "./steps/AccountStep";
 import {
+  EmailLead,
   getAdminEmail,
   getImportSources,
-  getSitemapSettings,
+  getWizardSettings,
   getWpSiteSettings,
   ImportResult,
   ImportSource,
@@ -74,25 +75,34 @@ export const SetupWizard: React.FC = () => {
   const [importResult, setImportResult] = useState<ImportResult | null>(persisted.importResult || null);
   const [email, setEmail] = useState(persisted.email ?? getAdminEmail());
   const [emailOptIn, setEmailOptIn] = useState(!!persisted.emailOptIn);
+  const [savedLead, setSavedLead] = useState<EmailLead | null>(null);
   const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
     // Each source is optional: a failed request only hides what depends on it.
-    Promise.allSettled([getWpSiteSettings(), getSitemapSettings(), getImportSources()]).then(
-      ([siteResult, sitemapResult, sourcesResult]) => {
+    Promise.allSettled([getWpSiteSettings(), getWizardSettings(), getImportSources()]).then(
+      ([siteResult, settingsResult, sourcesResult]) => {
         if (cancelled) {
           return;
         }
         if (siteResult.status === "fulfilled") {
           setSite(siteResult.value);
         }
-        if (sitemapResult.status === "fulfilled") {
-          setSitemap(sitemapResult.value);
+        if (settingsResult.status === "fulfilled") {
+          setSitemap(settingsResult.value.sitemap);
         }
         if (sourcesResult.status === "fulfilled") {
           setSources(sourcesResult.value);
+        }
+        const lead = settingsResult.status === "fulfilled" ? settingsResult.value.emailLead : null;
+        if (lead) {
+          setSavedLead(lead);
+          if (!persisted.email) {
+            setEmail(lead.email);
+            setEmailOptIn(lead.optIn);
+          }
         }
         setIsLoading(false);
       },
@@ -175,8 +185,10 @@ export const SetupWizard: React.FC = () => {
             email={email}
             optIn={emailOptIn}
             scanFailed={scan?.outcome === "error"}
+            savedLead={savedLead}
             onEmailChange={setEmail}
             onOptInChange={setEmailOptIn}
+            onSaved={setSavedLead}
             onBack={back}
             onNext={next}
           />

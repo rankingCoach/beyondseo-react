@@ -16,14 +16,16 @@ import {
 } from "vanguard";
 import { isValidEmail } from "@helpers/string-helpers";
 import { StepLayout } from "../StepLayout";
-import { saveEmailLead } from "../setup-wizard-api";
+import { EmailLead, saveEmailLead } from "../setup-wizard-api";
 import shared from "../SetupWizard.module.scss";
 
 interface EmailStepProps {
   email: string;
   optIn: boolean;
   scanFailed: boolean;
+  savedLead: EmailLead | null;
   onEmailChange: (email: string) => void;
+  onSaved: (lead: EmailLead) => void;
   onOptInChange: (optIn: boolean) => void;
   onBack: () => void;
   onNext: () => void;
@@ -33,7 +35,9 @@ export const EmailStep: React.FC<EmailStepProps> = ({
   email,
   optIn,
   scanFailed,
+  savedLead,
   onEmailChange,
+  onSaved,
   onOptInChange,
   onBack,
   onNext,
@@ -53,8 +57,10 @@ export const EmailStep: React.FC<EmailStepProps> = ({
     setError(null);
     setIsSaving(true);
     try {
-      await saveEmailLead(email.trim(), optIn);
+      onSaved(await saveEmailLead(email.trim(), optIn));
       onNext();
+    } catch (saveError: any) {
+      setError(saveError?.message || __("Your email address could not be saved. Please try again.", "beyondseo"));
     } finally {
       setIsSaving(false);
     }
@@ -111,6 +117,14 @@ export const EmailStep: React.FC<EmailStepProps> = ({
 
       <Render if={!!error}>
         <InfoBox type="danger" borderRadius={8} description={error || ""} />
+      </Render>
+
+      <Render if={!!savedLead && savedLead.email === email.trim() && optIn}>
+        <InfoBox
+          type="info"
+          borderRadius={8}
+          description={__("This address is saved for SEO recommendations. Save again to update it.", "beyondseo")}
+        />
       </Render>
 
       <div className={shared.card}>

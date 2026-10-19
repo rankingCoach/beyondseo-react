@@ -334,6 +334,9 @@
     --fn-bg-surface-rgb: 255, 255, 255;
     --fn-bg-cta: hsl(217deg, 100%, 50%);
     --fn-bg-cta-rgb: 0, 98, 255;
+    --fn-bg-cta-hov: #004ecc;
+    --fn-bg-dark: #171d26;
+    --fn-bg-disabled: #f5f7f9;
     --fn-fg-cta: hsl(217deg, 100%, 50%);
     --fn-fg-cta-rgb: 0, 98, 255;
     --fn-fg-cta-hov: #003b99;

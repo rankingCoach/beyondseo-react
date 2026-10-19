@@ -7,6 +7,7 @@ import {
   ButtonTypes,
   classNames,
   FontWeights,
+  Icon,
   IconNames,
   IconSize,
   InfoBox,
@@ -17,12 +18,18 @@ import {
   TextTypes,
 } from "vanguard";
 import { StepLayout } from "../StepLayout";
-import { fixActionLabel, fixKindForIssue, FixKind, priorityLabel } from "../issue-mapping";
+import {
+  fixActionLabel,
+  fixKindForIssue,
+  FixKind,
+  getWizardChecks,
+  priorityLabel,
+  WizardCheck,
+} from "../issue-mapping";
 import {
   ContentItem,
   getOptimiserResult,
   listScannableContent,
-  PageIssue,
   PageScanResult,
   rerunOptimiser,
   runSiteScan,
@@ -30,6 +37,7 @@ import {
   WizardRequestError,
 } from "../setup-wizard-api";
 import { IssueFixPanel } from "./IssueFixPanel";
+import { KeywordsPanel } from "./KeywordsPanel";
 import shared from "../SetupWizard.module.scss";
 import styles from "./ScanStep.module.scss";
 
@@ -39,6 +47,7 @@ export interface ScanSnapshot {
   outcome: ScanOutcome;
   scanned: number;
   pages: PageScanResult[];
+  /** `${postId}:${issueType}` of fixes saved inline and not rechecked yet. */
   fixedKeys: string[];
   loopbackSuspected: boolean;
   errorMessage?: string;
@@ -51,22 +60,36 @@ interface ScanStepProps {
   onNext: () => void;
 }
 
+interface CheckResult {
+  check: WizardCheck;
+  pages: PageScanResult[];
+}
+
 type Phase = "idle" | "scanning" | "collecting" | "done";
 
 const RESULT_BATCH_SIZE = 4;
 
-const getChecks = (): string[] => [
-  __("Focus keyword assignment", "beyondseo"),
-  __("Titles and meta descriptions", "beyondseo"),
-  __("Heading structure", "beyondseo"),
-  __("Image descriptions", "beyondseo"),
-  __("Canonical and indexing settings", "beyondseo"),
-];
-
 const issueKey = (postId: number, issueType: string): string => `${postId}:${issueType}`;
 
+const analyzedPages = (pages: PageScanResult[]): PageScanResult[] =>
+  pages.filter((page) => page.analyzed && !page.failed);
+
+/** Every wizard check with the analysed pages that failed it; checks with affected pages first, catalogue order within. */
+const groupByCheck = (pages: PageScanResult[]): CheckResult[] => {
+  const analyzed = analyzedPages(pages);
+  const results = getWizardChecks().map((check) => ({
+    check,
+    pages: analyzed.filter((page) => page.issues.some((issue) => issue.issueType === check.issueType)),
+  }));
+
+  return [
+    ...results.filter((result) => result.pages.length > 0),
+    ...results.filter((result) => result.pages.length === 0),
+  ];
+};
+
 const buildSnapshot = (scanned: number, pages: PageScanResult[], fixedKeys: string[] = []): ScanSnapshot => {
-  const analyzed = pages.filter((page) => page.analyzed && !page.failed);
+  const analyzed = analyzedPages(pages);
   const incomplete = pages.length - analyzed.length;
   const loopbackSuspected = analyzed.length > 0 && analyzed.every((page) => page.score === 0);
   const issueCount = analyzed.reduce((sum, page) => sum + page.issues.length, 0);
@@ -118,9 +141,10 @@ const scoreClass = (score: number | null): string => {
 export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack, onNext }) => {
   const [phase, setPhase] = useState<Phase>(snapshot ? "done" : "idle");
   const [notice, setNotice] = useState<string | null>(null);
+  const [collapsed, setCollapsed] = useState<string[]>([]);
   const [openFix, setOpenFix] = useState<{
     post: ContentItem;
-    issue: PageIssue;
+    issueType: string;
     kind: Exclude<FixKind, "editor">;
   } | null>(null);
   const [recheckingId, setRecheckingId] = useState<number | null>(null);
@@ -133,6 +157,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
     abortRef.current = controller;
     setNotice(null);
     setOpenFix(null);
+    setCollapsed([]);
     setPhase("scanning");
 
     try {
@@ -186,12 +211,18 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
 
   const cancel = () => abortRef.current?.abort();
 
+  const toggleCheck = (issueType: string) =>
+    setCollapsed((current) =>
+      current.includes(issueType) ? current.filter((entry) => entry !== issueType) : [...current, issueType],
+    );
+
   const markFixed = (postId: number, issueType: string) => {
-    if (snapshot) {
-      onSnapshot({ ...snapshot, fixedKeys: Array.from(new Set([...snapshot.fixedKeys, issueKey(postId, issueType)])) });
+    if (snapshot && !snapshot.fixedKeys.includes(issueKey(postId, issueType))) {
+      onSnapshot({ ...snapshot, fixedKeys: [...snapshot.fixedKeys, issueKey(postId, issueType)] });
     }
-    setOpenFix(null);
   };
+
+  const closeFix = () => setOpenFix(null);
 
   const recheck = async (page: PageScanResult) => {
     if (!snapshot) {
@@ -211,32 +242,27 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
     }
   };
 
-  const renderIssue = (page: PageScanResult, issue: PageIssue) => {
-    const kind = fixKindForIssue(issue.issueType);
-    const fixed = snapshot?.fixedKeys.includes(issueKey(page.post.id, issue.issueType));
-    const isOpen = openFix?.post.id === page.post.id && openFix.issue.issueType === issue.issueType;
+  const renderPageRow = (check: WizardCheck, page: PageScanResult) => {
+    const kind = fixKindForIssue(check.issueType);
+    const fixed = snapshot?.fixedKeys.includes(issueKey(page.post.id, check.issueType));
+    const isOpen = openFix?.post.id === page.post.id && openFix.issueType === check.issueType;
 
     return (
-      <li key={issue.issueType} className={styles.issue}>
-        <div className={styles.issueMain}>
-          <span
-            className={styles.priority}
-            style={issue.hex ? { color: issue.hex, background: `${issue.hex}1a` } : undefined}
-          >
-            {issue.label || priorityLabel(issue.priority)}
-          </span>
-          <div className={styles.issueText}>
+      <li key={page.post.id} className={styles.pageRow}>
+        <div className={styles.pageInfo}>
+          <div className={styles.pageTitleRow}>
             <Text type={TextTypes.text} fontWeight={FontWeights.medium}>
-              {issue.title}
+              {page.post.title}
             </Text>
-            <Render if={!!issue.description}>
-              <Text type={TextTypes.textHelp} className={shared.fine}>
-                {issue.description}
-              </Text>
+            <Render if={page.score !== null}>
+              <span className={classNames(styles.score, scoreClass(page.score))}>{page.score}%</span>
             </Render>
           </div>
+          <Link href={page.post.link} target="_blank">
+            {pathOf(page.post.link)}
+          </Link>
         </div>
-        <div className={styles.issueAction}>
+        <div className={styles.pageActions}>
           {fixed ? (
             <TextIcon
               icon={IconNames.check}
@@ -245,7 +271,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
               textType={TextTypes.textHelp}
               verticalAlign="center"
             >
-              {__("Updated, recheck to confirm", "beyondseo")}
+              {__("Updated", "beyondseo")}
             </TextIcon>
           ) : kind === "editor" ? (
             <Link href={page.post.editLink} target="_blank">
@@ -255,39 +281,11 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
             <Button
               type={ButtonTypes.secondary}
               size={ButtonSizes.small}
-              onClick={() => setOpenFix(isOpen ? null : { post: page.post, issue, kind })}
+              onClick={() => setOpenFix(isOpen ? null : { post: page.post, issueType: check.issueType, kind })}
             >
               {fixActionLabel(kind)}
             </Button>
           )}
-        </div>
-        <Render if={isOpen}>
-          <IssueFixPanel
-            post={page.post}
-            kind={openFix?.kind || "title"}
-            onSaved={() => markFixed(page.post.id, issue.issueType)}
-            onClose={() => setOpenFix(null)}
-          />
-        </Render>
-      </li>
-    );
-  };
-
-  const renderPage = (page: PageScanResult) => (
-    <div key={page.post.id} className={styles.pageCard}>
-      <div className={styles.pageHeader}>
-        <div className={styles.pageTitle}>
-          <Text type={TextTypes.text} fontWeight={FontWeights.bold}>
-            {page.post.title}
-          </Text>
-          <Link href={page.post.link} target="_blank">
-            {pathOf(page.post.link)}
-          </Link>
-        </div>
-        <div className={styles.pageMeta}>
-          <Render if={page.score !== null}>
-            <span className={classNames(styles.score, scoreClass(page.score))}>{page.score}%</span>
-          </Render>
           <Button
             type={ButtonTypes.default}
             size={ButtonSizes.small}
@@ -299,24 +297,124 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
             {__("Recheck", "beyondseo")}
           </Button>
         </div>
+        <Render if={isOpen}>
+          {openFix?.kind === "keywords" ? (
+            <KeywordsPanel
+              post={page.post}
+              onChanged={() => markFixed(page.post.id, check.issueType)}
+              onClose={closeFix}
+            />
+          ) : (
+            <IssueFixPanel
+              post={page.post}
+              kind={openFix?.kind === "description" ? "description" : "title"}
+              onSaved={() => {
+                markFixed(page.post.id, check.issueType);
+                closeFix();
+              }}
+              onClose={closeFix}
+            />
+          )}
+        </Render>
+      </li>
+    );
+  };
+
+  const renderCheck = ({ check, pages }: CheckResult) => {
+    const affected = pages.length > 0;
+    const isOpen = affected && !collapsed.includes(check.issueType);
+
+    return (
+      <div
+        key={check.issueType}
+        className={classNames(styles.checkCard, affected ? undefined : styles.checkCardPassed)}
+      >
+        <div className={styles.checkHeader}>
+          <span className={styles.checkIcon}>
+            <Icon type={IconSize.small} color={affected ? "var(--w500)" : "var(--s500)"}>
+              {affected ? IconNames.warning : IconNames.check}
+            </Icon>
+          </span>
+          <div className={styles.checkText}>
+            <div className={styles.checkTitleRow}>
+              <Text type={TextTypes.text} fontWeight={FontWeights.bold}>
+                {check.title}
+              </Text>
+              <Render if={affected}>
+                <span
+                  className={classNames(styles.priority, check.priority === 1 ? styles.priorityCritical : undefined)}
+                >
+                  {priorityLabel(check.priority)}
+                </span>
+              </Render>
+            </div>
+            <Render if={affected}>
+              <Text type={TextTypes.textHelp} className={shared.fine}>
+                {check.description}
+              </Text>
+            </Render>
+          </div>
+          <div className={styles.checkMeta}>
+            {affected ? (
+              <Button
+                type={ButtonTypes.default}
+                size={ButtonSizes.small}
+                iconRight={isOpen ? IconNames.caretUp : IconNames.caretDown}
+                onClick={() => toggleCheck(check.issueType)}
+                aria-expanded={isOpen}
+              >
+                {sprintf(
+                  /* translators: %d: number of pages */
+                  _n("%d page affected", "%d pages affected", pages.length, "beyondseo"),
+                  pages.length,
+                )}
+              </Button>
+            ) : (
+              <Text type={TextTypes.textHelp} className={shared.fine}>
+                {__("All checked pages pass", "beyondseo")}
+              </Text>
+            )}
+          </div>
+        </div>
+        <Render if={isOpen}>
+          <ul className={styles.pageList}>{pages.map((page) => renderPageRow(check, page))}</ul>
+        </Render>
       </div>
-      <ul className={styles.issueList}>{page.issues.map((issue) => renderIssue(page, issue))}</ul>
-    </div>
-  );
+    );
+  };
 
   const renderResults = () => {
     if (!snapshot) {
       return null;
     }
-    const analyzed = snapshot.pages.filter((page) => page.analyzed && !page.failed);
-    const withIssues = analyzed
-      .filter((page) => page.issues.length > 0)
-      .sort((a, b) => (a.score ?? 0) - (b.score ?? 0));
-    const issueCount = withIssues.reduce((sum, page) => sum + page.issues.length, 0);
+    const analyzed = analyzedPages(snapshot.pages);
+    const results = groupByCheck(snapshot.pages);
+    const failing = results.filter((result) => result.pages.length > 0);
     const incomplete = snapshot.pages.length - analyzed.length;
 
     return (
       <>
+        <div className={shared.intro}>
+          <Text type={TextTypes.heading2} fontWeight={FontWeights.bold}>
+            {failing.length > 0
+              ? __("Issues found on your pages", "beyondseo")
+              : __("Your pages pass every check", "beyondseo")}
+          </Text>
+          <Text type={TextTypes.text} className={shared.description}>
+            {failing.length > 0
+              ? __(
+                  "Each check lists the pages it applies to. Fix titles, descriptions and keywords right here, or open the page in the editor for everything else.",
+                  "beyondseo",
+                )
+              : __(
+                  "The completed checks found nothing to fix. You can run the scan again after updating your site.",
+                  "beyondseo",
+                )}
+          </Text>
+        </div>
+        <Render if={!!notice}>
+          <InfoBox type="warn" borderRadius={8} description={notice || ""} />
+        </Render>
         <Render if={snapshot.outcome === "partial"}>
           <InfoBox
             type="warn"
@@ -345,34 +443,26 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
         <div className={styles.summary}>
           <Text type={TextTypes.text}>
             {sprintf(
+              /* translators: 1: number of checks with affected pages, 2: total number of checks */
+              _n(
+                "%1$d of %2$d checks needs attention",
+                "%1$d of %2$d checks need attention",
+                failing.length,
+                "beyondseo",
+              ),
+              failing.length,
+              results.length,
+            )}
+          </Text>
+          <Text type={TextTypes.text}>
+            {sprintf(
               /* translators: %d: number of pages */
               _n("%d page checked", "%d pages checked", snapshot.scanned || analyzed.length, "beyondseo"),
               snapshot.scanned || analyzed.length,
             )}
           </Text>
-          <Text type={TextTypes.text}>
-            {sprintf(
-              /* translators: %d: number of issues */
-              _n("%d issue to review", "%d issues to review", issueCount, "beyondseo"),
-              issueCount,
-            )}
-          </Text>
-          <Render if={analyzed.length - withIssues.length > 0}>
-            <Text type={TextTypes.text}>
-              {sprintf(
-                /* translators: %d: number of pages */
-                _n(
-                  "%d page without open issues",
-                  "%d pages without open issues",
-                  analyzed.length - withIssues.length,
-                  "beyondseo",
-                ),
-                analyzed.length - withIssues.length,
-              )}
-            </Text>
-          </Render>
         </div>
-        {withIssues.map(renderPage)}
+        <div className={styles.checks}>{results.map(renderCheck)}</div>
         <Render if={snapshot.pages.length >= 40}>
           <Text type={TextTypes.textHelp} className={shared.fine}>
             {__(
@@ -423,51 +513,8 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
       );
     }
 
-    if (phase === "done" && snapshot?.outcome === "empty") {
-      return (
-        <div className={shared.intro}>
-          <Text type={TextTypes.heading2} fontWeight={FontWeights.bold}>
-            {__("No supported issues found", "beyondseo")}
-          </Text>
-          <Text type={TextTypes.text} className={shared.description}>
-            {__(
-              "The available checks finished without finding an open issue. You can scan again after updating your site.",
-              "beyondseo",
-            )}
-          </Text>
-        </div>
-      );
-    }
-
     if (phase === "done" && snapshot) {
-      const hasIssues = snapshot.pages.some((page) => page.analyzed && !page.failed && page.issues.length > 0);
-
-      return (
-        <>
-          <div className={shared.intro}>
-            <Text type={TextTypes.heading2} fontWeight={FontWeights.bold}>
-              {hasIssues
-                ? __("Issues found on your pages", "beyondseo")
-                : __("No open issues on the checked pages", "beyondseo")}
-            </Text>
-            <Text type={TextTypes.text} className={shared.description}>
-              {hasIssues
-                ? __(
-                    "Fix titles, descriptions and keywords right here, or open the page in the editor for everything else.",
-                    "beyondseo",
-                  )
-                : __(
-                    "The completed checks found nothing to fix. You can run the scan again after updating your site.",
-                    "beyondseo",
-                  )}
-            </Text>
-          </div>
-          <Render if={!!notice}>
-            <InfoBox type="warn" borderRadius={8} description={notice || ""} />
-          </Render>
-          {renderResults()}
-        </>
-      );
+      return renderResults();
     }
 
     return (
@@ -478,7 +525,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
           </Text>
           <Text type={TextTypes.text} className={shared.description}>
             {__(
-              "BeyondSEO checks your published pages and posts against the SEO essentials, then shows where to improve.",
+              "BeyondSEO checks every published page and post for the following, then shows which pages need work.",
               "beyondseo",
             )}
           </Text>
@@ -488,8 +535,8 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
         </Render>
         <div className={shared.card}>
           <ul className={styles.checkList}>
-            {getChecks().map((check) => (
-              <li key={check}>
+            {getWizardChecks().map((check) => (
+              <li key={check.issueType}>
                 <TextIcon
                   icon={IconNames.search}
                   iconColor="var(--n400)"
@@ -497,7 +544,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
                   textType={TextTypes.text}
                   verticalAlign="center"
                 >
-                  {check}
+                  {check.title}
                 </TextIcon>
               </li>
             ))}

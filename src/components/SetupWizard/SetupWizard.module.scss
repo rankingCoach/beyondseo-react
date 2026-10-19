@@ -229,3 +229,13 @@
     flex-direction: column;
     gap: 16px;
 }
+
+.wizard :global(.vanguard-input) input,
+.wizard :global(.vanguard-input) textarea {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    min-height: 0;
+    font: inherit;
+}
