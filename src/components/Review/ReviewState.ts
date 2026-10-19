@@ -205,7 +205,7 @@ export function displayReview(id: symbol, element: HTMLElement) {
   return true;
 }
 
-export function stopReviewFromFooter() {
+export function stopReviewFromFooter(event: "review" | "support") {
   if (reviewOutboundRequested) {
     return;
   }
@@ -216,7 +216,7 @@ export function stopReviewFromFooter() {
     reviewData = { ...data, permanentlyStopped: true };
   }
   notifyReview();
-  persistReview("review");
+  persistReview(event);
 }
 
 export function dismissReview(id: symbol, event: Exclude<ReviewEvent, "display">) {

@@ -13,6 +13,7 @@ import {
   scheduleReview,
   subscribeReview,
   updateReviewData,
+  stopReviewFromFooter,
   type ReviewPlacement,
 } from "./ReviewState";
 import styles from "./Review.module.scss";
@@ -32,6 +33,112 @@ export function getReviewDestination(value: string | undefined) {
   } catch {
     return undefined;
   }
+}
+
+type ReviewAction = Exclude<ReviewEvent, "display" | "close">;
+
+function ReviewActions({
+  reviewUrl,
+  supportUrl,
+  onAction,
+}: {
+  reviewUrl: string;
+  supportUrl: string;
+  onAction: (event: ReviewAction) => void;
+}) {
+  return (
+    <div className={styles.reviewActions}>
+      <a
+        className={`${styles.reviewButton} ${styles.reviewPrimary}`}
+        href={reviewUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onAction("review")}
+        onAuxClick={(event) => {
+          if (event.button === 1) {
+            onAction("review");
+          }
+        }}
+      >
+        {__("Yes, I love it", "beyondseo")}
+      </a>
+      <a
+        className={styles.reviewButton}
+        href={supportUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onAction("support")}
+        onAuxClick={(event) => {
+          if (event.button === 1) {
+            onAction("support");
+          }
+        }}
+      >
+        {__("Not really", "beyondseo")}
+      </a>
+      <button
+        className={`${styles.reviewButton} ${styles.reviewLater}`}
+        type="button"
+        onClick={() => onAction("later")}
+      >
+        {__("Maybe later", "beyondseo")}
+      </button>
+    </div>
+  );
+}
+
+export function FooterReview() {
+  const [open, setOpen] = useState(false);
+  const headingId = useId();
+  const reviewUrl = getReviewDestination(window.rankingCoachReactData?.reviewUrl);
+  const supportUrl = getReviewDestination(window.rankingCoachReactData?.supportUrl);
+
+  if (!reviewUrl || !supportUrl) {
+    return null;
+  }
+
+  const handleAction = (event: ReviewAction) => {
+    if (event === "review" || event === "support") {
+      stopReviewFromFooter(event);
+    }
+    setOpen(false);
+  };
+
+  return (
+    <div className={open ? styles.footerPromptOpen : styles.footerPrompt}>
+      <button
+        className={styles.footerTrigger}
+        type="button"
+        aria-expanded={open}
+        aria-controls={headingId}
+        onClick={() => setOpen((previous) => !previous)}
+      >
+        {__("Review BeyondSEO on WordPress.org", "beyondseo")}
+        <span className={styles.footerStars} aria-hidden="true">
+          {Array.from({ length: 5 }, (_, index) => (
+            <span key={index} className="dashicons dashicons-star-filled" />
+          ))}
+        </span>
+      </button>
+      {open && (
+        <section id={headingId} className={styles.reviewCard} aria-labelledby={`${headingId}-title`}>
+          <h3 id={`${headingId}-title`} className={styles.reviewHeading}>
+            {__("Enjoying BeyondSEO?", "beyondseo")}
+          </h3>
+          <p className={styles.reviewBody}>{__("We'd love to hear about your experience.", "beyondseo")}</p>
+          <ReviewActions reviewUrl={reviewUrl} supportUrl={supportUrl} onAction={handleAction} />
+          <button
+            className={styles.reviewClose}
+            type="button"
+            aria-label={__("Dismiss review request", "beyondseo")}
+            onClick={() => setOpen(false)}
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </section>
+      )}
+    </div>
+  );
 }
 
 function restoreReviewFocus(element: HTMLElement, target?: HTMLElement | null) {
@@ -162,7 +269,7 @@ export const Review = ({ placement, enabled = true, review, focusReturnRef }: Re
     }
   };
 
-  if (!ready) {
+  if (!ready || !reviewUrl || !supportUrl) {
     return null;
   }
 
@@ -185,43 +292,7 @@ export const Review = ({ placement, enabled = true, review, focusReturnRef }: Re
             {heading}
           </h3>
           <p className={styles.reviewBody}>{body}</p>
-          <div className={styles.reviewActions}>
-            <a
-              className={`${styles.reviewButton} ${styles.reviewPrimary}`}
-              href={reviewUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => handleReviewAction("review")}
-              onAuxClick={(event) => {
-                if (event.button === 1) {
-                  handleReviewAction("review");
-                }
-              }}
-            >
-              {__("Yes, I love it", "beyondseo")}
-            </a>
-            <a
-              className={styles.reviewButton}
-              href={supportUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => handleReviewAction("support")}
-              onAuxClick={(event) => {
-                if (event.button === 1) {
-                  handleReviewAction("support");
-                }
-              }}
-            >
-              {__("Not really", "beyondseo")}
-            </a>
-            <button
-              className={`${styles.reviewButton} ${styles.reviewLater}`}
-              type="button"
-              onClick={() => handleReviewAction("later")}
-            >
-              {__("Maybe later", "beyondseo")}
-            </button>
-          </div>
+          <ReviewActions reviewUrl={reviewUrl} supportUrl={supportUrl} onAction={handleReviewAction} />
           <button
             className={styles.reviewClose}
             type="button"
