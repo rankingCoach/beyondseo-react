@@ -2,6 +2,7 @@ import { getEditPostUrl, getPluginRestUrl, getRestNonce, getWpRestUrl } from "@h
 import { rcWindow } from "@stores/window.store";
 import { MetaTagsApiResponse, MetaTagsSaveRequest, WPVariableData } from "@src/types/meta-tags";
 import { OptimiserResult } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/Optimiser/Base/Models/Results/OptimiserResult";
+import { isWizardCheck } from "./issue-mapping";
 
 export class WizardRequestError extends Error {
   readonly code: string;
@@ -58,14 +59,11 @@ export interface ContentItem {
   editLink: string;
 }
 
+/** One wizard check that a page failed, with the backend's wording for it. */
 export interface PageIssue {
   issueType: string;
   title: string;
   description: string;
-  /** 1 = critical … 4 = low (FactorSuggestion::PRIORITY_*). */
-  priority: number;
-  label: string;
-  hex: string;
 }
 
 export interface PageScanResult {
@@ -76,7 +74,6 @@ export interface PageScanResult {
   issues: PageIssue[];
 }
 
-const MAX_PAGE_ISSUES = 6;
 const CONTENT_PER_TYPE = 20;
 
 const request = async <T>(url: string, init: RequestInit = {}, signal?: AbortSignal): Promise<T> => {
@@ -118,10 +115,35 @@ export const getWpSiteSettings = async (): Promise<WpSiteSettings> => {
   };
 };
 
-export const getSitemapSettings = async (): Promise<SitemapSettings | null> => {
-  const data = await request<{ response?: { settings?: { sitemap?: SitemapSettings } } }>(getPluginRestUrl("settings"));
+export interface EmailLead {
+  email: string;
+  optIn: boolean;
+  consentedAt: number;
+}
 
-  return data.response?.settings?.sitemap ?? null;
+export interface WizardSettings {
+  sitemap: SitemapSettings | null;
+  emailLead: EmailLead | null;
+}
+
+/** The plugin settings the wizard reads (one request; the email lead has no row until it was saved once). */
+export const getWizardSettings = async (): Promise<WizardSettings> => {
+  const data = await request<{
+    response?: {
+      settings?: {
+        sitemap?: SitemapSettings;
+        setup_wizard_email?: { email?: string; opt_in?: boolean; consented_at?: number };
+      };
+    };
+  }>(getPluginRestUrl("settings"));
+  const lead = data.response?.settings?.setup_wizard_email;
+
+  return {
+    sitemap: data.response?.settings?.sitemap ?? null,
+    emailLead: lead?.email
+      ? { email: lead.email, optIn: !!lead.opt_in, consentedAt: Number(lead.consented_at) || 0 }
+      : null,
+  };
 };
 
 export const saveSitemapSettings = (sitemap: SitemapSettings): Promise<unknown> =>
@@ -178,23 +200,25 @@ const toPercent = (score: number | undefined): number | null => {
   return Math.round(score > 1 ? score : score * 100);
 };
 
+/** Keeps only the suggestions that belong to the wizard checks, one per issue type. */
 export const toPageScanResult = (post: ContentItem, result: OptimiserResult | undefined): PageScanResult => {
   const analyzed = !!result?.analyzedAt;
   const suggestions = (result?.topSuggestions?.elements || []) as Array<Record<string, any>>;
-  const issues: PageIssue[] = suggestions
-    .filter((suggestion) => suggestion.issueType && suggestion.title)
-    .sort((a, b) => (a.priority ?? 4) - (b.priority ?? 4))
-    .slice(0, MAX_PAGE_ISSUES)
-    .map((suggestion) => ({
-      issueType: suggestion.issueType,
-      title: suggestion.title,
-      description: suggestion.description || "",
-      priority: suggestion.priority ?? 4,
-      label: suggestion.displayConfig?.label || "",
-      hex: suggestion.displayConfig?.hex || "",
-    }));
+  const issues = new Map<string, PageIssue>();
+  for (const suggestion of suggestions) {
+    const issueType = suggestion.issueType as string | undefined;
+    if (issueType && isWizardCheck(issueType) && !issues.has(issueType)) {
+      issues.set(issueType, { issueType, title: suggestion.title || "", description: suggestion.description || "" });
+    }
+  }
 
-  return { post, analyzed, failed: false, score: analyzed ? toPercent(result?.score) : null, issues };
+  return {
+    post,
+    analyzed,
+    failed: false,
+    score: analyzed ? toPercent(result?.score) : null,
+    issues: Array.from(issues.values()),
+  };
 };
 
 export const getOptimiserResult = async (
@@ -226,23 +250,32 @@ export const getVariables = async (postId: number): Promise<WPVariableData[]> =>
   return Array.isArray(data.response) ? data.response : [];
 };
 
-// TODO Setup Wizard: no lead-capture endpoint exists yet; the address only lives in the wizard session.
-export const saveEmailLead = async (_email: string, _optIn: boolean): Promise<void> => {};
+// TODO Setup Wizard: temporary storage in the plugin settings; replace with the direct rankingCoach subscription call once it exists.
+export const saveEmailLead = async (email: string, optIn: boolean): Promise<EmailLead> => {
+  const lead: EmailLead = { email, optIn, consentedAt: Math.floor(Date.now() / 1000) };
+  await request(getPluginRestUrl("settings/setup_wizard_email"), {
+    method: "POST",
+    body: JSON.stringify({ value: { email: lead.email, opt_in: lead.optIn, consented_at: lead.consentedAt } }),
+  });
 
-// The endpoint only strips a handful of stop words; filter the rest client-side.
-const KEYWORD_STOP_WORDS = new Set(
-  "about after again all also and any are because been before being between both but can could did does doing down each even every few for from further had has have having her here him his how into its just like made make many more most much not now off once only other our out over own page people same she should some something such than that the their them then there these they thing things this those through too under until very was were what when where which while who whom why will with would you your yours".split(
-    " ",
-  ),
-);
-
-export const extractContentKeywords = async (postId: number): Promise<string[]> => {
-  const data = await request<{ keywords?: Array<{ keyword: string }> }>(
-    getPluginRestUrl(`metatags/${postId}/content/keywords`),
-    { method: "POST" },
-  );
-
-  return (data.keywords || [])
-    .map((entry) => (entry.keyword || "").replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "").toLowerCase())
-    .filter((keyword) => keyword.length >= 4 && !KEYWORD_STOP_WORDS.has(keyword) && /^[\p{L}\p{N}-]+$/u.test(keyword));
+  return lead;
 };
+
+/** Keywords known to this install (synced account keywords); the General tab autocomplete reads the same list. */
+export const getAvailableKeywords = async (postId: number): Promise<string[]> => {
+  const data = await request<{ keywords?: unknown }>(getPluginRestUrl(`metatags/${postId}/keywords`));
+  const rows = Array.isArray(data.keywords)
+    ? data.keywords
+    : ((data.keywords as { elements?: unknown[] })?.elements ?? []);
+
+  return rows
+    .map((row: any) => (typeof row === "string" ? row : row?.keyword || row?.name || ""))
+    .filter((name: string) => !!name);
+};
+
+/** Same call as the General tab: the first keyword becomes primary, later ones additional. */
+export const assignKeyword = (postId: number, keyword: string): Promise<MetaTagsApiResponse> =>
+  request(getPluginRestUrl(`metatags/${postId}/keyword`), { method: "PUT", body: JSON.stringify({ keyword }) });
+
+export const detachKeyword = (postId: number, keyword: string): Promise<MetaTagsApiResponse> =>
+  request(getPluginRestUrl(`metatags/${postId}/keyword`), { method: "DELETE", body: JSON.stringify({ keyword }) });

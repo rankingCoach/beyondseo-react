@@ -26,13 +26,14 @@ interface ImportStepProps {
 }
 
 export const ImportStep: React.FC<ImportStepProps> = ({ sources, result, onImported, onBack, onNext }) => {
-  const [selected, setSelected] = useState<ImportSource["source"]>(
-    (sources.find((source) => source.active) || sources[0])?.source || "yoast",
-  );
+  const [selected, setSelected] = useState<ImportSource["source"] | null>(null);
   const [isImporting, setIsImporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleImport = async () => {
+    if (!selected) {
+      return;
+    }
     setIsImporting(true);
     setError(null);
     try {
@@ -89,7 +90,7 @@ export const ImportStep: React.FC<ImportStepProps> = ({ sources, result, onImpor
               size={ButtonSizes.medium}
               onClick={handleImport}
               isLoading={isImporting}
-              disabled={isImporting}
+              disabled={isImporting || !selected}
             >
               {__("Import", "beyondseo")}
             </Button>

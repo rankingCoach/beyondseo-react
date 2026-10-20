@@ -1,34 +1,37 @@
 import { __ } from "@wordpress/i18n";
+import { rcWindow } from "@stores/window.store";
 
 /** What the wizard can do about an issue: an inline editor or the post editor. */
 export type FixKind = "title" | "description" | "keywords" | "editor";
 
-const KEYWORD_ISSUES = new Set([
-  "missing_primary_keyword",
-  "missing_secondary_keywords",
-  "insufficient_secondary_keywords",
-  "too_many_secondary_keywords",
-  "keyword_map",
-  "optimise_primary_keyword",
-  "optimise_secondary_keyword",
-  "narrow_keyword_portfolio",
-  "missing_related_keywords",
-  "missing_long_tail_keywords",
-  "missing_keyword_coverage",
-]);
+export interface WizardCheck {
+  issueType: string;
+  title: string;
+  description: string;
+  /** 1 = critical … 4 = low, mirrors FactorSuggestion::PRIORITY_*. */
+  priority: number;
+}
+
+/** Checks the wizard reports on: BaseConstants::SETUP_WIZARD_CHECKS resolved through the suggestion catalogue, localized by Assets::front(). */
+export const getWizardChecks = (): WizardCheck[] => {
+  const checks = rcWindow?.rankingCoachReactData?.setupWizardChecks;
+
+  return Array.isArray(checks)
+    ? checks.filter((check: Partial<WizardCheck>) => typeof check?.issueType === "string" && !!check.issueType)
+    : [];
+};
+
+export const isWizardCheck = (issueType: string): boolean =>
+  getWizardChecks().some((check) => check.issueType === issueType);
 
 export const fixKindForIssue = (issueType: string): FixKind => {
-  if (
-    issueType.startsWith("meta_title") ||
-    issueType.endsWith("in_meta_title") ||
-    issueType === "keyword_not_at_title_start"
-  ) {
+  if (issueType.startsWith("meta_title") || issueType.endsWith("in_meta_title")) {
     return "title";
   }
   if (issueType.includes("meta_description")) {
     return "description";
   }
-  if (KEYWORD_ISSUES.has(issueType)) {
+  if (issueType === "missing_primary_keyword") {
     return "keywords";
   }
 

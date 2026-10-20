@@ -22,7 +22,11 @@ export const WizardStepper: React.FC<WizardStepperProps> = ({ steps, activeIndex
       return (
         <li
           key={step.id}
-          className={classNames(styles.step, isActive && styles.stepActive, isDone && styles.stepDone)}
+          className={classNames(
+            styles.step,
+            isActive ? styles.stepActive : undefined,
+            isDone ? styles.stepDone : undefined,
+          )}
           aria-current={isActive ? "step" : undefined}
         >
           <span className={styles.stepNumber} aria-hidden="true">

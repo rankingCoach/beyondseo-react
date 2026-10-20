@@ -69,7 +69,7 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
           isLoading={isFinishing}
           disabled={isFinishing}
         >
-          {__("Go to BeyondSEO settings", "beyondseo")}
+          {__("Go to Dashboard", "beyondseo")}
         </Button>
       }
     >
@@ -78,10 +78,15 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
           {__("Keep growing your visibility", "beyondseo")}
         </Text>
         <Text type={TextTypes.text} className={shared.description}>
-          {__(
-            "BeyondSEO helps you find and fix page issues. A rankingCoach account adds ongoing visibility information about your online presence.",
-            "beyondseo",
-          )}
+          {connected
+            ? __(
+                "BeyondSEO helps you find and fix page issues. Your rankingCoach account adds ongoing visibility information about your online presence.",
+                "beyondseo",
+              )
+            : __(
+                "BeyondSEO helps you find and fix page issues. A rankingCoach account adds ongoing visibility information about your online presence.",
+                "beyondseo",
+              )}
         </Text>
       </div>
 
@@ -90,7 +95,10 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
           type="info"
           borderRadius={8}
           title={__("Your rankingCoach account is connected", "beyondseo")}
-          description={__("Rankings, competitors and reports are available from the BeyondSEO dashboard.", "beyondseo")}
+          description={__(
+            "Rankings, competitors and reports are already available from the BeyondSEO dashboard. Nothing else to set up here.",
+            "beyondseo",
+          )}
         />
       </Render>
 
@@ -117,7 +125,7 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
         </div>
         <div className={styles.accountCard}>
           <Text type={TextTypes.heading4} fontWeight={FontWeights.bold} color="var(--white)">
-            {__("After activation", "beyondseo")}
+            {connected ? __("With your rankingCoach account", "beyondseo") : __("After activation", "beyondseo")}
           </Text>
           <ul className={styles.list}>
             {getAccountItems().map((item) => (
@@ -164,12 +172,14 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
         </div>
       </div>
 
-      <Text type={TextTypes.textHelp} className={shared.fine}>
-        {__(
-          "Registration and login happen on the BeyondSEO connect pages. You can also do this later from Settings.",
-          "beyondseo",
-        )}
-      </Text>
+      <Render if={!connected}>
+        <Text type={TextTypes.textHelp} className={shared.fine}>
+          {__(
+            "Registration and login happen on the BeyondSEO connect pages. You can also do this later from Settings.",
+            "beyondseo",
+          )}
+        </Text>
+      </Render>
     </StepLayout>
   );
 };
