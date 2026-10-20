@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { __, _n, sprintf } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import {
   Button,
   ButtonSizes,
@@ -365,7 +365,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
               >
                 {sprintf(
                   /* translators: %d: number of pages */
-                  _n("%d page affected", "%d pages affected", pages.length, "beyondseo"),
+                  __("Pages affected: %d", "beyondseo"),
                   pages.length,
                 )}
               </Button>
@@ -428,10 +428,8 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
                   )
                 : sprintf(
                     /* translators: 1: number of pages that could not be checked, 2: total number of pages */
-                    _n(
+                    __(
                       "%1$d of %2$d pages could not be checked. You can continue with the completed checks and try again later.",
-                      "%1$d of %2$d pages could not be checked. You can continue with the completed checks and try again later.",
-                      incomplete,
                       "beyondseo",
                     ),
                     incomplete,
@@ -444,12 +442,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
           <Text type={TextTypes.text}>
             {sprintf(
               /* translators: 1: number of checks with affected pages, 2: total number of checks */
-              _n(
-                "%1$d of %2$d checks needs attention",
-                "%1$d of %2$d checks need attention",
-                failing.length,
-                "beyondseo",
-              ),
+              __("Checks needing attention: %1$d of %2$d", "beyondseo"),
               failing.length,
               results.length,
             )}
@@ -457,7 +450,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
           <Text type={TextTypes.text}>
             {sprintf(
               /* translators: %d: number of pages */
-              _n("%d page checked", "%d pages checked", snapshot.scanned || analyzed.length, "beyondseo"),
+              __("Pages checked: %d", "beyondseo"),
               snapshot.scanned || analyzed.length,
             )}
           </Text>
