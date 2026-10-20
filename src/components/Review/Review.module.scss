@@ -1,0 +1,158 @@
+.reviewHost {
+    min-width: 0;
+    min-height: 1px;
+}
+
+.footerPrompt,
+.footerPromptOpen {
+    min-width: 0;
+}
+
+.footerPromptOpen {
+    flex-basis: 100%;
+}
+
+.footerTrigger {
+    cursor: pointer;
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 0;
+    font: inherit;
+    color: #2271b1;
+    background: none;
+    border: 0;
+
+    &:hover {
+        color: #135e96;
+        text-decoration: underline;
+    }
+
+    &:focus-visible {
+        outline: 2px solid #2271b1;
+        outline-offset: 2px;
+    }
+}
+
+.footerStars {
+    display: inline-flex;
+    color: #ffb900;
+
+    span {
+        width: 14px;
+        height: 14px;
+        font-size: 14px;
+    }
+}
+
+.reviewCard {
+    position: relative;
+    box-sizing: border-box;
+    margin: 12px 0;
+    padding: 16px 44px 16px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1d2327;
+    overflow-wrap: anywhere;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-inline-start: 4px solid #2271b1;
+}
+
+.reviewHeading {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: inherit;
+}
+
+.reviewBody {
+    margin: 0 0 12px;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+.reviewActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.reviewButton {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 32px;
+    padding: 4px 12px;
+    font: inherit;
+    line-height: 1.5;
+    color: #2271b1;
+    text-align: center;
+    text-decoration: none;
+    white-space: normal;
+    background: #f6f7f7;
+    border: 1px solid #2271b1;
+    border-radius: 3px;
+
+    &:hover {
+        color: #135e96;
+        text-decoration: none;
+        background: #f0f0f1;
+        border-color: #135e96;
+    }
+}
+
+.reviewPrimary {
+    color: #fff;
+    background: #2271b1;
+
+    &:hover {
+        color: #fff;
+        background: #135e96;
+    }
+}
+
+.reviewLater {
+    background: transparent;
+    border-color: transparent;
+
+    &:hover {
+        text-decoration: underline;
+        background: transparent;
+        border-color: transparent;
+    }
+}
+
+.reviewClose {
+    cursor: pointer;
+    position: absolute;
+    top: 4px;
+    inset-inline-end: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font: inherit;
+    font-size: 24px;
+    color: #50575e;
+    background: transparent;
+    border: 0;
+    border-radius: 3px;
+
+    &:hover {
+        color: #1d2327;
+    }
+}
+
+.reviewButton:focus-visible,
+.reviewClose:focus-visible {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+}

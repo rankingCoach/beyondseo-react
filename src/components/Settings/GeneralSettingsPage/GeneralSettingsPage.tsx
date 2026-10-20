@@ -4,7 +4,7 @@ import { Button, ButtonTypes, Text, TextTypes, FontWeights } from "vanguard";
 import { __ } from "@wordpress/i18n";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
-import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
+import { useReviewSettingsSave } from "../../Review/Review";
 import { isOnboardingCompleted, redirectToConnectPage } from "@helpers/onboarding-helpers";
 import SettingsRow from "./SettingsRow";
 
@@ -17,12 +17,13 @@ type SettingsKeys =
   | "disable_wp_heartbeat_service"
   | "open_rc_dashboard_in_new_tab";
 
-const GeneralSettingsPage: React.FC = () => {
+const GeneralSettingsPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotice }) => {
   const { plugin } = useSelector((state: RootState) => state.app);
   const initialSettings = plugin?.pluginData?.settings || ({} as Partial<Record<SettingsKeys, boolean>>);
 
   const [settings, setSettings] = useState<Partial<Record<SettingsKeys, boolean>>>(initialSettings);
   const [isSaving, setIsSaving] = useState<Partial<Record<SettingsKeys, boolean>>>({});
+  const { saveReviewSettings, reviewSave } = useReviewSettingsSave();
 
   useEffect(() => {
     setSettings(initialSettings);
@@ -33,13 +34,7 @@ const GeneralSettingsPage: React.FC = () => {
     setSettings((prev) => ({ ...prev, [key]: value }));
 
     try {
-      await seoStore
-        .postRankingcoachSeoSettings({
-          settings: {
-            [key]: value,
-          },
-        } as any)
-        .toPromise();
+      await saveReviewSettings({ [key]: value });
     } catch (error) {
       // Revert on failure
       setSettings((prev) => ({ ...prev, [key]: !value }));
@@ -127,6 +122,7 @@ const GeneralSettingsPage: React.FC = () => {
           </Button>
         </div>
       )}
+      {reviewNotice}
       <div className={styles.settingsList}>
         {settingsConfig.map(({ key, title, description }) => (
           <SettingsRow
@@ -140,6 +136,7 @@ const GeneralSettingsPage: React.FC = () => {
           />
         ))}
       </div>
+      {reviewSave}
     </div>
   );
 };

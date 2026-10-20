@@ -1,5 +1,26 @@
 /// <reference types="vite/client" />
 
+interface ReviewBootstrapData {
+  displayCount: number;
+  eligible: boolean;
+  cooldownUntil: number;
+  permanentlyStopped: boolean;
+  scoreThresholds?: {
+    dashboard: number;
+    editor: number;
+  };
+}
+
+interface RankingCoachReactData {
+  review?: ReviewBootstrapData | null;
+  reviewUrl?: string;
+  supportUrl?: string;
+}
+
+interface Window {
+  rankingCoachReactData?: RankingCoachReactData;
+}
+
 interface WPCoreEditorStore {
   // Post Data Selectors
   getCurrentPost(): {

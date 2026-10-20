@@ -1,0 +1,64 @@
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+
+    @media screen and (max-width: 720px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pluginCard,
+.accountCard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+    border-radius: 16px;
+    box-sizing: border-box;
+}
+
+.pluginCard {
+    border: 1px solid var(--fn-divider-gl);
+    background: var(--fn-bg-surface);
+}
+
+.accountCard {
+    background: var(--p500);
+    color: var(--white);
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+}
+
+/* Vanguard colours the label through these tokens, so override them instead of color/background. */
+.accountCard .connectButton {
+    --button-secondary-background-color: var(--white);
+    --button-secondary-hover-background-color: var(--n100);
+    --button-secondary-border-color: var(--white);
+    --button-secondary-hover-border-color: var(--white);
+    --button-secondary-text-color: var(--p500);
+    --button-secondary-hover-text-color: var(--p700);
+}
+
+.accountCard .loginButton {
+    --button-default-background-color: transparent;
+    --button-default-hover-background-color: var(--p600);
+    --button-default-border-color: transparent;
+    --button-default-hover-border-color: transparent;
+    --button-default-text-color: var(--white);
+    --button-default-hover-text-color: var(--white);
+}

@@ -40,6 +40,8 @@ export enum AdminPage {
   Registration = "rankingcoach-registration",
   Onboarding = "rankingcoach-onboarding",
   Connect = "rankingcoach-connect",
+  GeneralSettings = "rankingcoach-generalSettings",
+  SetupWizard = "rankingcoach-setupWizard",
 }
 
 const getLinksData = (): InternalLinksData =>
@@ -88,6 +90,12 @@ export const getWpRestUrl = (route: string, params?: QueryParams): string =>
 
 /** REST nonce for requests made outside the HttpStore (`X-WP-Nonce` header). */
 export const getRestNonce = (): string => getLinksData().restNonce || rcWindow?.rankingCoachRestData?.nonce || "";
+
+/** URL of a WordPress admin screen, e.g. getAdminScreenUrl("options-reading.php"). */
+export const getAdminScreenUrl = (screen: string): string => `${getAdminRootUrl()}${screen}`;
+
+/** Classic editor URL of a post; page builders (e.g. Elementor) open from there as well. */
+export const getEditPostUrl = (postId: number): string => `${getAdminRootUrl()}post.php?post=${postId}&action=edit`;
 
 /** Public site root (home_url): the base for robots.txt, the feed and the sitemap. */
 export const getHomeUrl = (): string => {

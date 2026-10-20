@@ -1,0 +1,241 @@
+.wizard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    color: var(--fn-fg);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 32px 40px 20px;
+}
+
+.logo img {
+    height: 32px;
+    width: auto;
+    display: block;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--fn-divider-gl);
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 40px 40px 56px;
+    box-sizing: border-box;
+
+    @media screen and (max-width: 782px) {
+        padding: 24px 16px 40px;
+    }
+}
+
+.column {
+    width: 100%;
+    max-width: 720px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px 40px;
+    min-height: 80px;
+    box-sizing: border-box;
+
+    @media screen and (max-width: 782px) {
+        padding: 16px;
+    }
+}
+
+.footerStart,
+.footerEnd {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.footerEnd {
+    margin-left: auto;
+}
+
+/* Stepper */
+.stepper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--fn-fg-lightest);
+}
+
+.stepActive {
+    color: var(--fn-fg);
+}
+
+.stepDone {
+    color: var(--fn-fg-light);
+}
+
+.stepNumber {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--n300);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.stepActive .stepNumber {
+    background: var(--p500);
+    border-color: var(--p500);
+    color: var(--white);
+}
+
+.stepDone .stepNumber {
+    background: var(--s100);
+    border-color: var(--s400);
+    color: var(--s900);
+}
+
+.stepLabel {
+    font-size: 13px;
+    white-space: nowrap;
+
+    @media screen and (max-width: 782px) {
+        display: none;
+    }
+}
+
+.stepActive .stepLabel {
+    display: inline;
+    font-weight: 600;
+}
+
+/* Shared blocks */
+.intro {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.description {
+    color: var(--fn-fg-light);
+}
+
+.card {
+    border: 1px solid var(--fn-divider-gl);
+    border-radius: 12px;
+    padding: 20px 24px;
+    background: var(--fn-bg-surface);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+}
+
+.statusRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--fn-divider-gl);
+
+    &:first-child {
+        border-top: 0;
+    }
+}
+
+.statusText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.fine {
+    color: var(--fn-fg-lightest);
+}
+
+.optionCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 16px 20px;
+    text-align: left;
+    background: var(--fn-bg-surface);
+    border: 1px solid var(--fn-divider-gl);
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    appearance: none;
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+
+    &:hover {
+        background: var(--n100);
+    }
+}
+
+.optionCardSelected {
+    border-color: var(--p500);
+    background: var(--p100);
+
+    &:hover {
+        background: var(--p100);
+    }
+}
+
+.optionBody {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.wizard :global(.vanguard-input) input,
+.wizard :global(.vanguard-input) textarea {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    min-height: 0;
+    font: inherit;
+}
