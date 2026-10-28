@@ -17,6 +17,7 @@ export const KeywordManager = () => {
   const [inputValue, setInputValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [showError, setShowError] = useState(false);
+  const [showSaveError, setShowSaveError] = useState(false);
   const { primaryKeyword, additionalKeywords, availableKeywords } = useSelector((state: RootState) => state.app);
   const keywordsSearchOptions = availableKeywords ?? [];
   const dispatch = useAppDispatch();
@@ -107,7 +108,8 @@ export const KeywordManager = () => {
 
     try {
       setIsLoading(true);
-      await dispatch(
+      setShowSaveError(false);
+      const response = await dispatch(
         MetatagsStore.putApiMetatagsKeywordByPostIdThunk({
           postId: getPathId(),
           requestBody: {
@@ -115,29 +117,24 @@ export const KeywordManager = () => {
           },
           queryParams: { noCache: true },
         }),
-      );
-
-      // If primary keyword already exists, add new keyword to additional keywords
-      if (primaryKeyword) {
-        const updatedAdditionalKeywords = [...additionalKeywords, trimmedKeyword];
-        dispatch(setAdditionalKeywords(updatedAdditionalKeywords));
-      } else {
-        // Only set as primary if there isn't already a primary keyword
-        dispatch(setPrimaryKeyword(trimmedKeyword));
+      ).unwrap();
+      if (
+        !response.keywords?.primaryKeyword ||
+        (response.keywords.primaryKeyword !== trimmedKeyword &&
+          !response.keywords.additionalKeywords?.includes(trimmedKeyword))
+      ) {
+        throw new Error("Keyword was not saved");
       }
 
-      // Trigger immediate recalculation after keyword change
+      dispatch(setPrimaryKeyword(response.keywords.primaryKeyword));
+      dispatch(setAdditionalKeywords(response.keywords.additionalKeywords ?? []));
       triggerRecalculation(true);
-
-      // Dispatch event to notify other components about the keyword update.
-      // The event listener above refetches the available-keywords list, so no
-      // direct refetch is needed here (it used to run twice per add).
-      const event = new CustomEvent("rankingcoach-keywords-updated");
-      document.dispatchEvent(event);
+      document.dispatchEvent(new CustomEvent("rankingcoach-keywords-updated"));
+      resetInputs();
     } catch (error) {
+      setShowSaveError(true);
     } finally {
       setIsLoading(false);
-      resetInputs();
     }
   };
 
@@ -210,6 +207,7 @@ export const KeywordManager = () => {
               optionKey={"name"}
               onInputChange={(e: React.SyntheticEvent, newValue: string) => {
                 setShowError(false);
+                setShowSaveError(false);
                 setInputValue(newValue);
                 setSearchValue(newValue);
               }}
@@ -238,6 +236,11 @@ export const KeywordManager = () => {
           {showError && (
             <Text color="--e500" className="error-message">
               {__("Certain special characters are not allowed.", "beyondseo")}
+            </Text>
+          )}
+          {showSaveError && (
+            <Text color="--e500" className="error-message">
+              {__("Could not save the keyword. Please try again.", "beyondseo")}
             </Text>
           )}
         </div>

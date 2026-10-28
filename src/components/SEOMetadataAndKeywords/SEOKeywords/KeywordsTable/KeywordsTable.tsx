@@ -23,7 +23,6 @@ import { __ } from "@wordpress/i18n";
 import { getPathId } from "@helpers/get-path-id";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
-import { AppSlice } from "@src/App.slice";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { useScoreRecalculation } from "@contexts/ScoreRecalculationContext";
@@ -48,9 +47,9 @@ export type KeywordsTableProps = {
 export const KeywordsTable = (props: KeywordsTableProps) => {
   const { hideSwapButton, title, elements, isPrimaryKeywordTable = false } = props;
   const dispatch = useAppDispatch();
-  const { optimiserResult, primaryKeyword, additionalKeywords } = useSelector((state: RootState) => state.app);
-  const { setPrimaryKeyword, setAdditionalKeywords } = AppSlice;
+  const { optimiserResult, primaryKeyword } = useSelector((state: RootState) => state.app);
   const [isDeleting, setIsDeleting] = useState<Record<string, boolean>>({});
+  const [saveError, setSaveError] = useState(false);
   const [expandedTasks, setExpandedTasks] = useState<{ [key: string]: boolean }>({});
   const { triggerRecalculation } = useScoreRecalculation();
   const [isLoadingTasks, setIsLoadingTasks] = useState<boolean>(true);
@@ -168,50 +167,38 @@ export const KeywordsTable = (props: KeywordsTableProps) => {
   };
 
   const swapCallback = async (keyword: string) => {
-    // swap elements in state
-    await dispatch(
-      MetatagsStore.postApiMetatagsKeywordSwapByPostIdThunk({
-        postId: getPathId(),
-        requestBody: {
-          keyword: keyword,
-        },
-        queryParams: {},
-      }),
-    );
-
-    // Trigger immediate recalculation after keyword swap
-    triggerRecalculation(true);
+    try {
+      setIsDeleting((prev) => ({ ...prev, [keyword]: true }));
+      setSaveError(false);
+      await dispatch(
+        MetatagsStore.postApiMetatagsKeywordSwapByPostIdThunk({
+          postId: getPathId(),
+          requestBody: { keyword },
+          queryParams: {},
+        }),
+      ).unwrap();
+      triggerRecalculation(true);
+    } catch (error) {
+      setSaveError(true);
+    } finally {
+      setIsDeleting((prev) => ({ ...prev, [keyword]: false }));
+    }
   };
 
   const removeCallback = async (keyword: string) => {
     try {
       setIsDeleting((prev) => ({ ...prev, [keyword]: true }));
-
-      if (keyword === primaryKeyword) {
-        dispatch(setPrimaryKeyword(null));
-      } else {
-        const newAdditionalKeywords = additionalKeywords.filter((k) => k !== keyword);
-        dispatch(setAdditionalKeywords(newAdditionalKeywords));
-      }
-
+      setSaveError(false);
       await dispatch(
         MetatagsStore.deleteApiMetatagsKeywordByPostIdThunk({
           postId: getPathId(),
-          requestBody: {
-            keyword: keyword,
-          },
+          requestBody: { keyword },
           queryParams: {},
         }),
-      );
-
+      ).unwrap();
       triggerRecalculation(true);
     } catch (error) {
-      await dispatch(
-        MetatagsStore.getApiMetatagsByPostIdThunk({
-          postId: getPathId(),
-          queryParams: {},
-        }),
-      );
+      setSaveError(true);
     } finally {
       setIsDeleting((prev) => ({ ...prev, [keyword]: false }));
     }
@@ -239,6 +226,7 @@ export const KeywordsTable = (props: KeywordsTableProps) => {
           </Text>
         </Render>
       </div>
+      {saveError && <Text color="--e500">{__("Could not update the keyword. Please try again.", "beyondseo")}</Text>}
       <div className={styles.tableBody}>
         {elements.map((element, index) => (
           <div key={index}>
