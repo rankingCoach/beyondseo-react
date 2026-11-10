@@ -11,6 +11,7 @@ import { Review } from "@components/Review/Review";
 // import {LinkAssistantTab} from './Tabs/LinkAssistantTab/LinkAssistantTab';
 import { LinkAssistantTab } from "@components/TabsManager/Tabs/LinkAssistantTab/LinkAssistantTab";
 import { __ } from "@wordpress/i18n";
+import { canManagePlugin } from "@helpers/capabilities";
 import styles from "./TabsManager.module.scss";
 
 const EditorReview = () => {
@@ -83,14 +84,19 @@ export const TabsManager = (props: any) => {
               showBackgroundColor: false,
               simple: true,
             },
-            {
-              label: __("Redirects", "beyondseo"),
-              //@ts-ignore
-              component: <RedirectsTab />,
-              hasBorderBottom: true,
-              showBackgroundColor: false,
-              simple: true,
-            },
+            // Redirects are site-wide; their API needs plugin access (RedirectManagerApi).
+            ...(canManagePlugin()
+              ? [
+                  {
+                    label: __("Redirects", "beyondseo"),
+                    //@ts-ignore
+                    component: <RedirectsTab />,
+                    hasBorderBottom: true,
+                    showBackgroundColor: false,
+                    simple: true,
+                  },
+                ]
+              : []),
             {
               label: __("Advanced", "beyondseo"),
               //@ts-ignore
