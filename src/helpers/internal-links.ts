@@ -42,6 +42,7 @@ export enum AdminPage {
   Connect = "rankingcoach-connect",
   GeneralSettings = "rankingcoach-generalSettings",
   SetupWizard = "rankingcoach-setupWizard",
+  ActionPlan = "rankingcoach-actionPlan",
 }
 
 const getLinksData = (): InternalLinksData =>

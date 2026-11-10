@@ -76,7 +76,8 @@ export interface PageScanResult {
 
 const CONTENT_PER_TYPE = 20;
 
-const request = async <T>(url: string, init: RequestInit = {}, signal?: AbortSignal): Promise<T> => {
+/** JSON request against a REST route with the nonce; errors carry the REST code and status. Shared with the Action Plan page. */
+export const request = async <T>(url: string, init: RequestInit = {}, signal?: AbortSignal): Promise<T> => {
   const response = await fetch(url, {
     ...init,
     signal,
