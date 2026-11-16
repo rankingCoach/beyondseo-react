@@ -94,7 +94,7 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
                   <Text type={TextTypes.textHelp}>{__("Error details", "beyondseo")}</Text>
                   <Icon children={isExpanded ? IconNames.caretUp : IconNames.caretDown} />
                 </div>
-                <Button onClick={handleCopyClick} type={ButtonTypes.secondary} size={ButtonSizes.small}>
+                <Button onClick={handleCopyClick} type={ButtonTypes.secondary} size={ButtonSizes.medium}>
                   {hasCopied ? __("Copied!", "beyondseo") : __("Copy Error", "beyondseo")}
                 </Button>
               </div>

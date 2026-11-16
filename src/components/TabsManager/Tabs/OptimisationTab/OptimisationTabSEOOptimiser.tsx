@@ -279,7 +279,7 @@ export const OptimisationTabSEOOptimiser = (props: SEOOptimiserProps) => {
           <Button
             type={ButtonTypes.default}
             iconLeft={isExpanded ? IconNames.caretUp : IconNames.caretDown}
-            size={ButtonSizes.small}
+            size={ButtonSizes.medium}
 q            onClick={(e:any) => {
               e.stopPropagation();
               handleContentItemExpand(itemKey, !isExpanded);
@@ -374,7 +374,7 @@ q            onClick={(e:any) => {
             <Button
               type={ButtonTypes.secondary}
               iconLeft={IconNames.close}
-              size={ButtonSizes.small}
+              size={ButtonSizes.medium}
               color={"--n400"}
               onClick={() => {
                 setSizeType(SEOOptimiserSizeType.Small);

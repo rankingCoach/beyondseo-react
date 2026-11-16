@@ -1,7 +1,16 @@
 import * as React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./KeywordManager.module.scss";
-import { Autocomplete, Button, ComponentContainer, IconNames, PageSectionLoading, Render, Text } from "vanguard";
+import {
+  Autocomplete,
+  Button,
+  ComponentContainer,
+  IconNames,
+  PageSectionLoading,
+  Render,
+  Text,
+  ButtonSizes,
+} from "vanguard";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { KeywordsTable } from "@components/SEOMetadataAndKeywords/SEOKeywords/KeywordsTable/KeywordsTable";
@@ -223,6 +232,7 @@ export const KeywordManager = () => {
               autoComplete={false}
             />
             <Button
+              size={ButtonSizes.extraLarge}
               onClick={() => {
                 const trimmedKeyword = inputValue.trim();
                 if (trimmedKeyword && trimmedKeyword.length > 1 && !isLoading) {

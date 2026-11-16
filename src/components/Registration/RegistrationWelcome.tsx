@@ -70,7 +70,7 @@ export const RegistrationWelcome: React.FC<RegistrationWelcomeProps> = ({ onCont
       <div className={styles.footerSection}>
         <Button
           type={ButtonTypes.secondary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           iconLeft={IconNames.arrowLeft}
           onClick={() => { window.location.href = getAdminPageUrl(AdminPage.Connect); }}
           className={styles.backButton}

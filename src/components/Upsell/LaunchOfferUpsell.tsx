@@ -144,7 +144,7 @@ export const LaunchOfferUpsell: React.FC<LaunchOfferUpsellProps> = ({
 
                     <Button
                         type={ButtonTypes.primary}
-                        size={ButtonSizes.medium}
+                        size={ButtonSizes.extraLarge}
                         className={styles.ctaButton}
                         onClick={handleCtaClick}
                         isLoading={isLoading}

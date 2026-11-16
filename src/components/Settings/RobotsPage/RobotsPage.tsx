@@ -1,6 +1,16 @@
 import React, { SyntheticEvent, useState, useEffect } from "react";
 import styles from "./RobotsPage.module.scss";
-import { ComponentContainer, Switch, Text, TextTypes, FontWeights, Button, ButtonTypes, CheckBox } from "vanguard";
+import {
+  ComponentContainer,
+  Switch,
+  Text,
+  TextTypes,
+  FontWeights,
+  Button,
+  ButtonTypes,
+  CheckBox,
+  ButtonSizes,
+} from "vanguard";
 import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { RobotsPagePlaceholder } from "./RobotsPagePlaceholder";
 import { __ } from "@wordpress/i18n";
@@ -130,7 +140,12 @@ const RobotsPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotice
                 <Text type={TextTypes.text} className={styles.urlValue}>
                   {robotsUrl}
                 </Text>
-                <Button type={ButtonTypes.secondary} onClick={handleViewRobots} className={styles.viewButton}>
+                <Button
+                  size={ButtonSizes.extraLarge}
+                  type={ButtonTypes.secondary}
+                  onClick={handleViewRobots}
+                  className={styles.viewButton}
+                >
                   {__("View Robots.txt", "beyondseo")}
                 </Button>
               </div>
@@ -146,6 +161,7 @@ const RobotsPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotice
 
               <div className={styles.buttonContainer}>
                 <Button
+                  size={ButtonSizes.extraLarge}
                   type={ButtonTypes.primary}
                   onClick={handleSave}
                   testId="save-robots-settings"

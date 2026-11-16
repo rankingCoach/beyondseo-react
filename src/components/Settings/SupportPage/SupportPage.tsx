@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./SupportPage.module.scss";
 import settingsStyles from "../Settings.module.scss";
-import { Text, TextTypes, Button, ButtonTypes, Skeleton } from "vanguard";
+import { Text, TextTypes, Button, ButtonTypes, Skeleton, ButtonSizes } from "vanguard";
 import { rcWindow } from "@stores/window.store";
 import { __ } from "@wordpress/i18n";
 import { getSupportUrl } from "@helpers/external-links";
@@ -96,7 +96,12 @@ const SupportPage: React.FC = () => {
               </div>
             </div>
             <div className={styles.action}>
-              <Button type={ButtonTypes.secondary} onClick={handleContactSupport} testId="contact-support-button">
+              <Button
+                size={ButtonSizes.extraLarge}
+                type={ButtonTypes.secondary}
+                onClick={handleContactSupport}
+                testId="contact-support-button"
+              >
                 {__("Contact Support", "beyondseo")}
               </Button>
             </div>
@@ -128,13 +133,19 @@ const SupportPage: React.FC = () => {
                       {__("Failed to load site info. Please try again.", "beyondseo")}
                     </Text>
                   </div>
-                  <Button type={ButtonTypes.secondary} onClick={loadSiteInfo} testId="retry-site-info-button">
+                  <Button
+                    size={ButtonSizes.extraLarge}
+                    type={ButtonTypes.secondary}
+                    onClick={loadSiteInfo}
+                    testId="retry-site-info-button"
+                  >
                     {__("Retry", "beyondseo")}
                   </Button>
                 </div>
               ) : (
                 <div className={styles.actionGroup}>
                   <Button
+                    size={ButtonSizes.extraLarge}
                     type={ButtonTypes.primary}
                     onClick={handleCopyToClipboard}
                     disabled={!siteInfo}

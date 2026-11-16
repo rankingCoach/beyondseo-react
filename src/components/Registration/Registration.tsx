@@ -595,7 +595,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
       <div className={styles.footerSection}>
         <Button
           type={ButtonTypes.secondary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           iconLeft={IconNames.arrowLeft}
           onClick={isVerificationPhase ? handleRegistrationReset : () => setShowWelcome(true)}
           className={styles.registrationResetButton}
@@ -604,7 +604,7 @@ export const Registration: React.FC<RegistrationProps> = ({ isPluginLoading }) =
         </Button>
         <Button
           type={ButtonTypes.primary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           iconRight={!isVerificationPhase ? IconNames.arrowRight : undefined}
           onClick={handleNext}
           disabled={isLoading || isButtonLoading || isPolling || (!isVerificationPhase && (!email.trim() || !termsAccepted))}

@@ -189,7 +189,7 @@ export const KeywordsPanel: React.FC<KeywordsPanelProps> = ({ post, onChanged, o
             />
             <Button
               type={ButtonTypes.secondary}
-              size={ButtonSizes.medium}
+              size={ButtonSizes.extraLarge}
               onClick={() => add(input)}
               isLoading={isBusy}
               disabled={isBusy || input.trim().length < 2}
@@ -232,7 +232,7 @@ export const KeywordsPanel: React.FC<KeywordsPanelProps> = ({ post, onChanged, o
       )}
 
       <div className={styles.fixPanelActions}>
-        <Button type={ButtonTypes.primary} size={ButtonSizes.small} onClick={onClose} disabled={isBusy}>
+        <Button type={ButtonTypes.primary} size={ButtonSizes.medium} onClick={onClose} disabled={isBusy}>
           {__("Done", "beyondseo")}
         </Button>
       </div>

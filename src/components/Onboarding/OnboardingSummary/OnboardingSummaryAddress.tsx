@@ -178,7 +178,7 @@ export const OnboardingSummaryAddress: React.FC<OnboardingSummaryAddressProps> =
             <ComponentContainer className={classNames(addressStyles.centeredContent)}>
               <Button
                 type={ButtonTypes.secondary}
-                size={ButtonSizes.medium}
+                size={ButtonSizes.extraLarge}
                 iconRight={IconNames.arrowRight}
                 onClick={handleIframeOpen}
               >

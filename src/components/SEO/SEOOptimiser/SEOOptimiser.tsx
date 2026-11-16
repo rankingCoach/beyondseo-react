@@ -207,7 +207,7 @@ export const SEOOptimiser = (props: SEOOptimiserProps) => {
               <Button
                 type={ButtonTypes.secondary}
                 iconLeft={IconNames.close}
-                size={ButtonSizes.small}
+                size={ButtonSizes.medium}
                 color={"--n400"}
                 onClick={() => {
                   debouncedSizeChange(SizeTypeEnum.Small);
@@ -238,7 +238,7 @@ export const SEOOptimiser = (props: SEOOptimiserProps) => {
             <Render if={notSuccess}>
               <Button
                 className={classNames(VanguardStyle.mb1, VanguardStyle.mt2)}
-                size={ButtonSizes.small}
+                size={ButtonSizes.medium}
                 onClick={() => {
                   onCloseFunction && onCloseFunction();
                 }}
@@ -311,7 +311,7 @@ export const SEOOptimiser = (props: SEOOptimiserProps) => {
                 )}
               >
                 <Button
-                  size={ButtonSizes.small}
+                  size={ButtonSizes.medium}
                   className={classNames(VanguardStyle.mb1, VanguardStyle.mt2)}
                   onClick={() => {
                     if (onUseKeywordsFunction && postSeoOptimiserKeywords) {
@@ -324,7 +324,7 @@ export const SEOOptimiser = (props: SEOOptimiserProps) => {
                   {useKwdButtonText}
                 </Button>
                 <Button
-                  size={ButtonSizes.small}
+                  size={ButtonSizes.medium}
                   type={ButtonTypes.secondary}
                   className={classNames(VanguardStyle.mb1, VanguardStyle.mt2)}
                   onClick={() => {

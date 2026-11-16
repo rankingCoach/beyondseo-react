@@ -71,7 +71,7 @@ export const EmailStep: React.FC<EmailStepProps> = ({
       footerStart={
         <Button
           type={ButtonTypes.secondary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           iconLeft={IconNames.arrowLeft}
           onClick={onBack}
           disabled={isSaving}
@@ -81,12 +81,12 @@ export const EmailStep: React.FC<EmailStepProps> = ({
       }
       footerEnd={
         <>
-          <Button type={ButtonTypes.default} size={ButtonSizes.medium} onClick={onNext} disabled={isSaving}>
+          <Button type={ButtonTypes.default} size={ButtonSizes.extraLarge} onClick={onNext} disabled={isSaving}>
             {__("Skip", "beyondseo")}
           </Button>
           <Button
             type={ButtonTypes.primary}
-            size={ButtonSizes.medium}
+            size={ButtonSizes.extraLarge}
             onClick={handleSave}
             isLoading={isSaving}
             disabled={isSaving}

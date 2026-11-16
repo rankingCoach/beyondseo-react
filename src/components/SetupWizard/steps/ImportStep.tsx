@@ -65,7 +65,7 @@ export const ImportStep: React.FC<ImportStepProps> = ({ sources, result, onImpor
       footerStart={
         <Button
           type={ButtonTypes.secondary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           iconLeft={IconNames.arrowLeft}
           onClick={onBack}
           disabled={isImporting}
@@ -76,18 +76,18 @@ export const ImportStep: React.FC<ImportStepProps> = ({ sources, result, onImpor
       footerEnd={
         <>
           <Render if={!result}>
-            <Button type={ButtonTypes.default} size={ButtonSizes.medium} onClick={onNext} disabled={isImporting}>
+            <Button type={ButtonTypes.default} size={ButtonSizes.extraLarge} onClick={onNext} disabled={isImporting}>
               {__("Continue without import", "beyondseo")}
             </Button>
           </Render>
           {result ? (
-            <Button type={ButtonTypes.primary} size={ButtonSizes.medium} onClick={onNext}>
+            <Button type={ButtonTypes.primary} size={ButtonSizes.extraLarge} onClick={onNext}>
               {__("Continue", "beyondseo")}
             </Button>
           ) : (
             <Button
               type={ButtonTypes.primary}
-              size={ButtonSizes.medium}
+              size={ButtonSizes.extraLarge}
               onClick={handleImport}
               isLoading={isImporting}
               disabled={isImporting || !selected}

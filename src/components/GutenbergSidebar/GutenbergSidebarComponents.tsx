@@ -71,7 +71,7 @@ export const SuggestionAccordionItem = (props: SuggestionAccordionItemProps) => 
         <Button
           type={ButtonTypes.default}
           iconLeft={isExpanded ? IconNames.caretUp : IconNames.caretDown}
-          size={ButtonSizes.small}
+          size={ButtonSizes.medium}
           onClick={(e) => {
             e.stopPropagation();
             handleContentItemExpand(suggestionKey, !isExpanded);
@@ -134,7 +134,7 @@ export const ContentAccordionItem = (props: ContentAccordionItemProps) => {
           <Button
             type={ButtonTypes.default}
             iconLeft={isExpanded ? IconNames.caretUp : IconNames.caretDown}
-            size={ButtonSizes.small}
+            size={ButtonSizes.medium}
             onClick={(e) => {
               e.stopPropagation();
               handleContentItemExpand(itemKey, !isExpanded);

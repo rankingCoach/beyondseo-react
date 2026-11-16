@@ -267,7 +267,7 @@ export const KeywordsTable = (props: KeywordsTableProps) => {
                     <Button
                       className={styles.swapButton}
                       testId={"cta-swap-button"}
-                      size={ButtonSizes.small}
+                      size={ButtonSizes.medium}
                       iconLeft={IconNames.queriesTarget}
                       iconSize={IconSize.small}
                       iconColor={"--n500"}
@@ -281,7 +281,7 @@ export const KeywordsTable = (props: KeywordsTableProps) => {
                   <Button
                     className={styles.deleteButton}
                     testId={"cta-remove-button"}
-                    size={ButtonSizes.small}
+                    size={ButtonSizes.medium}
                     iconLeft={IconNames.trash}
                     iconSize={IconSize.small}
                     iconColor={"--n500"}
