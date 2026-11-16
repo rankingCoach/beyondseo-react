@@ -1,6 +1,16 @@
 import React, { SyntheticEvent, useState, useEffect } from "react";
 import styles from "./RSSPage.module.scss";
-import { ComponentContainer, Switch, Text, TextTypes, FontWeights, Input, Button, ButtonTypes } from "vanguard";
+import {
+  ComponentContainer,
+  Switch,
+  Text,
+  TextTypes,
+  FontWeights,
+  Input,
+  Button,
+  ButtonTypes,
+  ButtonSizes,
+} from "vanguard";
 import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { RSSPagePlaceholder } from "./RSSPagePlaceholder";
 import { __ } from "@wordpress/i18n";
@@ -235,13 +245,19 @@ const RSSPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotice })
                   <Text type={TextTypes.text} className={styles.urlValue}>
                     {getFeedUrl()}
                   </Text>
-                  <Button type={ButtonTypes.secondary} onClick={handleOpenRSS} className={styles.openRssButton}>
+                  <Button
+                    size={ButtonSizes.extraLarge}
+                    type={ButtonTypes.secondary}
+                    onClick={handleOpenRSS}
+                    className={styles.openRssButton}
+                  >
                     {__("View RSS Feed", "beyondseo")}
                   </Button>
                 </div>
 
                 <div className={styles.buttonContainer}>
                   <Button
+                    size={ButtonSizes.extraLarge}
                     type={ButtonTypes.primary}
                     onClick={handleSave}
                     disabled={!validateContent(beforeContent) || !validateContent(afterContent) || isSaving}

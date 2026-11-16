@@ -183,7 +183,7 @@ export const OnboardingSummaryKeyword: React.FC<OnboardingSummaryKeywordProps> =
           </div>
           <Button
             type={ButtonTypes.primary}
-            size={ButtonSizes.large}
+            size={ButtonSizes.extraLarge}
             onClick={processAndAddKeywords}
             disabled={!newKeyword.trim() || newKeyword.trim().length < 3}
           >

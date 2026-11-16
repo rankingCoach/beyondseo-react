@@ -1,6 +1,16 @@
 import React, { SyntheticEvent, useState, useEffect } from "react";
 import styles from "./BreadcrumbsPage.module.scss";
-import { ComponentContainer, Switch, Text, TextTypes, FontWeights, Input, Button, ButtonTypes } from "vanguard";
+import {
+  ComponentContainer,
+  Switch,
+  Text,
+  TextTypes,
+  FontWeights,
+  Input,
+  Button,
+  ButtonTypes,
+  ButtonSizes,
+} from "vanguard";
 import { SeparatorSettings } from "./SeparatorSettings";
 import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { BreadcrumbPreview } from "./BreadcrumbPreview";
@@ -349,6 +359,7 @@ const BreadcrumbsPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewN
               </div>
               <div className={styles.buttonContainer}>
                 <Button
+                  size={ButtonSizes.extraLarge}
                   type={ButtonTypes.primary}
                   onClick={handleSave}
                   testId="save-breadcrumbs-settings"

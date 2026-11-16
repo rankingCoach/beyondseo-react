@@ -421,7 +421,7 @@ export const OnboardingWelcome = ({ isCompleted, currentStep, skipWelcomeScreen 
         <div className={classNames(styles.buttonComponent, styles.fadeInButton)}>
           <Button
             type={ButtonTypes.primary}
-            size={ButtonSizes.large}
+            size={ButtonSizes.extraLarge}
             iconRight={IconNames.arrowRight}
             onClick={handleStartClick}
           >

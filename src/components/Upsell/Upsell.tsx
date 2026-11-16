@@ -340,7 +340,7 @@ const UpsellContent = () => {
 
                 <Button
                     type={ButtonTypes.secondary}
-                    size={ButtonSizes.medium}
+                    size={ButtonSizes.extraLarge}
                     className={styles.heroButton}
                     onClick={isOnboardingCompleted ? scrollToLaunchOffer : handleActivateForFree}
                     isLoading={isOnboardingCompleted ? isLoading : false}
@@ -519,7 +519,7 @@ const UpsellContent = () => {
 
                                 <Button
                                     type={ButtonTypes.secondary}
-                                    size={ButtonSizes.medium}
+                                    size={ButtonSizes.extraLarge}
                                     className={styles.upgradeButton}
                                     onClick={handleUpgradeClick}
                                     isLoading={isLoading}
@@ -648,7 +648,7 @@ const UpsellContent = () => {
                             <div className={styles.legendCta}>
                                 <Button
                                     type={ButtonTypes.primary}
-                                    size={ButtonSizes.medium}
+                                    size={ButtonSizes.extraLarge}
                                     onClick={isOnboardingCompleted ? scrollToLaunchOffer : handleActivateForFree}
                                     isLoading={isOnboardingCompleted ? isLoading : false}
                                     disabled={isOnboardingCompleted ? isLoading : false}
@@ -725,7 +725,7 @@ const UpsellContent = () => {
 
                     <Button
                         type={ButtonTypes.secondary}
-                        size={ButtonSizes.small}
+                        size={ButtonSizes.medium}
                         className={styles.impactButton}
                         onClick={openContactModal}
                     >
@@ -837,7 +837,7 @@ const UpsellContent = () => {
 
                 <Button
                     type={ButtonTypes.secondary}
-                    size={ButtonSizes.medium}
+                    size={ButtonSizes.extraLarge}
                     iconRight={IconNames.arrowRight}
                     className={styles.salesButton}
                     onClick={openContactModal}
@@ -912,7 +912,7 @@ const UpsellContent = () => {
 
                             <Button
                                 type={ButtonTypes.secondary}
-                                size={ButtonSizes.medium}
+                                size={ButtonSizes.extraLarge}
                                 className={styles.upgradeButton}
                                 onClick={handleUpgradeClick}
                                 isLoading={isLoading}
@@ -952,7 +952,7 @@ const UpsellContent = () => {
 
                             <Button
                                 type={ButtonTypes.secondary}
-                                size={ButtonSizes.medium}
+                                size={ButtonSizes.extraLarge}
                                 className={styles.planButton}
                                 onClick={() => setIsContactModalOpen(true)}
                             >

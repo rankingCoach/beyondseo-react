@@ -8,7 +8,7 @@ import { getPathId } from "@helpers/get-path-id";
 import { LinkAssistantTable } from "./LinkAssistantTable";
 import { LinkAssistants } from "./types";
 import { __ } from "@wordpress/i18n";
-import { Button, ButtonTypes } from "vanguard";
+import { Button, ButtonTypes, ButtonSizes } from "vanguard";
 import tabStyles from "../Tabs.module.scss";
 import { useEffect, useState } from "react";
 
@@ -124,6 +124,7 @@ export const LinkAssistantTab = () => {
         </div>
 
         <Button
+          size={ButtonSizes.extraLarge}
           type={ButtonTypes.primary}
           onClick={handleScanLinks}
           isLoading={isScanning}

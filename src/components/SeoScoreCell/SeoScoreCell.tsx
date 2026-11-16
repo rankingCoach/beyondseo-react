@@ -428,7 +428,7 @@ export const SeoScoreCell = ({ postId, onDataLoaded, snippet: initialSnippet }: 
               <Popover message={__("Edit SEO title and description", "beyondseo")} position="top">
                 <Button
                   type={ButtonTypes.default}
-                  size={ButtonSizes.small}
+                  size={ButtonSizes.medium}
                   iconLeft={IconNames.edit}
                   className={styles.snippetEditButton}
                   onClick={handleTriggerClick}

@@ -246,7 +246,7 @@ export const ActionPlan: React.FC = () => {
           ) : (
             <Button
               type={ButtonTypes.secondary}
-              size={ButtonSizes.small}
+              size={ButtonSizes.medium}
               onClick={() => toggleFix(issue, kind)}
               disabled={actionsDisabled}
             >
@@ -255,7 +255,7 @@ export const ActionPlan: React.FC = () => {
           )}
           <Button
             type={ButtonTypes.default}
-            size={ButtonSizes.small}
+            size={ButtonSizes.medium}
             iconLeft={IconNames.refresh}
             onClick={() => recheck(issue.post.id)}
             isLoading={isBusy}
@@ -375,7 +375,7 @@ export const ActionPlan: React.FC = () => {
         <>
           <InfoBox type="danger" borderRadius={8} description={loadError || ""} />
           <div className={styles.toolbarActions}>
-            <Button type={ButtonTypes.secondary} size={ButtonSizes.medium} onClick={retryLoad}>
+            <Button type={ButtonTypes.secondary} size={ButtonSizes.extraLarge} onClick={retryLoad}>
               {__("Try again", "beyondseo")}
             </Button>
           </div>
@@ -394,13 +394,13 @@ export const ActionPlan: React.FC = () => {
             </Text>
             <div className={styles.toolbarActions}>
               <Render if={isChecking}>
-                <Button type={ButtonTypes.default} size={ButtonSizes.medium} onClick={cancelCheck}>
+                <Button type={ButtonTypes.default} size={ButtonSizes.extraLarge} onClick={cancelCheck}>
                   {__("Cancel", "beyondseo")}
                 </Button>
               </Render>
               <Button
                 type={plan.pagesChecked === 0 ? ButtonTypes.primary : ButtonTypes.secondary}
-                size={ButtonSizes.medium}
+                size={ButtonSizes.extraLarge}
                 iconLeft={IconNames.refresh}
                 onClick={checkAllPages}
                 isLoading={isChecking}

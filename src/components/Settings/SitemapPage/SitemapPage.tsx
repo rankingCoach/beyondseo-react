@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useState, useEffect } from "react";
 import styles from "./SitemapPage.module.scss";
-import { ComponentContainer, Switch, Text, TextTypes, FontWeights, Button, ButtonTypes } from "vanguard";
+import { ComponentContainer, Switch, Text, TextTypes, FontWeights, Button, ButtonTypes, ButtonSizes } from "vanguard";
 import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { SitemapPagePlaceholder } from "./SitemapPagePlaceholder";
 import { __ } from "@wordpress/i18n";
@@ -137,13 +137,14 @@ const SitemapPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ reviewNotic
                 <Text type={TextTypes.text} className={styles.urlValue}>
                   {sitemapUrl}
                 </Text>
-                <Button type={ButtonTypes.secondary} onClick={handleViewSitemap}>
+                <Button size={ButtonSizes.extraLarge} type={ButtonTypes.secondary} onClick={handleViewSitemap}>
                   {__("View Sitemap", "beyondseo")}
                 </Button>
               </div>
 
               <div className={styles.buttonContainer}>
                 <Button
+                  size={ButtonSizes.extraLarge}
                   type={ButtonTypes.primary}
                   onClick={handleSave}
                   testId="save-sitemap-settings"

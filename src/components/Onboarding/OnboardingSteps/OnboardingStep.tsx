@@ -201,7 +201,7 @@ export const OnboardingStep: React.FC<OnboardingStepProps> = ({
                 <Button
                   type={ButtonTypes.default}
                   iconRight={IconNames.send}
-                  size={ButtonSizes.medium}
+                  size={ButtonSizes.extraLarge}
                   iconSize={IconSize.large}
                   iconColor="--n500"
                   isLoading={isButtonLoading}

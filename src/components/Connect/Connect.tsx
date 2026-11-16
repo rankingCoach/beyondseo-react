@@ -119,7 +119,7 @@ export const Connect = () => {
 
         <Button
           type={ButtonTypes.secondary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           className={styles.heroButton}
           onClick={handleActivateForFree}
         >
@@ -209,7 +209,7 @@ export const Connect = () => {
 
             <Button
               type={ButtonTypes.secondary}
-              size={ButtonSizes.medium}
+              size={ButtonSizes.extraLarge}
               className={styles.activateButton}
               onClick={handleActivateForFree}
             >
@@ -309,7 +309,7 @@ export const Connect = () => {
 
           <Button
             type={ButtonTypes.secondary}
-            size={ButtonSizes.medium}
+            size={ButtonSizes.extraLarge}
             className={styles.finalCtaButton}
             onClick={handleActivateForFree}
           >

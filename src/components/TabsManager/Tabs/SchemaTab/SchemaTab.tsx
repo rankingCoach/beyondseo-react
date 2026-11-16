@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Button, classNames, ComponentContainer, FontWeights, Select, VanguardStyle } from "vanguard";
+import { Button, classNames, ComponentContainer, FontWeights, Select, VanguardStyle, ButtonSizes } from "vanguard";
 import { SeoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { getPathId } from "@helpers/get-path-id";
 import { RootState } from "@src/main.store";
@@ -165,6 +165,7 @@ export const SchemaTab = () => {
             )}
           >
             <Button
+              size={ButtonSizes.extraLarge}
               className={VanguardStyle.mb1}
               onClick={handleButtonClick}
               isLoading={isGenerating}
