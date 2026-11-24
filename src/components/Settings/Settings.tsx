@@ -5,6 +5,7 @@ import BreadcrumbsPage from "./BreadcrumbsPage/BreadcrumbsPage";
 import RSSPage from "./RSSPage/RSSPage";
 import SitemapPage from "./SitemapPage/SitemapPage";
 import RobotsPage from "./RobotsPage/RobotsPage";
+import WebmasterToolsPage from "./WebmasterToolsPage/WebmasterToolsPage";
 import GeneralSettingsPage from "./GeneralSettingsPage/GeneralSettingsPage";
 import { __ } from "@wordpress/i18n";
 import { useSelector, useDispatch } from "react-redux";
@@ -42,6 +43,7 @@ const sections: MenuItem[] = [
   },
   { id: "sitemap", label: __("Sitemap", "beyondseo"), icon: "sitemap", component: SitemapPage },
   { id: "robots", label: __("Robots.txt", "beyondseo"), icon: "robot", component: RobotsPage },
+  { id: "webmaster", label: __("Webmaster Tools", "beyondseo"), icon: "search", component: WebmasterToolsPage },
   { id: "account", label: __("Account", "beyondseo"), icon: "user", component: AccountPage },
 ];
 
