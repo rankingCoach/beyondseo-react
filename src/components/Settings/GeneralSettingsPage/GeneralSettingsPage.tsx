@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./GeneralSettingsPage.module.scss";
-import { Button, ButtonTypes, Text, TextTypes, FontWeights } from "vanguard";
+import { Button, ButtonTypes, Text, TextTypes, FontWeights, ButtonSizes } from "vanguard";
 import { __ } from "@wordpress/i18n";
 import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
@@ -111,13 +111,23 @@ const GeneralSettingsPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ rev
       <div className={styles.separator}></div>
       {!isOnboardingCompleted() && (
         <div className={styles.connectSection}>
-          <Button type={ButtonTypes.primary} onClick={redirectToConnectPage} testId="create-free-account-button">
+          <Button
+            size={ButtonSizes.extraLarge}
+            type={ButtonTypes.primary}
+            onClick={redirectToConnectPage}
+            testId="create-free-account-button"
+          >
             {__("Create a Free Account", "beyondseo")}
           </Button>
           <Text type={TextTypes.text} fontWeight={FontWeights.bold} className={styles.connectSectionDivider}>
             {__("OR", "beyondseo")}
           </Text>
-          <Button type={ButtonTypes.secondary} onClick={redirectToConnectPage} testId="connect-existing-account-button">
+          <Button
+            size={ButtonSizes.extraLarge}
+            type={ButtonTypes.secondary}
+            onClick={redirectToConnectPage}
+            testId="connect-existing-account-button"
+          >
             {__("Connect to an Existing Account", "beyondseo")}
           </Button>
         </div>

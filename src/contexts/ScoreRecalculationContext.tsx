@@ -4,6 +4,7 @@ import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { getPathId } from "@helpers/get-path-id";
 import { REVIEW_EDITOR_SCORE_THRESHOLD } from "@components/Review/ReviewState";
 import { OptimiserStore, type PostApiOptimiserByPostIdOpts } from "@stores/swagger/api/OptimiserStore";
+import { registerScoreRecalculationTrigger, setScoreRecalculationScheduled } from "@helpers/score-recalculation";
 
 type ReviewEditorQueryParams = PostApiOptimiserByPostIdOpts & { reviewContext?: "editor" };
 
@@ -18,8 +19,10 @@ type ReviewEditorResponse = {
 
 function getReviewEditorPostId() {
   const editor = typeof wp !== "undefined" ? wp.data?.select("core/editor") : undefined;
+  const editorPostId = Number(editor?.getCurrentPostId?.() ?? 0);
 
-  return editor ? Number(editor.getCurrentPostId()) : getPathId();
+  // a registered editor store without a post (classic editor with wp-editor enqueued) reports null
+  return editorPostId > 0 ? editorPostId : getPathId();
 }
 
 interface ScoreRecalculationEventDetail {
@@ -72,6 +75,13 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
   const reviewRequestRef = useRef<string | null>(null);
   const reviewPendingRecalculationRef = useRef<(() => void) | null>(null);
 
+  // Nothing pending anymore: the buttons in other roots stop showing "scheduled"
+  const settleSchedule = useCallback(() => {
+    if (!debounceTimeoutRef.current && !immediateTimeoutRef.current && !reviewPendingRecalculationRef.current) {
+      setScoreRecalculationScheduled(false);
+    }
+  }, []);
+
   const performRecalculation = useCallback(
     async (postId: number, href: string, revision: number, reviewInteractive: boolean): Promise<void> => {
       if (
@@ -81,8 +91,10 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
         revision !== reviewRevisionRef.current ||
         postId !== getReviewEditorPostId() ||
         href !== window.location.href
-      )
+      ) {
+        settleSchedule();
         return;
+      }
       if (reviewRequestRef.current) {
         reviewPendingRecalculationRef.current = () => {
           void performRecalculation(postId, href, revision, reviewInteractive);
@@ -112,6 +124,7 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
           }),
         );
         reviewRequestRef.current = request.requestId;
+        settleSchedule();
         const apiResponse = await request;
         if (
           !isCurrentReviewRequest() ||
@@ -168,7 +181,7 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
         pendingRecalculation?.();
       }
     },
-    [dispatch, onRecalculationStart, onRecalculationComplete],
+    [dispatch, onRecalculationStart, onRecalculationComplete, settleSchedule],
   );
 
   const triggerRecalculation = useCallback(
@@ -188,19 +201,25 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
       }
 
       if (immediate) {
-        // For immediate actions (save, keyword add/remove), short delay to ensure data is persisted
+        // Short delay so the save that triggered us is persisted before the analysis reads it
         immediateTimeoutRef.current = setTimeout(() => {
+          immediateTimeoutRef.current = null;
           performRecalculation(postId, href, revision, reviewInteractive).then((r) => r);
         }, 500);
       } else {
-        // For real-time changes (typing), longer debounce
+        // Debounced path kept for tab-level edits (meta title/description, advanced settings)
         debounceTimeoutRef.current = setTimeout(() => {
+          debounceTimeoutRef.current = null;
           performRecalculation(postId, href, revision, reviewInteractive).then((r) => r);
         }, 2000);
       }
+      setScoreRecalculationScheduled(true);
     },
     [performRecalculation],
   );
+
+  // Buttons in other React roots (editor header, Optimisation tab) reach the provider through this bus
+  useEffect(() => registerScoreRecalculationTrigger(() => triggerRecalculation(true)), [triggerRecalculation]);
 
   useEffect(() => {
     reviewMountedRef.current = true;
@@ -209,6 +228,7 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
     const invalidateReview = () => {
       ++reviewRevisionRef.current;
       reviewPendingRecalculationRef.current = null;
+      settleSchedule();
       setEditorReview(null);
       postId = getReviewEditorPostId();
       href = window.location.href;
@@ -226,6 +246,7 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
       reviewMountedRef.current = false;
       ++reviewRevisionRef.current;
       reviewPendingRecalculationRef.current = null;
+      setScoreRecalculationScheduled(false);
       unsubscribe?.();
       window.removeEventListener("popstate", invalidateReview);
       window.removeEventListener("pagehide", invalidateReview);
@@ -240,8 +261,7 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
       const { select, subscribe } = wp.data;
 
       let wasSaving = false;
-      let previousTitle = "";
-      let previousContent = "";
+      let wasAutosaving = false;
       let previousSlug = "";
       let currentPost: any = null;
 
@@ -257,18 +277,25 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
       initializeTracking();
 
       const unsubscribe = subscribe(() => {
-        const isSaving = select("core/editor")?.isSavingPost() ?? false;
-        const didSaveSucceed = select("core/editor")?.didPostSaveRequestSucceed();
-        const currentTitle = select("core/editor")?.getEditedPostAttribute("title") || "";
-        const currentContent = select("core/editor")?.getEditedPostContent() || "";
-        const currentSlug = select("core/editor")?.getEditedPostAttribute("slug") || "";
+        const editor = select("core/editor");
+        const isSaving = editor?.isSavingPost() ?? false;
+        const didSaveSucceed = editor?.didPostSaveRequestSucceed();
+        const currentSlug = editor?.getEditedPostAttribute("slug") || "";
 
-        // Trigger immediate recalculation on save
-        if (wasSaving && !isSaving && didSaveSucceed) {
-          triggerRecalculation(true);
+        // isAutosavingPost() is only true while the request runs; remember it for the tick that sees it end
+        if (isSaving && editor?.isAutosavingPost()) {
+          wasAutosaving = true;
         }
 
-        // Handle slug changes with immediate recalculation and event dispatch
+        // Recalculate after explicit saves only; autosaves fire while typing
+        if (wasSaving && !isSaving) {
+          if (didSaveSucceed && !wasAutosaving) {
+            triggerRecalculation(true);
+          }
+          wasAutosaving = false;
+        }
+
+        // Handle slug changes: SERPPreview rebuilds its URL from this event
         if (currentSlug !== previousSlug && previousSlug !== "") {
           // Calculate new URL
           let newUrl = "";
@@ -287,29 +314,10 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
             },
           });
           document.dispatchEvent(slugChangeEvent);
-
-          // Trigger immediate score recalculation
-          triggerRecalculation(true);
           previousSlug = currentSlug;
         } else if (previousSlug === "") {
           // Initialize slug tracking
           previousSlug = currentSlug;
-        }
-
-        // Trigger debounced recalculation on content changes
-        if (
-          currentTitle !== previousTitle
-          //|| currentContent !== previousContent
-        ) {
-          if (
-            previousTitle !== ""
-            //|| previousContent !== ""
-          ) {
-            // Skip initial load
-            triggerRecalculation(false);
-          }
-          previousTitle = currentTitle;
-          //previousContent = currentContent;
         }
 
         wasSaving = isSaving;
@@ -348,9 +356,6 @@ export const ScoreRecalculationProvider: React.FC<ScoreRecalculationProviderProp
               },
             });
             document.dispatchEvent(slugChangeEvent);
-
-            // Trigger immediate score recalculation
-            triggerRecalculation(true);
             previousSlug = newSlug;
           } else if (previousSlug === "") {
             previousSlug = newSlug;

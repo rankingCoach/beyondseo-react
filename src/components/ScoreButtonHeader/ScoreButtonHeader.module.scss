@@ -1,13 +1,22 @@
 @import "@src/styles/spacings";
 
+// One pill: the score on the left, the recalculate segment attached on the right when needed
+.pill {
+    display: inline-flex;
+    align-items: stretch;
+    height: 32px;
+    border-radius: $byte;
+    background: #e5efff;
+    overflow: hidden;
+}
+
 .scoreContainer {
     display: flex;
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    background: #e5efff;
     width: 90px;
-    border-radius: $byte;
+    height: 32px;
     flex-direction: row;
     gap: $byte;
 }

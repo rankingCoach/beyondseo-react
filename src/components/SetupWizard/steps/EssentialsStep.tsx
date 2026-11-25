@@ -278,7 +278,7 @@ export const EssentialsStep: React.FC<EssentialsStepProps> = ({
       footerStart={
         <Button
           type={ButtonTypes.secondary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           onClick={onExit}
           disabled={isLeaving || isSaving}
         >
@@ -288,7 +288,7 @@ export const EssentialsStep: React.FC<EssentialsStepProps> = ({
       footerEnd={
         <Button
           type={ButtonTypes.primary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           onClick={handleContinue}
           isLoading={isSaving}
           disabled={isSaving || isLeaving || isHomepageLoading}

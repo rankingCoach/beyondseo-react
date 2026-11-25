@@ -187,12 +187,12 @@ export const IssueFixPanel: React.FC<IssueFixPanelProps> = ({ post, kind, onSave
         <InfoBox type="danger" borderRadius={8} description={error || ""} />
       </Render>
       <div className={styles.fixPanelActions}>
-        <Button type={ButtonTypes.default} size={ButtonSizes.small} onClick={onClose} disabled={isSaving}>
+        <Button type={ButtonTypes.default} size={ButtonSizes.medium} onClick={onClose} disabled={isSaving}>
           {__("Cancel", "beyondseo")}
         </Button>
         <Button
           type={ButtonTypes.primary}
-          size={ButtonSizes.small}
+          size={ButtonSizes.medium}
           onClick={handleSave}
           isLoading={isSaving}
           disabled={isSaving || isLoading}

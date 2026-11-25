@@ -36,7 +36,7 @@ export const AdornmentControls = (props: AdornmentControlsProps) => {
               key={"variable"}
               onClick={(e:any) => onAddAdornment(e, "variable", variableConfig.options)}
               disabled={adornmentCount >= maxAdornments}
-              size={ButtonSizes.small}
+              size={ButtonSizes.medium}
               iconLeft={IconNames.add}
               type={ButtonTypes.secondary}
             >
@@ -48,7 +48,7 @@ export const AdornmentControls = (props: AdornmentControlsProps) => {
                 key={"separator"}
                 onClick={(e:any) => onAddAdornment(e, "separator", separatorConfig.options)}
                 disabled={adornmentCount >= maxAdornments}
-                size={ButtonSizes.small}
+                size={ButtonSizes.medium}
                 iconLeft={IconNames.add}
                 type={ButtonTypes.secondary}
                 >

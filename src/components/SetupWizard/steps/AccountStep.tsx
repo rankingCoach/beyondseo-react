@@ -53,7 +53,7 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
       footerStart={
         <Button
           type={ButtonTypes.secondary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           iconLeft={IconNames.arrowLeft}
           onClick={onBack}
           disabled={isFinishing}
@@ -64,7 +64,7 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
       footerEnd={
         <Button
           type={ButtonTypes.primary}
-          size={ButtonSizes.medium}
+          size={ButtonSizes.extraLarge}
           onClick={onFinish}
           isLoading={isFinishing}
           disabled={isFinishing}
@@ -147,7 +147,7 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
             <div className={styles.actions}>
               <Button
                 type={ButtonTypes.secondary}
-                size={ButtonSizes.medium}
+                size={ButtonSizes.extraLarge}
                 className={styles.connectButton}
                 onClick={() => onConnect(connectUrl)}
                 disabled={isFinishing}
@@ -159,7 +159,7 @@ export const AccountStep: React.FC<AccountStepProps> = ({ onBack, onFinish, onCo
               <Render if={emailRegistration}>
                 <Button
                   type={ButtonTypes.default}
-                  size={ButtonSizes.medium}
+                  size={ButtonSizes.extraLarge}
                   className={styles.loginButton}
                   onClick={() => onConnect(connectUrl)}
                   disabled={isFinishing}

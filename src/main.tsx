@@ -31,6 +31,7 @@ import { Onboarding } from "@src/components/Onboarding/Onboarding";
 import { Registration } from "@src/components/Registration/Registration";
 import { SEOOptimiser } from "@components/SEO/SEOOptimiser/SEOOptimiser";
 import { fetchPost, isUnsavedNewPost } from "@helpers/post-helpers";
+import { fetchPostListOptimiserScores } from "@helpers/post-list-optimiser";
 import { MetatagsStore } from "@stores/swagger/api/MetatagsStore";
 import { WPKeywordsAnalysis } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/ContentAnalysis/WPKeywordsAnalysis";
 import { SeoScoreCell } from "@components/SeoScoreCell/SeoScoreCell";
@@ -487,23 +488,31 @@ const MAX_SEO_SCORE_CELLS = 20;
  * Initializes the SeoScoreCell components for post list items
  * This function finds all post cell elements and renders the SeoScoreCell component in each one
  * Limited to MAX_SEO_SCORE_CELLS items for performance optimization
- * Components are loaded sequentially to prevent AJAX overload
  */
 export function initializePostCells() {
-  const renderPostCells = async () => {
+  const renderPostCells = () => {
     const postCellElements = document.querySelectorAll(".rc-react-postcell");
-    const elementsToRender = Array.from(postCellElements).slice(0, MAX_SEO_SCORE_CELLS);
+    const cellsToRender = Array.from(postCellElements)
+      .slice(0, MAX_SEO_SCORE_CELLS)
+      .map((div) => ({
+        div,
+        postId: parseInt(div.getAttribute("data-id") || "0"),
+      }))
+      .filter(({ postId }) => Number.isInteger(postId) && postId > 0);
 
-    // Render components sequentially, one at a time
-    for (const div of elementsToRender) {
-      await new Promise<void>((resolve) => {
-        const postId = parseInt(div.getAttribute("data-id") || "0");
-        // SEO title / description snippet rendered by PHP into the mount point's data attributes
-        const snippet = readSnippetFromElement(div as HTMLElement);
-        const SeoScoreCellWrapper = () => <SeoScoreCell postId={postId} snippet={snippet} onDataLoaded={resolve} />;
-        renderWithProviders(div, SeoScoreCellWrapper);
-      });
+    if (cellsToRender.length === 0) {
+      return;
     }
+
+    const scoreRequest = fetchPostListOptimiserScores(cellsToRender.map(({ postId }) => postId)).catch(
+      (): Record<number, unknown> => ({}),
+    );
+
+    cellsToRender.forEach(({ div, postId }) => {
+      const snippet = readSnippetFromElement(div as HTMLElement);
+      const SeoScoreCellWrapper = () => <SeoScoreCell postId={postId} snippet={snippet} scoreRequest={scoreRequest} />;
+      renderWithProviders(div, SeoScoreCellWrapper);
+    });
   };
 
   if (document.readyState === "complete" || document.readyState === "interactive") {

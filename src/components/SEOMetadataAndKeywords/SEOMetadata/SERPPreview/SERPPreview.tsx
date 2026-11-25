@@ -14,11 +14,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "@src/main.store";
 import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { AppSlice } from "@src/App.slice";
-import { useSlugChangeRecalculation } from "@hooks/use-slug-change-recalculation";
+import { useScoreRecalculation } from "@contexts/ScoreRecalculationContext";
 import { WPWebPageKeywordsMetaTag } from "@models/swagger/BeyondSEO/Domain/Integrations/WordPress/Seo/Entities/WebPages/Content/Elements/MetaTags/Tags/WPWebPageKeywordsMetaTag";
 import { Text } from "vanguard";
 import { SeoStore } from "@src/stores/swagger/rankingcoach/SeoStore";
-import {__} from "@wordpress/i18n";
+import { __ } from "@wordpress/i18n";
 
 interface SERPPreviewProps {
   title?: string | null;
@@ -72,8 +72,7 @@ export const SERPPreview = (props: SERPPreviewProps) => {
   const [separator, setSeparator] = useState<string>("|");
   const dispatch = useAppDispatch();
 
-  // Integrate slug change recalculation
-  const { isRecalculating } = useSlugChangeRecalculation();
+  const { isRecalculating } = useScoreRecalculation();
 
   // Handle preview mode changes
   const handlePreviewModeChange = (mode: "desktop" | "tablet") => {
@@ -149,7 +148,7 @@ export const SERPPreview = (props: SERPPreviewProps) => {
   return (
     <Render if={isMetaTagsDataLoaded}>
       <ComponentContainer testId={"serp-preview-container"} className={styles.serpPreviewContainer}>
-        <Text fontWeight={FontWeights.bold}>{__("SERP Preview", 'beyondseo')}</Text>
+        <Text fontWeight={FontWeights.bold}>{__("SERP Preview", "beyondseo")}</Text>
 
         <div className={classNames(styles.serpPreviewBreakpoints, VanguardStyle.dFlex, VanguardStyle.gap1)}>
           {/* Desktop Icon */}

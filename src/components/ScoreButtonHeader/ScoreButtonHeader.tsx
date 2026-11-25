@@ -5,12 +5,13 @@ import { RootState } from "../../main.store";
 import { ComponentContainer, Text, FontWeights } from "vanguard";
 import rCLogoBlue from "@assets/rc-logo-blue.svg";
 import { ScoreButtonHeaderPlaceholder } from "./ScoreButtonHeaderPlaceholder";
+import { RecalculateScoreButton } from "@components/RecalculateScoreButton/RecalculateScoreButton";
 import { __ } from "@wordpress/i18n";
 
-export interface ScoreButtonHeaderProps { }
+export interface ScoreButtonHeaderProps {}
 
 export const ScoreButtonHeader = (props: ScoreButtonHeaderProps) => {
-  const { } = props;
+  const {} = props;
   const [score, setScore] = useState<number | null>(null);
   const optimiserResult = useSelector((state: RootState) => state.app.optimiserResult);
 
@@ -27,13 +28,14 @@ export const ScoreButtonHeader = (props: ScoreButtonHeaderProps) => {
   }
 
   return (
-    <>
+    <div className={styles.pill}>
       <ComponentContainer id="score-button-header" className={styles.scoreContainer}>
         <img src={rCLogoBlue} alt={__("rC Icon", "beyondseo")} className={styles.icon} />
         <Text fontSize={14} fontWeight={FontWeights.medium}>
           {score}/100
         </Text>
       </ComponentContainer>
-    </>
+      <RecalculateScoreButton variant="icon" />
+    </div>
   );
 };

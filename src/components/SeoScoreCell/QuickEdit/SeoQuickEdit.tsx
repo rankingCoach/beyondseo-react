@@ -426,7 +426,7 @@ export const SeoQuickEdit = forwardRef<SeoQuickEditHandle, SeoQuickEditProps>(
           <div className={styles.actions}>
             <Button
               type={ButtonTypes.secondary}
-              size={ButtonSizes.small}
+              size={ButtonSizes.medium}
               onClick={onClose}
               disabled={isSaving}
               testId="rc-quick-edit-cancel"
@@ -435,7 +435,7 @@ export const SeoQuickEdit = forwardRef<SeoQuickEditHandle, SeoQuickEditProps>(
             </Button>
             <Button
               type={ButtonTypes.primary}
-              size={ButtonSizes.small}
+              size={ButtonSizes.medium}
               onClick={() => void saveAndClose()}
               disabled={!isDirty || isSaving}
               isLoading={isSaving}

@@ -291,7 +291,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
           <>
             <Button
               type={ButtonTypes.secondary}
-              size={ButtonSizes.medium}
+              size={ButtonSizes.extraLarge}
               iconLeft={IconNames.arrowLeft}
               onClick={() => {
                 window.location.href = REGISTRATION_URL;
@@ -303,7 +303,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
             </Button>
             <Button
               type={ButtonTypes.primary}
-              size={ButtonSizes.medium}
+              size={ButtonSizes.extraLarge}
               onClick={handleSubmit}
               disabled={!commOptIn || isLoading}
               isLoading={isLoading}
@@ -317,7 +317,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
         {view === "error" && (
           <Button
             type={ButtonTypes.secondary}
-            size={ButtonSizes.medium}
+            size={ButtonSizes.extraLarge}
             iconLeft={IconNames.arrowLeft}
             onClick={() => setView(previousView)}
             className={styles.backButton}
@@ -329,7 +329,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
         {view === "success" && (
           <Button
             type={ButtonTypes.primary}
-            size={ButtonSizes.medium}
+            size={ButtonSizes.extraLarge}
             onClick={() => {
               window.location.href = ONBOARDING_URL;
             }}
@@ -342,7 +342,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
           <>
             <Button
               type={ButtonTypes.secondary}
-              size={ButtonSizes.medium}
+              size={ButtonSizes.extraLarge}
               iconLeft={IconNames.arrowLeft}
               onClick={() => setView("form")}
               className={styles.backButton}
@@ -352,7 +352,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
             </Button>
             <Button
               type={ButtonTypes.primary}
-              size={ButtonSizes.medium}
+              size={ButtonSizes.extraLarge}
               onClick={handleRecoverSubmit}
               disabled={isRecovering || recoverEmail.trim() === ""}
               isLoading={isRecovering}
@@ -364,7 +364,7 @@ export const Activation: React.FC<ActivationProps> = ({ isPluginLoading }) => {
         )}
 
         {view === "recoverSuccess" && (
-          <Button type={ButtonTypes.primary} size={ButtonSizes.medium} onClick={() => setView("form")}>
+          <Button type={ButtonTypes.primary} size={ButtonSizes.extraLarge} onClick={() => setView("form")}>
             {__("Enter activation code", "beyondseo")}
           </Button>
         )}

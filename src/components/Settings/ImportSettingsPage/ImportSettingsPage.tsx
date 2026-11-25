@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ImportSettingsPage.module.scss";
-import { ComponentContainer, Text, TextTypes, Link, FontWeights, Button, ButtonTypes } from "vanguard";
+import { ComponentContainer, Text, TextTypes, Link, FontWeights, Button, ButtonTypes, ButtonSizes } from "vanguard";
 import { ImportSettingsPagePlaceholder } from "./ImportSettingsPagePlaceholder";
 import { __ } from "@wordpress/i18n";
 
@@ -108,6 +108,7 @@ const ImportSettingsPage: React.FC<ImportSettingsPageProps> = ({ comingSoon }) =
           </div>
           <div className={styles.buttonContainer}>
             <Button
+              size={ButtonSizes.extraLarge}
               type={ButtonTypes.primary}
               onClick={handleImport}
               testId="import-settings-button"

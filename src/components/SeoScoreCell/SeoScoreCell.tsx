@@ -45,9 +45,8 @@ interface FactorSuggestion {
 
 export interface SeoScoreCellProps {
   postId: number;
-  onDataLoaded?: () => void;
-  /** Search snippet passed by PHP through the mount point's data attributes. */
   snippet?: SeoSnippetData;
+  scoreRequest?: Promise<Record<number, unknown>>;
 }
 
 interface AnalysisResult {
@@ -58,6 +57,7 @@ interface AnalysisResult {
       factors: {
         elements: Array<{
           factorName: string;
+          status?: string;
           description?: string;
           suggestions?: {
             elements: FactorSuggestion[];
@@ -69,6 +69,18 @@ interface AnalysisResult {
   topSuggestions?: {
     elements: FactorSuggestion[];
   };
+  totalSuggestionsCount?: number;
+}
+
+interface PostListCheck {
+  title: string;
+  isGood: boolean;
+}
+
+interface PostListOptimiserResult {
+  score: number;
+  recommendationCount: number;
+  checks: PostListCheck[];
 }
 
 /** How long the "Saved" confirmation stays visible next to the score. */
@@ -106,12 +118,22 @@ const isValidAnalysisResult = (result: any): result is AnalysisResult => {
   );
 };
 
+const isValidPostListResult = (result: any): result is PostListOptimiserResult => {
+  return (
+    result &&
+    typeof result.score === "number" &&
+    typeof result.recommendationCount === "number" &&
+    Array.isArray(result.checks) &&
+    result.checks.every((check: any) => check && typeof check.title === "string" && typeof check.isGood === "boolean")
+  );
+};
+
 /**
  * Assistant cell of the posts/pages list: optimisation score with the
  * recommendations popup, the current SEO title / meta description, and the
  * quick editor to change both without opening the post.
  */
-export const SeoScoreCell = ({ postId, onDataLoaded, snippet: initialSnippet }: SeoScoreCellProps) => {
+export const SeoScoreCell = ({ postId, scoreRequest, snippet: initialSnippet }: SeoScoreCellProps) => {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
   const [score, setScore] = useState(0);
@@ -121,7 +143,7 @@ export const SeoScoreCell = ({ postId, onDataLoaded, snippet: initialSnippet }: 
   const [badgeIcon, setBadgeIcon] = useState(cellWidgetSuccessURL);
   const [badgeValue, setBadgeValue] = useState("0");
   const [iconUrl] = useState(rcIconManageProjectsURL);
-  const [recommendations, setRecommendations] = useState<FactorSuggestion[]>([]);
+  const [recommendations, setRecommendations] = useState<PostListCheck[]>([]);
 
   const [snippet, setSnippet] = useState<SeoSnippetData | undefined>(initialSnippet);
   const [isEditing, setIsEditing] = useState(false);
@@ -149,14 +171,29 @@ export const SeoScoreCell = ({ postId, onDataLoaded, snippet: initialSnippet }: 
     const calculatedScore = calculateScore(analysisResult.score);
     setScore(calculatedScore);
 
-    // Process suggestions/issues
-    const suggestions = analysisResult.topSuggestions?.elements || [];
-    setRecommendations(suggestions);
+    const checks = analysisResult.contexts.elements
+      .flatMap((context) => context.factors?.elements || [])
+      .filter((factor) => factor.factorName)
+      .slice(0, 4)
+      .map((factor) => ({
+        title: factor.factorName,
+        isGood: factor.status === "completed",
+      }));
+    setRecommendations(checks);
 
-    // Set badge properties using helper function
-    const hasIssues = suggestions.length > 0;
-    const badgeConfig = getBadgeConfig(hasIssues, suggestions.length);
+    const recommendationCount =
+      analysisResult.totalSuggestionsCount ?? analysisResult.topSuggestions?.elements.length ?? 0;
+    const badgeConfig = getBadgeConfig(recommendationCount > 0, recommendationCount);
+    setBadgeClass(badgeConfig.badgeClass);
+    setBadgeIcon(badgeConfig.badgeIcon || cellWidgetSuccessURL);
+    setBadgeValue(badgeConfig.badgeValue);
+  };
 
+  const processPostListResult = (result: PostListOptimiserResult) => {
+    setScore(result.score);
+    setRecommendations(result.checks.slice(0, 4));
+
+    const badgeConfig = getBadgeConfig(result.recommendationCount > 0, result.recommendationCount);
     setBadgeClass(badgeConfig.badgeClass);
     setBadgeIcon(badgeConfig.badgeIcon || cellWidgetSuccessURL);
     setBadgeValue(badgeConfig.badgeValue);
@@ -235,15 +272,42 @@ export const SeoScoreCell = ({ postId, onDataLoaded, snippet: initialSnippet }: 
   };
 
   useEffect(() => {
-    loadScore();
-  }, [postId]);
-
-  // Notify parent when data loading is complete
-  useEffect(() => {
-    if (!isLoading && onDataLoaded) {
-      onDataLoaded();
+    if (!scoreRequest) {
+      loadScore();
+      return;
     }
-  }, [isLoading, onDataLoaded]);
+
+    let isMounted = true;
+
+    scoreRequest
+      .then((results) => {
+        if (!isMounted) {
+          return;
+        }
+
+        const postListResult = results[postId];
+        if (isValidPostListResult(postListResult)) {
+          processPostListResult(postListResult);
+        } else {
+          resetBadge();
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          resetBadge();
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoading(false);
+          setIsRefreshingScore(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [postId, scoreRequest]);
 
   useEffect(() => {
     return () => {
@@ -337,8 +401,8 @@ export const SeoScoreCell = ({ postId, onDataLoaded, snippet: initialSnippet }: 
                     {recommendations.slice(0, 4).map((item, index) => (
                       <TextIcon
                         key={index}
-                        icon={IconNames.check}
-                        iconColor={"#379683"}
+                        icon={item.isGood ? IconNames.check : IconNames.close}
+                        iconColor={item.isGood ? "#379683" : "#d14b4b"}
                         verticalAlign="start"
                         iconSize={IconSize.small}
                         className={styles.iconText}
@@ -428,7 +492,7 @@ export const SeoScoreCell = ({ postId, onDataLoaded, snippet: initialSnippet }: 
               <Popover message={__("Edit SEO title and description", "beyondseo")} position="top">
                 <Button
                   type={ButtonTypes.default}
-                  size={ButtonSizes.small}
+                  size={ButtonSizes.medium}
                   iconLeft={IconNames.edit}
                   className={styles.snippetEditButton}
                   onClick={handleTriggerClick}

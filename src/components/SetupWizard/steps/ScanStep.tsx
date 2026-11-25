@@ -280,7 +280,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
           ) : (
             <Button
               type={ButtonTypes.secondary}
-              size={ButtonSizes.small}
+              size={ButtonSizes.medium}
               onClick={() => setOpenFix(isOpen ? null : { post: page.post, issueType: check.issueType, kind })}
             >
               {fixActionLabel(kind)}
@@ -288,7 +288,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
           )}
           <Button
             type={ButtonTypes.default}
-            size={ButtonSizes.small}
+            size={ButtonSizes.medium}
             iconLeft={IconNames.refresh}
             onClick={() => recheck(page)}
             isLoading={recheckingId === page.post.id}
@@ -358,7 +358,7 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
             {affected ? (
               <Button
                 type={ButtonTypes.default}
-                size={ButtonSizes.small}
+                size={ButtonSizes.medium}
                 iconRight={isOpen ? IconNames.caretUp : IconNames.caretDown}
                 onClick={() => toggleCheck(check.issueType)}
                 aria-expanded={isOpen}
@@ -554,13 +554,13 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
     <StepLayout
       footerStart={
         isRunning ? (
-          <Button type={ButtonTypes.secondary} size={ButtonSizes.medium} onClick={cancel}>
+          <Button type={ButtonTypes.secondary} size={ButtonSizes.extraLarge} onClick={cancel}>
             {__("Cancel", "beyondseo")}
           </Button>
         ) : (
           <Button
             type={ButtonTypes.secondary}
-            size={ButtonSizes.medium}
+            size={ButtonSizes.extraLarge}
             iconLeft={IconNames.arrowLeft}
             onClick={onBack}
           >
@@ -571,18 +571,18 @@ export const ScanStep: React.FC<ScanStepProps> = ({ snapshot, onSnapshot, onBack
       footerEnd={
         <>
           <Render if={canRerun}>
-            <Button type={ButtonTypes.secondary} size={ButtonSizes.medium} onClick={start}>
+            <Button type={ButtonTypes.secondary} size={ButtonSizes.extraLarge} onClick={start}>
               {snapshot?.outcome === "error" ? __("Retry scan", "beyondseo") : __("Run scan again", "beyondseo")}
             </Button>
           </Render>
           {phase === "done" ? (
-            <Button type={ButtonTypes.primary} size={ButtonSizes.medium} onClick={onNext}>
+            <Button type={ButtonTypes.primary} size={ButtonSizes.extraLarge} onClick={onNext}>
               {__("Continue", "beyondseo")}
             </Button>
           ) : (
             <Button
               type={ButtonTypes.primary}
-              size={ButtonSizes.medium}
+              size={ButtonSizes.extraLarge}
               onClick={start}
               isLoading={isRunning}
               disabled={isRunning}

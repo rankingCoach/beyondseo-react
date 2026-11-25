@@ -1,5 +1,15 @@
 import React, { useEffect, useId, useRef, useState } from "react";
-import { Button, ButtonTypes, ComponentContainer, EditModal, FontWeights, Skeleton, Text, TextTypes } from "vanguard";
+import {
+  Button,
+  ButtonTypes,
+  ComponentContainer,
+  EditModal,
+  FontWeights,
+  Skeleton,
+  Text,
+  TextTypes,
+  ButtonSizes,
+} from "vanguard";
 import { __ } from "@wordpress/i18n";
 import { AdminPage, getAdminPageUrl, getPluginRestUrl, getRestNonce } from "@helpers/internal-links";
 import { redirectToConnectPage } from "@helpers/onboarding-helpers";
@@ -556,6 +566,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
         {(loadError || actionError || needsRefresh || (!project && !isLoading)) && (
           <div className={styles.actions}>
             <Button
+              size={ButtonSizes.extraLarge}
               type={ButtonTypes.secondary}
               disabled={isLoading || isDeleting || isCreating}
               onClick={refresh}
@@ -609,6 +620,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
             {projectCreated && (
               <div className={styles.actions}>
                 <Button
+                  size={ButtonSizes.extraLarge}
                   type={ButtonTypes.primary}
                   disabled={disabled}
                   onClick={() => {
@@ -634,6 +646,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
                 </Text>
                 <div className={styles.actions}>
                   <Button
+                    size={ButtonSizes.extraLarge}
                     type={ButtonTypes.secondary}
                     className={styles.deleteButton}
                     disabled={disabled}
@@ -663,6 +676,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
                 </Text>
                 <div className={styles.actions}>
                   <Button
+                    size={ButtonSizes.extraLarge}
                     type={ButtonTypes.primary}
                     disabled={disabled}
                     onClick={handleCreate}
@@ -690,6 +704,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
                 </Text>
                 <div className={styles.actions}>
                   <Button
+                    size={ButtonSizes.extraLarge}
                     type={ButtonTypes.primary}
                     disabled={disabled}
                     onClick={redirectToConnectPage}

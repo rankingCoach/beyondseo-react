@@ -386,14 +386,14 @@ export const RedirectsTab: React.FC<RedirectsTabProps> = () => {
                           <Button
                             iconLeft={IconNames.edit}
                             type={ButtonTypes.secondary}
-                            size={ButtonSizes.small}
+                            size={ButtonSizes.medium}
                             className={styles.editButton}
                             onClick={() => handleEditClick(redirect)}
                           />
                           <Button
                             iconLeft={IconNames.trash}
                             type={ButtonTypes.secondary}
-                            size={ButtonSizes.small}
+                            size={ButtonSizes.medium}
                             onClick={(e:any) => handleDeleteRedirect(redirect, e)}
                           />
                         </div>
@@ -513,12 +513,12 @@ export const RedirectsTab: React.FC<RedirectsTabProps> = () => {
               )}
 
               <div className={styles.buttonRow}>
-                <Button onClick={handleAddOrUpdateRedirect} isLoading={isSubmitting}>
+                <Button size={ButtonSizes.extraLarge} onClick={handleAddOrUpdateRedirect} isLoading={isSubmitting}>
                   {editMode ? __("Update Redirect", "beyondseo") : __("Add Redirect", "beyondseo")}
                 </Button>
 
                 {editMode && (
-                  <Button onClick={cancelEdit} type={ButtonTypes.secondary}>
+                  <Button size={ButtonSizes.extraLarge} onClick={cancelEdit} type={ButtonTypes.secondary}>
                     {__("Cancel", "beyondseo")}
                   </Button>
                 )}

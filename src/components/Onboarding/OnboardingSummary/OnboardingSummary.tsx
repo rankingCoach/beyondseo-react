@@ -732,7 +732,7 @@ export const OnboardingSummary: React.FC<OnboardingSummaryProps> = ({
         <ComponentContainer
           className={classNames(VanguardStyle.dFlex, VanguardStyle.justifyContentEnd, VanguardStyle.gap8)}
         >
-          <Button type={ButtonTypes.secondary} size={ButtonSizes.medium} onClick={onCancel} disabled={isFinishing}>
+          <Button type={ButtonTypes.secondary} size={ButtonSizes.extraLarge} onClick={onCancel} disabled={isFinishing}>
             {__("Cancel", "beyondseo")}
           </Button>
           <div>
@@ -743,7 +743,7 @@ export const OnboardingSummary: React.FC<OnboardingSummaryProps> = ({
               <div>
                 <Button
                   type={ButtonTypes.primary}
-                  size={ButtonSizes.medium}
+                  size={ButtonSizes.extraLarge}
                   iconRight={IconNames.arrowRight}
                   onClick={handleFinish}
                   disabled={!isFormValid() || isFinishing}
