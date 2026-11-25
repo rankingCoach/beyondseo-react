@@ -23,19 +23,19 @@ export const ScoreButtonHeader = (props: ScoreButtonHeaderProps) => {
     }
   }, [optimiserResult]);
 
+  if (typeof score !== "number") {
+    return <ScoreButtonHeaderPlaceholder />;
+  }
+
   return (
-    <div className={styles.headerGroup}>
-      {typeof score !== "number" ? (
-        <ScoreButtonHeaderPlaceholder />
-      ) : (
-        <ComponentContainer id="score-button-header" className={styles.scoreContainer}>
-          <img src={rCLogoBlue} alt={__("rC Icon", "beyondseo")} className={styles.icon} />
-          <Text fontSize={14} fontWeight={FontWeights.medium}>
-            {score}/100
-          </Text>
-        </ComponentContainer>
-      )}
-      <RecalculateScoreButton />
+    <div className={styles.pill}>
+      <ComponentContainer id="score-button-header" className={styles.scoreContainer}>
+        <img src={rCLogoBlue} alt={__("rC Icon", "beyondseo")} className={styles.icon} />
+        <Text fontSize={14} fontWeight={FontWeights.medium}>
+          {score}/100
+        </Text>
+      </ComponentContainer>
+      <RecalculateScoreButton variant="icon" />
     </div>
   );
 };

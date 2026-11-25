@@ -1,9 +1,13 @@
 @import "@src/styles/spacings";
 
-.headerGroup {
-    display: flex;
-    align-items: center;
-    gap: $byte;
+// One pill: the score on the left, the recalculate segment attached on the right when needed
+.pill {
+    display: inline-flex;
+    align-items: stretch;
+    height: 32px;
+    border-radius: $byte;
+    background: #e5efff;
+    overflow: hidden;
 }
 
 .scoreContainer {
@@ -11,10 +15,8 @@
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    background: #e5efff;
     width: 90px;
     height: 32px;
-    border-radius: $byte;
     flex-direction: row;
     gap: $byte;
 }

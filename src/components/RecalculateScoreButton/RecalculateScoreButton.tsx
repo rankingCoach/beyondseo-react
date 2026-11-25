@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { __ } from "@wordpress/i18n";
-import { Button, ButtonSizes, ButtonTypes, classNames, IconNames } from "vanguard";
+import { Button, ButtonSizes, ButtonTypes, classNames, Icon, IconNames, IconSize } from "vanguard";
 import { RootState } from "@src/main.store";
 import { isUnsavedNewPost } from "@helpers/post-helpers";
 import {
@@ -80,12 +80,15 @@ const waitForSaveToSettle = (): Promise<void> =>
 
 export interface RecalculateScoreButtonProps {
   className?: string;
+  /** "icon": a wordless segment for the score pill, shown only while there is something to save or in progress */
+  variant?: "button" | "icon";
   size?: ButtonSizes;
   testId?: string;
 }
 
 export const RecalculateScoreButton: React.FC<RecalculateScoreButtonProps> = ({
   className,
+  variant = "button",
   size = ButtonSizes.small,
   testId = "rc-recalculate-score-button",
 }) => {
@@ -111,6 +114,10 @@ export const RecalculateScoreButton: React.FC<RecalculateScoreButtonProps> = ({
   const isSaving = savingFromButton || saving;
   const busy = isSaving || scheduled || isRecalculatingScore;
   const needsSave = isSaving || (blockEditor && dirty);
+  const compact = variant === "icon";
+
+  if (compact && !needsSave && !busy) return null;
+
   // While busy the loading state already ignores clicks; staying enabled keeps keyboard focus on the button
   const disabled = !busy && (dirty ? !saveable || locked : unsavedNew);
 
@@ -120,11 +127,16 @@ export const RecalculateScoreButton: React.FC<RecalculateScoreButtonProps> = ({
       : __("Save & recalculate", "beyondseo")
     : __("Recalculate", "beyondseo");
   const label = isSaving ? __("Saving…", "beyondseo") : busy ? __("Recalculating…", "beyondseo") : idleLabel;
-  const title = needsSave
+  const idleTitle = needsSave
     ? published
-      ? __("Updates the live post and refreshes the SEO score", "beyondseo")
-      : __("Saves your changes and refreshes the SEO score", "beyondseo")
-    : __("Refreshes the SEO score of the saved content", "beyondseo");
+      ? __("Update the post and recalculate the SEO score", "beyondseo")
+      : __("Save your changes and recalculate the SEO score", "beyondseo")
+    : __("Recalculate the SEO score of the saved content", "beyondseo");
+  const title = isSaving
+    ? __("Saving your changes…", "beyondseo")
+    : busy
+      ? __("Recalculating the SEO score…", "beyondseo")
+      : idleTitle;
 
   const handleClick = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -142,6 +154,25 @@ export const RecalculateScoreButton: React.FC<RecalculateScoreButtonProps> = ({
     }
     requestScoreRecalculation();
   };
+
+  if (compact) {
+    return (
+      <button
+        type="button"
+        className={classNames(styles.iconButton, busy && styles.busy, className)}
+        title={title}
+        aria-label={title}
+        aria-busy={busy || undefined}
+        disabled={disabled}
+        onClick={handleClick}
+        data-testid={testId}
+      >
+        <Icon type={IconSize.small} color="var(--p500)" spin={busy}>
+          {IconNames.refresh}
+        </Icon>
+      </button>
+    );
+  }
 
   return (
     <span className={styles.wrapper} title={title} aria-busy={busy || undefined}>
