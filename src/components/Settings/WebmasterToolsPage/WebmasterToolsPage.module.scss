@@ -1,0 +1,57 @@
+.title {
+    margin-bottom: 1rem;
+}
+
+.description {
+    max-width: 800px;
+    line-height: 1.5;
+    color: #646970;
+
+    @media screen and (width <= 782px) {
+        max-width: 100%;
+        font-size: 14px;
+    }
+
+    @media screen and (width <= 480px) {
+        font-size: 13px;
+    }
+}
+
+.separator {
+    margin: 2rem 0;
+    border-bottom: 1px solid #e9ecef;
+
+    @media screen and (width <= 782px) {
+        margin: 1.5rem 0;
+    }
+}
+
+.settingsColumn {
+    max-width: 60%;
+
+    @media screen and (width <= 960px) {
+        max-width: 80%;
+    }
+
+    @media screen and (width <= 782px) {
+        max-width: 100%;
+    }
+}
+
+.codeInput {
+    margin-bottom: 1.5rem;
+}
+
+.helpLink {
+    display: inline-block;
+    margin-top: 0.25rem;
+}
+
+.note {
+    margin-bottom: 2rem;
+    color: #646970;
+}
+
+.buttonContainer {
+    margin-top: 1rem;
+}
