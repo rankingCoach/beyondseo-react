@@ -65,6 +65,7 @@ export type AppSliceType = {
 
   // Optimiser Result
   optimiserResult: OptimiserResult | null;
+  pendingScoreRecalculations: number;
 
   // Breadcrumbs
   breadcrumbsData: any | null;
@@ -127,6 +128,7 @@ const initialState: AppSliceType = {
 
   //
   optimiserResult: null,
+  pendingScoreRecalculations: 0,
 
   // Breadcrumbs
   breadcrumbsData: null,
@@ -374,11 +376,24 @@ const appSlice = createSlice({
     // the store at `null` for it so the UI shows its empty state rather than a 0% score.
     const analyzedResultOrNull = (result: OptimiserResult | null | undefined): OptimiserResult | null =>
       result && result.analyzedAt ? result : null;
+    // A slow GET (first analysis on load) may resolve after a later POST; never replace a newer result
+    const keepNewerResult = (state: AppSliceType, incoming: OptimiserResult | null) => {
+      const current = state.optimiserResult;
+      if (current?.analyzedAt && incoming?.analyzedAt && incoming.analyzedAt < current.analyzedAt) return;
+      state.optimiserResult = incoming;
+    };
     builder.addCase(OptimiserStore.getApiOptimiserByPostIdThunk.fulfilled, (state, action) => {
-      state.optimiserResult = analyzedResultOrNull(action.payload.analyseResult);
+      keepNewerResult(state, analyzedResultOrNull(action.payload.analyseResult));
+    });
+    builder.addCase(OptimiserStore.postApiOptimiserByPostIdThunk.pending, (state) => {
+      state.pendingScoreRecalculations += 1;
     });
     builder.addCase(OptimiserStore.postApiOptimiserByPostIdThunk.fulfilled, (state, action) => {
-      state.optimiserResult = analyzedResultOrNull(action.payload.analyseResult);
+      keepNewerResult(state, analyzedResultOrNull(action.payload.analyseResult));
+      state.pendingScoreRecalculations = Math.max(0, state.pendingScoreRecalculations - 1);
+    });
+    builder.addCase(OptimiserStore.postApiOptimiserByPostIdThunk.rejected, (state) => {
+      state.pendingScoreRecalculations = Math.max(0, state.pendingScoreRecalculations - 1);
     });
 
     // Onboarding Generate Steps

@@ -1,5 +1,11 @@
 @import "@src/styles/spacings";
 
+.headerGroup {
+    display: flex;
+    align-items: center;
+    gap: $byte;
+}
+
 .scoreContainer {
     display: flex;
     cursor: pointer;
@@ -7,6 +13,7 @@
     justify-content: center;
     background: #e5efff;
     width: 90px;
+    height: 32px;
     border-radius: $byte;
     flex-direction: row;
     gap: $byte;

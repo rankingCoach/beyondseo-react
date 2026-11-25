@@ -8,6 +8,7 @@ import { useAppDispatch } from "@hooks/use-app-dispatch";
 import { OptimiserStore } from "@src/stores/swagger/api/OptimiserStore";
 import { getPathId } from "@helpers/get-path-id";
 import { isUnsavedNewPost } from "@helpers/post-helpers";
+import { RecalculateScoreButton } from "@components/RecalculateScoreButton/RecalculateScoreButton";
 
 interface OptimisationTabProps {
   recalculationStart?: boolean;
@@ -80,8 +81,16 @@ export const OptimisationTab: React.FC<OptimisationTabProps> = ({ recalculationS
     };
   }, []);
 
+  // The block editor already shows the button in its header next to the score pill
+  const showRecalculateButton = !document.body.classList.contains("block-editor-page");
+
   return (
     <div className={styles.optimisationTabContainer}>
+      {showRecalculateButton && (
+        <div className={styles.actions}>
+          <RecalculateScoreButton />
+        </div>
+      )}
       <div className={styles.sidebarWrapper}>
         <GutenbergSidebar
           headerText={__("SEO Plug-in", "beyondseo")}

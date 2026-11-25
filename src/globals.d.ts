@@ -185,9 +185,19 @@ interface WPDataSubscribe {
   (callback: () => void): () => void;
 }
 
+interface WPCoreEditorDispatch {
+  savePost(options?: Record<string, unknown>): Promise<unknown> | void;
+}
+
+interface WPDataDispatch {
+  (storeName: "core/editor"): WPCoreEditorDispatch | undefined;
+  (storeName: string): any;
+}
+
 interface WPData {
   select: WPDataSelect;
   subscribe: WPDataSubscribe;
+  dispatch: WPDataDispatch;
 }
 
 interface WP {

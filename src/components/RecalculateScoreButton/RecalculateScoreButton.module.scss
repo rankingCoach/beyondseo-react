@@ -1,0 +1,13 @@
+.wrapper {
+    display: inline-flex;
+
+    // Below WordPress' small breakpoint the editor header has no room left next to its own controls
+    @media (max-width: 599px) {
+        display: none;
+    }
+}
+
+.button {
+    min-height: 32px;
+    white-space: nowrap;
+}
