@@ -55,3 +55,31 @@
 .buttonContainer {
     margin-top: 1rem;
 }
+
+.domainWarning,
+.domainSuccess,
+.domainError {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    border-left: 3px solid;
+}
+
+.domainWarning {
+    color: #5c4400;
+    background-color: #fcf9e8;
+    border-color: #dba617;
+}
+
+.domainSuccess {
+    color: #172b4d;
+    background-color: #f0f6fc;
+    border-color: #2271b1;
+}
+
+.domainError {
+    color: #8a2424;
+    background-color: #fff2f2;
+    border-color: #b32d2e;
+}

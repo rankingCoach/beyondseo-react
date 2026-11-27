@@ -5,6 +5,7 @@ import { seoStore } from "@stores/swagger/rankingcoach/SeoStore";
 import { __ } from "@wordpress/i18n";
 import { useReviewSettingsSave } from "../../Review/Review";
 import { WebmasterToolsPagePlaceholder } from "./WebmasterToolsPagePlaceholder";
+import { ProjectDomain } from "./ProjectDomain";
 
 const MAX_CODE_LENGTH = 100;
 const VALID_CODE = /^[A-Za-z0-9_-]*$/;
@@ -153,6 +154,7 @@ const WebmasterToolsPage: React.FC<{ reviewNotice?: React.ReactNode }> = ({ revi
               </Button>
             </div>
           </div>
+          <ProjectDomain />
           {reviewSave}
         </>
       )}
